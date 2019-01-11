@@ -1,0 +1,877 @@
+%\documentclass[english,10pt]{beamer}
+\documentclass[english,handout]{beamer}
+
+\input{../frontpage}
+
+\title{Introduction to Statistical  Machine Learning}
+
+\author{\includegraphics[height=1.1cm,width=2.2cm]{../CityU_Logo_Basic_Signature.eps}
+\\ $\ $ \\
+Xiang Zhou  \\ $\ $ \\
+}
+\institute[]{  School of Data Science 
+\\
+ Department of Mathematics
+\\
+City University of Hong Kong
+\\
+~~
+\\
+\textup{  }
+}
+
+\date[]{}
+
+
+
+\begin{document}
+ 
+ 
+
+
+\maketitle
+ 
+
+
+\frame{
+{Mathematical Description of Data}
+
+Notations
+\biz
+\item  input - output relation 
+\begin{itemize}
+\item $x$: inputs, feature vectors, predictors, independent variables.
+\item $y$: output, response, dependent variable.
+\end{itemize}
+
+\item $\mathcal{X}$ and $\mathcal{Y}$ denote the spaces of the generic $x$ and $y$ variables, respectively.
+
+\begin{itemize}
+\item Generally $\Xcal = { \Real }^p$; qualitative features are coded using, for example, dummy variables
+(such as 0,1, -1, etc).
+\item Typically $\Ycal \in \Real^1$ is a scalar,  or takes a finite number of values as a subset of $ \NN $ ;
+it can be a  vector in some scenarios.
+\end{itemize}
+\item The random variable $(X,Y)$ has the joint distribution $p(x,y)$
+on the sample space $\Xcal \times \Ycal$.
+\eiz
+}
+
+\frame{{Ground truth}
+\biz
+\item 
+It is usually assumed that the ground truth for the relation between from input to the output  is a { deterministic} input-output mapping from $x\in \Xcal$  to 
+$y_{\text{true}}\in \Ycal$:
+\[ y_{\text{true}} = f^\star (x)\]
+where the ground truth  $f^*$ is an unknown function and  has to be 
+approximated by learning from  the training dataset.
+\eiz
+}
+
+
+\frame{{Data as iid r.v. }
+\biz
+\item In {\bf supervised learning}, the data ( observations )  are given as the collection of the pairs \footnote{sometimes it is denoted as $\Dcal=\set{(x_i, y_i):  1\leq i \leq n}$ if the subindex has no ambiguity. }
+
+$$\Dcal=\set{(x^{(i)}, y^{(i)}):  1\leq i \leq N} \subset (\Xcal\times \Ycal)^N$$
+which  is  {assumed} iid samples of the r.v. $(X,Y)$ with an unknown joint distribution  $p(x,y)$ on the product space $\Xcal \times \Ycal$.
+\biz
+\item \hb{Regression}:   $\Ycal$ is continuous/quantitiative,  e.g.,  $\Real^{d}$ or its subset.
+\item \hb{Classification}:  $\Ycal$ is discrete and finite (categorical variable), encoded by a finite number 
+$\set{1,\ldots,K}$.  In this case, ``$y$'' is usually called ``label''.
+\eiz 
+
+
+\item In {\bf unsupervised learning}, the observations only have $\set{x^{(i)}}$, the information $y^{(i)}$
+is zero or there is no definition of $y$ variable. The purpose is to identify the pattern of $\set{x^{(i)}}$ itself, such as 
+model reduction.
+
+%\item {\bf Reinforcement  learning}: the interaction between the agent and environment generates data for decision.
+%There are no given observations.
+
+\eiz
+}
+\frame{
+{Output as perturbed   truth}
+\biz
+\item The observed $x^{(i)}\in \Xcal$ are samples from 
+the marginal distribution $p_X$, i.e., $x^{(i)}\sim X$; in some cases,
+they are deterministic and assigned by a procedure of experiment design.
+\item  The  corresponding observed $y^{(i)}$ are assumed to be 
+the {\it perturbed} truth $f^\star (x^{(i)})$   with additional measurement error $\eps^{(i)}$ which are assumed to be iid and independent from $X$.
+ $$y^{(i)}=f^\star (x^{(i)}) + \eps^{(i)}.$$
+ $\set{\eps^{(i)}}$ are assumed iid  and distributed as a generic r.v. $  \eps$.
+\item The effect of the noise $\eps$ can never be eliminated by any statistical learning algorithms (\hb{irreducible error}).
+\eiz
+}
+
+\frame{
+\biz
+\item  So, the joint distribution $p(x,y)$ of $(X,Y)$
+is  completely determined by the triplet:
+\[ ( p_X, f^\star,  p_{\eps} ) \] 
+\biz
+\item $p_X$:  the distribution of the input
+\item  $f^\star$: the input-output function,
+\item $p_\eps$: the distribution of error.
+\eiz
+\item The joint distribution $p(x,y)$ manifests by the available dataset $\Dcal$.
+Given $X, Y$ random variables $\sim p$, how to identify $f^\star$?
+\eiz
+}
+
+
+\frame{
+\frametitle{Statistics and machine learning}
+
+Different views and terminologies:
+\begin{table} \centering
+\begin{small}
+\begin{tabular}{l|l}
+\hline
+\bf{Machine Learning} & \bf{Statistics} \\
+\hline
+Supervised learning & Classification/regression \\
+Unsupervised learning & Clustering \\
+Semisupervised learning & Classification/regression with missing responses \\
+\hline
+Features/outcomes & Covariates/responses \\
+Training set/testing set & Sample/population \\
+Learner & Statistical model  \\
+Generalization error & Misclassification error/prediction error \\
+\hline
+\end{tabular}
+\end{small}
+\end{table}
+
+}
+
+
+\frame{
+{Suggestion}
+
+{Learn machine learning like a statistician or an applied mathematician, 
+not a software engineer
+}
+\biz
+\item Start from stating a problem,
+not show an algorithm first:
+Many times,  the students 
+think  the methods/algorithms/procedures
+as the problem itself.
+\item Pay close attentions to the ``modelling'' process: 
+how to turn the data problem into the statistical model.
+In particularly the underlying principle which applies very  general.
+\item Try to rigorously ( and in most general context)  understand (like a math theorem)
+the heuristic arguments used  in practice, even for some toy examples.
+\item Draw strict boundaries  between
+general principles and specific 
+methods.  In between,
+computational method survives and thrives. 
+\item 
+Diagnose   and rationalize your results of numerical experiments.
+Test different dataset/parameters/methods. 
+\eiz
+
+}
+
+
+\frame{
+
+
+{\color{blue} \huge 
+{   Learning Theory:  An Approximation  Theory  Viewpoint}
+
+}
+
+\bigskip
+Reference: 
+\begin{center}
+ Learning Theory: An Approximation Theory Viewpoint;
+by F. Cucker and  D.X. Zhou, 
+ Cambridge University Press 2007
+\end{center}
+
+Given r.v.s $X $ and $Y$, find a function 
+$f: \Xcal\to \Ycal$ so that 
+$f(X)$ can explain $Y$ best in certain sense. 
+
+}
+\frame{
+{Conditional Expectation as Optimal Prediction}
+
+The best $L^2$ approximation of a function $f$
+of the  r.v. $X$
+to a r.v. $Y$ is achieved by the conditional probability.
+The {\bf (generalized)    squared error}\footnote{also named as
+generalization risk, mean square error,  $L_2$ error, etc.  }
+ \begin{equation}
+{\mathcal{E}(f):=\e   |Y-f(X)|^2  } 
+\end{equation}
+has a minimum  at 
+ \[
+\otherbox{ f^*(x)=\e(Y|X=x)}.\]
+ i.e., 
+\[ \e   |Y-f^*(X)|^2= \min_{f \mbox{\footnotesize: a Borel   function }}  \e (  |Y-f(X)|^2    ) \]
+}
+\frame{
+\begin{proof}
+\biz
+\item 
+We show first that   $\e[(Y-f^*(X) )  h(X) ]=0$ is true  for any function $h$.
+Using the double expectation theorem, we have 
+\[
+\begin{split}
+&\e[(Y- f^*(X) )  h(X) ] = \e \left[ \e[Y-f^*(X) ) | X]  h(X)    \right ]\\
+=& \e \left[ \e(Yh(X)|X) -  f^*(X) h(X) \right] =0.
+\end{split}
+\]
+\item 
+ Note that 
+$(y-f(x))^2=(y-f^*(x))^2+(f(x)-f^*(x))^2-2(y-f^*(x))h(x)$ where $h(x)=f(x)-f^*(x)$,
+then for any $f$
+\begin{equation}
+ \label{proj-cond-exp-3}
+\boxed{
+\e (  |f(X)-Y|^2    )
+=\e (  |f^*(X)-Y|^2   ) + \e\left[ \abs{f(X)-f^*(X)} ^2 \right]
+}
+\end{equation}
+ \eiz 
+\end{proof}
+}
+
+
+\frame{
+\begin{center}
+\includegraphics[width=0.8\textwidth]{optimalL2cond.png}
+\end{center}
+
+
+\noindent\rule{\textwidth}{.5pt}
+
+reference for elementary math:
+\href{http://www.ee.nthu.edu.tw/cschang/Talk01142008.pdf}
+{Understanding Conditional Expectation via Vector
+Projection}
+}
+
+\frame{
+
+The following exercise is to use the viewpoint of variational calculus:
+minimizing in functional space
+
+\begin{ex}
+Use the method of Calculus of Variation to solve 
+\[
+\inf_{f} \iint (f(x)-y)^2 p_{X,Y}(x,y) dx dy
+\]
+where $p_{X,Y}$ is the joint pdf of the r.v.s $(X, Y)$.
+The optimal $f^*$ satisfies 
+$$ \int (f^*(x)-y)p_{X,Y}(x,y)dy=0,~~
+\quad \forall x$$
+i.e., $\e Y = \e f^*(X)$
+\end{ex}
+What if generalized  the $L_2$ norm to $L_p $ norm ?
+}
+
+\frame{
+\begin{ex}[Conditional distribution of multivariate Gaussian r.v.]
+
+Suppose that $X=(X_1, X_2)$ is a two dimensional Gaussian random variable with mean $\mu=(\mu_1, \mu_2) $ and the covariance matrix $\Sigma=\left(
+  \begin{array}{cc}
+    \sigma_1^2 & \rho\sigma_1\sigma_2  \\
+    \rho\sigma_1\sigma_2 & \sigma_2^2 \\
+  \end{array}
+\right) $. What is the conditional pdf $p(x_1|x_2)$ of $X_1$ given $X_2=x_2$? 
+What is the expectation of $X_1$ given $X_2=x_2$?
+What is the 
+\href{https://en.wikipedia.org/wiki/Multivariate_normal_distribution\#Conditional_distributions}{general result} in $n$ dimension ?
+\end{ex}
+
+\[
+X_1|_{X_2=x_2}\sim \mathcal{N}(\mu_1+\rho\frac{\sigma_1}{\sigma_2}(x_2-\mu_2), \sigma_1^2(1-\rho^2))
+\]
+
+}
+\frame{
+\biz
+\item The objective function $\mathcal{E}(f)$ is also called 
+loss function, risk, etc.
+ \item $\e f^*(X) =\e Y$:  $f^*(X)$ is an unbiased estimate of $Y$;
+\item
+The variance of the difference between $Y$ and the optimal prediction $f^*(X)$
+is
+$$\sigma^2_*(x):= \e  \left[(Y-f^*(X))^2 \vert X=x\right]$$ 
+  \item
+  Take average of $\sigma^2(x)$ over $x$, then
+the averaged uncertainty is 
+ \[ \sigma^2_* := \e_X  \sigma^2(X)=\e  \left[\abs{Y-f^*(X)}^2 \right]=\mathcal{E}(f^*)
+ \]
+is the   variance  of the measurement error $Y-f^*(X)$:
+\hb{irreducible error}
+\eiz
+}
+
+\frame 
+{{Notations}
+We have shown that \eqref{proj-cond-exp-3}
+\begin{equation}
+ \begin{split}
+\e_{X,Y}(  |f(X)-Y|^2    )
+ & = \e_{X,Y} (  |f^*(X)-Y|^2   ) + \e_X\left[ \abs{f(X)-f^*(X)} ^2 \right]
+ \\
+&=\mbox{Bayes error} + \mbox{model error}
+\end{split}
+\end{equation}
+where $f^*(x)=\e(Y \vert X=x)$ is called {\bf Bayes rule}.
+}
+
+\frame {
+\frametitle{ Application to classification with 0-1 loss}
+
+\begin{itemize}[<+->]
+\item Assume $Y \in \{1,\ldots,K\}$ and $X \in {\Real}^p$.
+\item $f:\Xcal \to \Ycal$ is a piece-wise constant function.
+\item A Loss function $\ell(Y, f(Y))$ for penalizing errors in misclassification.
+\item Most Common choice is the 0-1 loss
+$$
+\ell (Y , f(X))=I(Y \neq f(X)).
+$$
+\item The expected prediction error, or the generalization error, is
+$$
+\Ecal (f)=\e I(Y \neq f(X))=\p (Y \neq f(X))=1-\p(Y=f(X)).
+$$
+\item The Bayes rule minimizing $\Ecal(f)$ is
+the one maximizing $\p(Y=f(X))=
+\int_\Xcal  \p(Y=f(x) \vert X=x) p_{X}(x)dx$,
+which is 
+$$
+f^*(x)=\argmax_k \p(Y=k|X=x).
+$$
+since  $\p(Y=k|X=x) \leq \p(Y=f^*(x) \vert X=x ), \forall k $
+\end{itemize}
+
+}
+
+
+
+\frame{
+{How do we estimate $f^*$ ? }
+\biz
+\item direction method by definition of conditional expectation; 
+\item optimization method by minimization of generalization error;
+\eiz
+
+}
+\frame {
+
+\frametitle{Nearest neighbors method to approximate  condition expectation}
+
+A natural way to approximate the function $\e (Y \vert X=x)$ is to 
+replace the expectation by the average:
+$$f^*(x)=\e (Y\vert X=x) \approx \mbox{AVE}\set{y_i :  \mbox{ where } ~x_i=x},
+~~\forall x\in \Xcal$$
+
+Question: Would this work well in practice ? in high dimension ?
+
+\pause
+
+(1) this formula is defined point-wisely; 
+(2) one does not have an accurate estimation of the expectation or the joint distribution $p(x,y)$,
+particularly in high dimension.
+
+\biz 
+\item Use windows with size $\Delta$
+\[
+\e (Y\vert X=x) \approx \mbox{AVE}\set{y_i :  \mbox{ where } ~
+\abs{x_i-x} \leq \Delta}
+\]
+
+\item Use $k$ -nearest neighbors:
+have a look at its neighbors,
+and take a vote:
+$$
+\e (Y\vert X=x) \approx \mbox{AVE} \set{y_i :  x_i   \in {\cal N}_k(x) }
+$$
+where ${\cal N}_k(x)$ is a neighborhood of $x$ that contains exactly $k$ neighbors
+(k-nearest neighbors).
+
+\eiz 
+}
+
+\frame {
+
+\frametitle{Curse of dimensionality}
+
+k-NN can fail in high dimensions, because it becomes difficult to gather $k$ observations close to a target point $x_0$.
+\pause
+\begin{itemize}[<+->]
+\item Neighborhoods tend to be spatially large, and estimates are
+biased.
+\item Reducing the spatial size of the neighborhood means reducing $k$, and
+the variance of the estimate increases.
+\end{itemize}
+
+\pause
+In general (see Figure 2.6),
+\begin{itemize}[<+->]
+\item Most points are at the boundary, and points tend to be equidistant (Hall et al., JRSS-B, 2005).
+\item Sampling density is proportional to $n^{1/p}$: the number of sample size increases exponentially in dimension $p$: If 100 points are sufficient
+to estimate a function in ${\Real}^1$, $100^{10}$ are needed to achieve similar
+accuracy in ${\Real}^{10}$.
+\end{itemize}
+This is similar to the curse of dimensionality in using the mesh grid based method to solve
+high dimension PDE.
+
+}
+
+
+
+
+
+\frame{
+
+{\color{blue} \huge 
+
+Minimizing the generalization error: learning as minimization}
+
+}
+\frame{
+\biz
+\item Loss function $\ell(y, \hat{y}):  \Ycal  \times \Ycal \to \Real^+$
+\biz
+\item  $L_2$, $L_1$ norm
+\item  0-1 loss:  $\ell(y,\hat{y})= I( y\neq \hat{y})$.
+\item  ...
+\eiz
+\item $\Ecal (f) = \e \ell (Y, f(X))$
+\eiz
+
+
+
+\par
+The direct  approach  of minimizing the risk \[ \min_{f} \mathcal{E}(f)=
+ \e \ell (Y, f(X))\]
+where $f$ can be in a very general class of functions, such as
+continuous function on $\Xcal$, or even piecewise continuous function.
+
+\ben
+
+\item 
+the function space of $f$  to search:  \hb{ hypothesis space(model class)} $\mathcal{H}$.
+
+It is important to specify a  hypothesis space $\mathcal{H}$ to restrict the search space.
+
+
+\item approximate the expectation $\e$ in $\mathcal{E}$ with  the use of data $\Dcal=\set{x_i, y_i}$.
+\een
+
+
+}
+\frame{
+%{hypothesis space and training error}
+{Notations}
+\ben
+
+\item 
+ 
+ The minimizer  of $$\min_{f\in \mathcal{H}}\mathcal{E}(f)$$
+is denoted by $f_{\mathcal{H}}$. 
+ 
+
+\item  
+\[
+\mathcal{E}(f) = \e \left [ \abs{Y-f(X)}^2\right]
+\approx 
+\mathcal{E}_N(f)=\frac{1}{N} \sum_ i \ell (y_i, f(x_i))  
+\]
+The learning algorithm produces the  learnt function  $ \hat{f}_\Dcal $
+(\hb{ regression function})
+as the  solution to  $$
+\Ecal_N ( \hat{f}_\Dcal ) = \min_{f\in \Hcal}\mathcal{E}_N(f)=
+\min_{f\in \Hcal} \frac{1}{N} \sum_{(x_i,y_i)\in \Dcal}\ell(y_i,f(x_i))$$
+  The {\bf training error} (empirical risk) is   $\mathcal{E}(\hat{f}_\Dcal)$ .
+
+\een
+
+
+}
+
+\frame{
+
+
+\biz
+
+\item
+$\hat{f}_\Dcal$ depends on {\it three} elements:
+ the hypothesis space $\Hcal$,  the (training) data $\Dcal$ ( random ! ) and  the loss function $\ell$.
+So, $\hat{f}_\Dcal$ is a random function to approximate the ground truth $f$.
+\item
+For the fixed $\Hcal$ and $\ell$,  $\hat{f}_\Dcal$ is essentially a mapping from $\Dcal$ to the function space
+$\Hcal$.
+ As $N\to \infty$, $\hat{f}_\Dcal \to  f_{\Hcal}$ by the law of large number.
+\eiz
+}
+ 
+\frame{
+{Hypothesis space: representation of the function $f$}
+\biz
+\item parametric approach:  e.g. $f(x)=\theta\cdot x$ with a set of finite and (usually fixed) number of parameters
+$\theta$
+\item non-parametric approach: functional analysis viewpoint, $f$ is only in some function space.
+(such as in the traditional computational math for representing the solution to some PDE )
+\item there is no rigorous boundary between parametric/non-parametric: eventually 
+the computer represents a function $f$ only by a finite number of freedoms. 
+\item need to be restricted to certain model class in practice. Examples:   linear model,  polynomial, spline, kernel machine,   neural network, etc.
+\eiz 
+}
+
+
+
+\frame {
+
+\frametitle{some examples of $\Hcal$}
+
+\begin{itemize}[<+->]
+\item Linear function (chapter 3 , ESL)
+\item Basis functions and dictionary methods (chapter 5, ESL)
+$$
+f_{\theta}(x) = \sum_{m=1}^M \theta_m h_m(x),
+$$
+where $h_m$'s are pre-specified basis functions.
+\item Kernel methods and local regression (chapter 6, ESL)
+$$
+RSS(f, x_0) = \sum_{i=1}^n K(x_0,x_i) (y_i-f(x_i))^2,
+$$
+where $K$ is a kernel measuring the closeness between points.
+\item Roughness penalty (chapter 5, ESL)
+$$
+\mbox{Penalized RSS}(f; \lambda) = \mbox{RSS}(f) + \lambda J(f),
+$$
+where $J(f)$ is a regularization term on the model complexity.
+\end{itemize}
+
+}
+
+\frame{
+\underline{The generalization  error   is  then decomposed into} 
+\bigskip
+\[
+\otherbox
+{
+\Ecal(f^*) = 
+\underbrace{ {\Ecal(f^*) - \Ecal(f_\Hcal) }}_\text{\bf approximation error}
++ \underbrace{{\Ecal(f_\Hcal)- \Ecal_N(\hat{f}_\Dcal)} }_\text{\bf sampling error}
++  
+\underbrace{\Ecal_N(\hat{f}_\Dcal)}_\text{\bf training error}
+}
+\]
+
+
+}
+
+
+\frame{
+
+\biz
+\item 
+Approximation error:
+characterized how large (complex)
+the hypothesis space $\mathcal{H}$ is.
+analogy to the interpolation 
+inequality in finite element method.
+A larger space of $\Hcal $ indicates
+\biz
+\item
+A  larger effective dimension of this space;
+\item A smaller approximation error;
+lower bias
+\item More difficult for numerical optimization;  
+\eiz
+
+\item 
+Sampling error:
+vanishes if the number of data
+points is infinity. This error may be analyzed by
+probability inequality 
+(e.g. Chebychev);
+analysis method used for 
+Monte Carlo  simulation.
+A larger sample size for training data indicates:
+\biz
+\item Smaller sampling error; lower variance; 
+\item more challenges for data collection and  Big Data techniques;
+\eiz
+\item  
+Training error: 
+optimization method 
+
+ \eiz
+ These three topics are not completely separate.
+ For example, the necessary number of sample size $N$
+ may depend on the complexity of hypothesis space,
+ which further depends  on the  dimension of $\Xcal,\Ycal$
+ and the specific representation form of functions in $\Hcal$.
+}
+
+
+\frame{{Generalization Gap}
+The optimal function in theory is $f^*$; 
+the  optimal function in practical computation is 
+$\hat{f}_\Dcal$. The difference in  risks 
+of these two:
+\[
+ \Ecal(\hat{f}_\Dcal) - 
+\Ecal(f^*)
+\]
+is called {\bf generalization gap}:
+it measures to which extent 
+the performance of the algorithm
+learnt from a given training data set $\Dcal$
+is valid for the whole distribution $p(x,y)$.
+}
+\frame{
+{First inequality for Generalization Gap}
+\begin{ex}
+Prove the upper bound of the generalization gap: 
+ \[
+ \begin{split}
+ \otherbox{
+ \Ecal(\hat{f}_\Dcal) 
+ - \Ecal(f^*)
+% =
+% \Ecal(\hat{f}_\Dcal) - 
+%\Ecal_N(\hat{f}_\Dcal)
+%+
+%\Ecal_N (\hat{f}_\Dcal)
+%-
+%\Ecal_N (f^*)
+%+\Ecal_N (f^*)
+%- \Ecal(f^*)
+\leq 2 \sup_{f\in \Hcal} \abs{ \Ecal_N (f)- \Ecal(f)}
+}
+\\
+\approx 2 \sup_{f\in \Hcal}  \frac{1}{\sqrt{N}} \Var (\ell(Y,f(X)))
+\end{split}
+ \]
+  \end{ex}
+ The first RHS depends on the hypothesis space
+ $\Hcal$ and the dataset $\Dcal$ of size $N$ in $\Ecal_N$;
+ and the second depends on $\Hcal$ and the joint distribution $p(x,y)$
+ of $(X,Y)$.
+
+
+The supremum in the above inequality
+ can describe the {\bf complexity } of  hypothesis space $\Hcal$,
+ which increases when $\Hcal$ is ``larger''.
+ WARNING: this upper bound is not sharp.
+ A good lower bound is extremely difficult to obtain.
+}
+
+
+\frame{
+
+{\color{blue} \huge 
+Statistical  Learning:
+Viewpoint of Bias-Variance
+Trade-off}
+
+
+}
+\frame{
+{Bias-Variance Decomposition / Trade-off}
+
+Let $f$ be a given deterministic function 
+$\mathcal{X}\to\mathcal{Y}$.
+
+Assume that the response r.v. 
+$Y$ is defined by 
+\[
+Y=f(X)+\eps
+\]
+where  the 
+r.v.  $\eps$ is independent of $X$
+and has mean $0$ and variance $\sigma_\eps^2$.
+Then 
+$f^*(x)=\e[Y\vert X=x]=f(x)$ is the optimal approximation
+in the square error sense.
+}
+\frame{ {test error decomposition}
+Based on a {training} dataset $\Dcal=\set{x_i, y_i}$ where $y_i=f(x_i)+\eps_i$ and $\eps_i  \sim \eps$, one learns a regression  function, 
+denoted by 
+$\hat{f}_\Dcal(\cdot)$, then
+the {\bf test error} 
+at a new input $x_0$ 
+(with a new independent measurement error $\eps_0\sim \eps$) is 
+\begin{align*}
+& \e [  ( Y-\hat{f}_\Dcal(X))^2
+\vert X=x_0] 
+=
+ \e_{\eps_0, \Dcal} [  ( f(x_0)+\eps_0-\hat{f}_\Dcal(x_0))^2
+] ~~\\
+=&\sigma_\eps^2+ \e_\Dcal [  \left( f(x_0)-\hat{f}_\Dcal(x_0)\right)^2] 
+~~\because   \e (\eps_0)=0 , \mbox{ and } \Dcal \perp \eps_0
+\\
+=&
+\sigma_\eps^2+ \e_\Dcal [  \left( f(x_0)-
+\e\hat{f}_\Dcal(x_0) + \e \hat{f}_\Dcal(x_0)- \hat{f}_\Dcal(x_0) \right)^2] \\
+=&
+\otherbox{
+\sigma_\eps^2+ 
+\underbrace{ ( f(x_0)-
+\e \hat{f}_\Dcal(x_0))^2}
+_\text {Bias$^2$}
+ + 
+ \underbrace{
+ \Var (\hat{f}_\Dcal(x_0))}
+ _\text{Variance}}
+\end{align*}
+ Sometimes, this quantity should be taken expectation w.r.t. 
+ $x_0 \sim p_X$.
+ }
+ 
+ 
+\frame{
+%For linear regression:
+%\[ \Var (\hat{f}_\Dcal(x_0))
+%\sim p\sigma^2_\eps/N  \]
+%where $p$ is the number of components,
+%i.e.,  the dimension 
+%of $X$. $\mathcal{X}=\Real^p$.
+%
+
+\biz
+\item 
+low bias:  large model space, 
+low training error, 
+overfitting, bad generalization ability
+(high variance);
+ \item low variance:  
+rigid model space,
+insensitive to the perturbation of the dataset used in fitting;
+good generalization for the new data from the same distribution. 
+\item BAD news:
+it is almost impossible to decrease the bias and variance terms
+simultaneously!
+
+ \item Criteria for model assessment or variable selection:
+{
+\color{blue}\bf good trade-off between the bias and variance
+}
+
+\biz
+\item Analyse the bias or variance 
+or model complexity to have analytical 
+results (very limited cases)
+\item  
+A practical method is to estimate $\e [  ( Y-\hat{f}_\Dcal(X))^2]
+\approx \frac{1}{n} \sum_j (Y'_j-\hat{f}_\Dcal(X'_j))$
+where $X'_j$ are not from $\Dcal$
+but an independent dataset $\Dcal'$.
+\item Where is the ``new'' dataset $\Dcal'$?
+cross-validation
+(split 1 cent into 1/2 cents)  and bootstrap
+(1 cent used twice ) .
+
+\eiz
+
+
+\eiz
+}
+
+
+
+\frame {
+
+\frametitle{Model assessment}
+
+Typical objectives:
+\begin{itemize}
+\item Choose a value of a tuning parameter  (\hb{hyperparameter})
+used in the model
+(such as $k$ in k-NN)
+\item Estimate the prediction performance  (test error) of a given model
+\end{itemize}
+
+\vspace{3mm}
+Remarks:
+\begin{itemize}
+\item For both objectives, the best approach is to run the procedure on
+an independent test set, if one is available.
+\item If possible, one should use different test data for (1) and (2) above: a
+{\it validation set} for (1) and a {\it test set} for (2).
+\item Often there is insufficient data to create a separate validation or test set. In this case, {\it Cross-Validation} is useful.
+\end{itemize}
+
+}
+
+
+
+%%%--------------------------------------------------------------------
+
+\frame {
+
+\frametitle{K-fold cross validation}
+Denote the hyper-parameter by $\lambda$.
+K-fold cross validation is the most popular method for estimating a tuning parameter $\lambda$. 
+
+\vspace{3mm}
+Divide the dataset (of size $N$) into $K$ subsets: ${\cal A}_1,\ldots,{\cal A}_K$ ($K=2,5,10$ or $N$)
+\begin{itemize}
+\item For each $k = 1, \ldots, K$, fit the model with parameter $\lambda$ to $\{{\cal A}_1,\ldots,{\cal A}_{k-1},{\cal A}_{k+1},\ldots,{\cal A}_K\}$ giving $ {f}^{-k}_\lambda(\cdot)$, and compute its prediction error on ${\cal A}_k$: $$E_k(\lambda)=\sum_{x_i \in {\cal A}_k} \ell (y_i, f^{-k}_\lambda(x_i)).$$
+\item The average of these $K$ values $E_k(\lambda)$ give  the cross-validation error (per sample)
+    $$
+    CV(\lambda):=\frac{1}{N} \sum_{k=1}^K E_k(\lambda).
+    $$
+\item Choose the optimal $\lambda^*$ yielding the smallest $CV(\lambda)$.
+\end{itemize}
+
+}
+
+
+
+%%%--------------------------------------------------------------------
+
+\frame {
+
+\frametitle{K-fold cross validation}
+
+\begin{itemize}
+\item Cross-validation is often abbreviated as CV.
+\item In the subset selection procedure, $\lambda$ is the subset size
+\item $f^{-k}(\lambda)$ is the  best model of size $\lambda$, found from the training set that leaves out the $k$-th part of the data
+\item $E_k(\lambda)$ is its estimated test error on the $k$-th part.
+\item Using $K$-fold CV, the $K$ test error estimates are averaged to give the final CV estimated test error.
+\item The output is the model associated with  $\lambda^*$,
+typically, 
+computed  by using all $N$ data. 
+\end{itemize}
+
+}
+
+
+
+%%%--------------------------------------------------------------------
+
+\frame {
+
+\frametitle{Bootstrap}
+
+\begin{itemize}
+\item Bootstrap works by sampling $N$ times with replacement from the training set to form a ``bootstrap" data set. Then model is estimated on the bootstrap data set,
+and predictions are made on the original training set.
+\item This process is repeated many times and the results are averaged.
+\item {\it Bootstrap is most useful for estimating standard errors of predictions.}
+\item Can also use modified versions of the bootstrap to estimate prediction error. Sometimes produces better estimates than CV (still an open question!)
+\end{itemize}
+
+}
+
+
+
+
+
+\end{document}
+
+
