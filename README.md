@@ -7,4 +7,7 @@ I am no expert in this area. But as an applied and computmational mathematician,
 
 Overall, the coverage here is very classic. Senior undergraduates should be able to follow. 
 
-
+Acknowledgement :  
+ISL and ESL: two classic books
+Cucker and Zhou book on approximation theory
+Prof WANG Junhui's slides strictly following ESL book.
