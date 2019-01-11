@@ -1,0 +1,385 @@
+
+
+
+
+
+ 
+%\usepackage{mathptmx}
+%\renewcommand{\sfdefault}{lmss}
+\usepackage[T1]{fontenc}
+%\usepackage[latin9]{inputenc}
+\usepackage[utf8]{inputenc}
+
+\synctex=-1
+
+\usefonttheme{professionalfonts}
+
+%\setbeamertemplate{navigation symbols}{}
+%\setbeamertemplate{caption}[numbered]
+
+
+\useinnertheme{rectangles}
+%http://tex.stackexchange.com/questions/11168/change-bullet-style-formatting-in-beamer
+
+ \AtBeginDocument{
+  \addtolength\abovedisplayskip{-0.4\baselineskip}%
+  \addtolength\belowdisplayskip{-0.4\baselineskip}%
+}%change the space between text lines and the math formula
+
+
+\usepackage{pifont}
+%Postscript ZipfDingbats font
+%the command \ding{number}, will print the specified symbol
+
+\usepackage{fontawesome}
+%icon package
+\DeclareFontFamily{U}{FontAwesomeOne}{}
+\DeclareFontShape{U}{FontAwesomeOne}{m}{n}{<-> FontAwesome--fontawesomeone}{}
+\DeclareRobustCommand\FAone{\fontencoding{U}\fontfamily{FontAwesomeOne}\fontseries{m}\fontshape{n}\selectfont}
+\DeclareFontFamily{U}{FontAwesomeTwo}{}
+\DeclareFontShape{U}{FontAwesomeTwo}{m}{n}{<-> FontAwesome--fontawesometwo}{}
+\DeclareRobustCommand\FAtwo{\fontencoding{U}\fontfamily{FontAwesomeTwo}\fontseries{m}\fontshape{n}\selectfont}
+\DeclareFontFamily{U}{FontAwesomeThree}{}
+\DeclareFontShape{U}{FontAwesomeThree}{m}{n}{<-> FontAwesome--fontawesomethree}{}
+\DeclareRobustCommand\FAthree{\fontencoding{U}\fontfamily{FontAwesomeThree}\fontseries{m}\fontshape{n}\selectfont}
+
+%ftp://ftp.dante.de/tex-archive/fonts/fontawesome/doc/fontawesome.pdf
+%http://tug.ctan.org/info/symbols/comprehensive/symbols-a4.pdf
+
+
+\usepackage{amsmath,amssymb,amsfonts,bm,mathrsfs,mathtools}
+
+\usepackage{tikzsymbols}
+%\usepackage[tikz]{bclogo}
+
+
+
+\usepackage{perpage}
+\MakePerPage{footnote} %reset for each page
+%\renewcommand{\thefootnote}{\fnsymbol{footnote}} %use symbol, limit less than 9 symbols
+
+
+
+%%%% HIGHTLIGHT  and annotation &=%%%%%%%%
+\usepackage{color,xcolor}
+ \usepackage{todonotes}
+
+\usepackage[normalem]{ulem}
+
+\usepackage[many]{tcolorbox}
+
+\tcbset{fonttitle=\scriptsize}
+\tcbset{highlight math style={enhanced,
+  colframe=red!40!black,colback=yellow!20!white,arc=2pt,boxrule=.2pt,
+  }}
+  \newtcbox{\otherbox}[1][]{nobeforeafter,math upper,tcbox raise base,
+enhanced,frame hidden,boxrule=0pt,interior style={top color=green!10!white,
+bottom color=green!10!white,middle color=green!50!yellow},
+fuzzy halo=1pt with green,#1}
+%%\tcbhighmath{math here}
+%% \otherbox{math here}
+
+
+
+%%%%% HIGHLIGHT %%%%%%
+\newcommand{\hb}[1]{{\color{blue}{#1}}}
+%\noindent\rule{\textwidth}{.5pt}
+
+%:
+\usepackage{soul}
+
+\newcommand\hcancel[2][black]{\setbox0=\hbox{$#2$}%
+\rlap{\raisebox{.45\ht0}{\textcolor{#1}{\rule{\wd0}{1pt}}}}#2}
+%cross to delete
+
+\newcommand{\mcb}[2]{\colorbox{#1}{$\displaystyle #2$}}
+%highlight math
+
+\newcommand{\hlfancy}[2]{\sethlcolor{#1}\hl{#2}}
+%specified color , for\hl
+
+\newcommand\myhl{\bgroup\markoverwith
+  {\textcolor{yellow}{\rule[-.5ex]{2pt}{2.5ex}}}\ULon}
+
+
+
+\mode<presentation>{ \usetheme{boxes} }
+
+%write Matlab code
+\usepackage{listings}
+ \definecolor{dkgreen}{rgb}{0,0.6,0}
+\definecolor{gray}{rgb}{0.5,0.5,0.5}
+\definecolor{mauve}{rgb}{0.58,0,0.82}
+\lstset{frame=tb,
+  language=Matlab,
+  aboveskip=3mm,
+  belowskip=3mm,
+  showstringspaces=false,
+  columns=flexible,
+  basicstyle={\small\ttfamily},
+  numbers=none,
+  numberstyle=\tiny\color{gray},
+  keywordstyle=\color{blue},
+  commentstyle=\color{dkgreen},
+  stringstyle=\color{mauve},
+  breaklines=true,
+  breakatwhitespace=true
+  tabsize=3
+}
+
+\usepackage[lastexercise]{exercise}
+
+\newtheorem{ex}{Exercise}
+\newtheorem{property}{Property}
+\newtheorem{ag}{Algorithm}
+\newtheorem{remark}{Remark}
+\newtheorem{den}{definition}
+\newtheorem{assumption}{Assumption}
+
+
+\usepackage[nosolutionfiles]{answers}
+\Newassociation{sol}{Solution}{ans}
+
+
+
+\usepackage{empheq}
+\usepackage{comment}
+%\usepackage{lscape}
+\usepackage{multirow}
+\usepackage{url,hyperref}
+
+\hypersetup{
+ %   bookmarks=true,         % show bookmarks bar?
+    unicode=false,          % non-Latin characters in Acrobat's bookmarks
+    pdftoolbar=true,        % show Acrobat's toolbar?
+    pdfmenubar=true,        % show Acrobat's menu?
+    pdffitwindow=false,     % window fit to page when opened
+    pdfstartview={FitH},    % fits the width of the page to the window
+    pdftitle={My title},    % title
+    pdfauthor={Author},     % author
+    pdfsubject={Subject},   % subject of the document
+    pdfcreator={Creator},   % creator of the document
+    pdfproducer={Producer}, % producer of the document
+    pdfkeywords={keyword1} {key2} {key3}, % list of keywords
+    pdfnewwindow=true,      % links in new window
+    colorlinks=true,       % false: boxed links; true: colored links
+    linkcolor=red,          % color of internal links (change box color with linkbordercolor)
+    citecolor=green,        % color of links to bibliography
+    filecolor=magenta,      % color of file links
+    urlcolor=cyan           % color of external links
+}
+
+
+\usepackage{subfigure,epsfig,graphicx,graphics}
+
+\DeclareGraphicsRule{.tif}{png}{.png}{`convert #1 `dirname #1`/`basename #1 .tif`.png}
+   \DeclareGraphicsExtensions{.pdf}
+
+
+
+
+\newcommand{\hw}{ {\underline{\tt Homework }} }
+\newcommand{\hws}{ {\underline{\tt Homework$\star$}} }
+\newcommand{\optional}{ {\it optional} }
+
+\newcommand{\MATLAB}{ \texttt{MATLAB}}
+\newcommand{\python}{ \texttt{python}}
+\newcommand{\Rlang}{ \texttt{R}}
+\newcommand{\SAS}{ \texttt{SAS}}
+\newcommand{\MC}{Markov Chain}
+
+
+\newcommand{\tm}{transition matrix}
+\newcommand{\rv}{random variable}
+\newcommand{\spl} {supervised learning }
+ 
+
+\newcommand{\dis}{\underline{\tt discussion}: }
+\newcommand{\pri}{\underline{\tt principle}: }
+
+
+
+
+\newcommand{\bq}{\scalebox{6}{\textbf{?} }}
+\newcommand{\sq}{\scalebox{2}{\textbf{?} }}
+\newcommand{\ck} {  {\scalebox{0.8} {\Interval}   } }
+
+\newcommand{\eps}{\varepsilon}
+\newcommand{\To}{\longrightarrow}
+
+% 
+\newcommand{\Dcal}{\mathtt{D}}
+\newcommand{\Hcal}{\mathcal{H}}
+\newcommand{\Ecal}{\mathcal{E}}
+\newcommand{\Xcal}{\mathcal{X}}
+\newcommand{\Ycal}{\mathcal{Y}}
+\newcommand{\Zcal}{\mathcal{Z}}
+
+%%Calculus 
+
+\renewcommand{\d}{\ensuremath{\mathrm{d}}}
+\newcommand{\dt}{ \ensuremath{\mathrm{d} t } }
+\newcommand{\dx}{ \ensuremath{\mathrm{d} x} }
+\newcommand{\dy}{ \ensuremath{\mathrm{d} y } }
+
+%indicator function
+\newcommand{\indf}{ \ensuremath{\mathbf{1} } }
+
+
+
+%probability
+\newcommand{\p}{ \mathbb{P}}
+\newcommand{\prob}{{\Pr}}
+\newcommand{\PP}{\mbox{PP}}%Poisson process
+%condition prob
+\newcommand{\cPr}[2]{{\Pr\left(#1\mid #2\right)}}
+
+\newcommand{\FF}{{\mathbb{F}}}
+
+\newcommand{\e}{ \operatorname{\mathbb E}}
+\newcommand{\Var}{\operatorname{\mathbb{V} }}
+\newcommand{\var}{\operatorname{\text{Var} }}
+\newcommand{\MSE}{\operatorname{\text{MSE} }}
+
+\newcommand{\Std}{\operatorname{std}}
+\newcommand{\Cov}{\operatorname{cov}}
+
+%Matrix  %mathbf
+\newcommand{\Pb}{{\mathbf{P}}}
+\newcommand{\Qb}{{\mathbf{Q}}}
+\newcommand{\Mb}{{\mathbf{M}}}
+\newcommand{\cb}{\mathbf{c}}
+\newcommand{\bb}{{\mathbf{b}}}
+
+\newcommand{\Tb}{\mathbf{T}}
+
+\newcommand{\Wb}{\mathbf{W}}
+\newcommand{\wb}{\mathbf{w}}
+\newcommand{\Xb}{\mathbf{X}}
+
+\newcommand{\xb}{\mathbf{x}}
+
+\newcommand{\Wtn}{\mathbb{W}}
+\newcommand{\btn}{\mathbf{b}}
+
+
+
+\newcommand{\eye}{{\mathbf{I}}}
+%identity matrix
+\newcommand{\onem}{{\mathbb{1}}}
+\newcommand{\idor}{\mathbf{1}}
+\newcommand{\ii}{\mathbf{i}}
+%imaginary symbol
+
+\usepackage{tikz}
+
+%State number
+\newcommand{\snum}[1]{ \raisebox{.5pt}{\textcircled{\raisebox{-.9pt} {#1}}}}
+
+ \usetikzlibrary{arrows}
+\usetikzlibrary{shapes}
+
+%\newcommand{\snum}[1]{%
+ % \tikz[baseline=(char.base)]\node[anchor=south west, draw,rectangle, rounded corners, inner sep=1.4pt, minimum size=5mm,
+   % text height=1.3mm](char){\ensuremath{#1}} ;}
+
+\newcommand*\circled[1]{\tikz[baseline=(char.base)]{
+            \node[shape=circle,draw,inner sep=.4pt] (char) {#1};}}
+
+
+%real number
+\newcommand{\Real}{{\mathbb{R}}}
+%integer
+\newcommand{\ZZ}{\mathbb{Z}}
+%positive integer
+\newcommand{\NN}{\mathbb{N}}
+
+
+
+\newcommand{\inpd}[2]{\left\langle #1, #2 \right\rangle}
+\newcommand{\abs}[1]{\left\vert#1\right\vert}
+\newcommand{\norm}[1]{\left\|#1\right\|}
+\newcommand{\wt}[1]{{\widetilde{#1}}}
+\newcommand{\set}[1]{\left\{#1\right\}}
+\newcommand{\partiald}[2]{  \frac{\partial #1 }{\partial #2}}
+
+
+
+\newcommand{\ie}{{\it{i.e.}}}
+
+
+
+\newcommand{\transpose}{\textsf{T}} % or, \intercal
+\newcommand{\diag}{\textsf{diag}}
+\newcommand{\tr}{{\textsf{T}}}
+\newcommand{\rt}{{\textbf{r}}}
+
+\DeclareMathOperator{\trace}{Trace}
+
+
+\newcommand{\argmin}{ \operatornamewithlimits{argmin} }
+\newcommand{\argmax}{ \operatornamewithlimits{argmax} }
+
+
+
+
+\def\biz{\begin{itemize} }
+\def\bizp{\begin{itemize}[<+->] }
+\def\eiz{\end{itemize}}
+
+
+\def\bfm{\begin{frame}}
+\def\efm{\end{frame}}
+
+\def\bena{\begin{enumerate}[<+-| alert@+>]}
+\def\ben{\begin{enumerate}}
+\def\een{\end{enumerate}}
+
+
+\def\bbk{\begin{block} }
+\def\ebk{\end{block}}
+
+
+
+
+
+
+\makeatletter
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%% Textclass specific LaTeX commands.
+ % this default might be overridden by plain title style
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%% User specified LaTeX commands.
+%\usetheme{Warsaw}
+\usetheme{Boadilla}
+% or ...
+
+
+
+%\setbeamertemplate{footline}[text line]{} % makes the footer EMPTY
+%\setbeamertemplate{footline}[page number]{} % makes the footer EMPTY
+
+%\usecolortheme{orchid} %not use is better 
+
+\setbeamertemplate{footline}[text line]{%
+  \parbox{\linewidth}{\vspace*{-2pt}Xiang Zhou\hfill CityU\hfill \insertpagenumber}}
+%\setbeamertemplate{navigation symbols}{}
+
+%\setbeamercovered{transparent}
+% or whatever (possibly just delete it)
+
+
+%\usepackage{babel}
+\makeatother
+
+
+
+ %
+%\addtobeamertemplate{frametitle}{}{%
+%\begin{tikzpicture}[remember picture,overlay]
+%\node[anchor=south east,yshift=2pt] at (current page.south east) {\includegraphics[height=0.6cm]{CityU_Logo_Basic_Signature.eps}};
+%\end{tikzpicture}}
+%
+
+\beamerdefaultoverlayspecification{<+->}
+%the presentation acts as though a \pause command has been inserted between every two bullets, without the actual need to write \pause after each item.
+
