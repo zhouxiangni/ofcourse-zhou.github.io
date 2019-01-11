@@ -1,0 +1,551 @@
+\documentclass[english,10pt,handout]{beamer}
+%\documentclass[english,11pt]{beamer}
+
+\usepackage[clock]{ifsym}
+%\usepackage{clock}
+
+\include{frontpage}
+
+\begin{document}
+
+
+
+
+
+\title{Introduction to Stochastic Process}
+
+
+\author{Xiang Zhou}
+
+
+\date[CFP 2003]{2013-2014, Semester A}
+
+\maketitle 
+
+
+%\pgfdeclareimage[height=0.5cm]{institution-logo}{institution-logo-filename}
+
+%\logo{\pgfuseimage{institution-logo}}
+
+
+
+%\beamerdefaultoverlayspecification{<+->}
+
+\frame{
+\
+{\Large Chapter 4: Continuous-Time Markov Chain}
+
+
+\bigskip
+\biz
+\item occupancy time
+\item limiting behaviour
+\item first-passage time
+
+\eiz
+ }
+
+
+
+\setlength{\belowdisplayskip}{3pt} \setlength{\belowdisplayshortskip}{3pt}
+\setlength{\abovedisplayskip}{3pt} \setlength{\abovedisplayshortskip}{3pt}
+
+ 
+
+
+\frame{{Occupancy Times}
+Let $\Pm(t)=[P_{ij}(t)]$ be the transition matrix of a CTMC
+$\{ X(t): t\in \Real_+\}$.  
+The occupancy time of state $j$ is defined as 
+\[m_{ij}(T) = \e\left(\left.\int_0^T 1_{\{X(t)=j\}} \ \mathrm{d}t\right|X(0)=i\right),\]
+ which is the expected amount of time the CTMC
+spends in state $j$ during the interval $[0,T]$.
+We compute
+\begin{equation*}
+\begin{split}
+m_{ij}(T)&=\int_0^T\e\left(\left. 1_{\{X(t)=j\}} \right|X(0)=i\right)\mathrm{d}t
+=\int_0^T\p\left(\left.X(t)=j \right|X(0)=i\right)\ \mathrm{d}t\\
+&=\int_0^T P_{ij}(t)\ \mathrm{d}t.
+\end{split}
+\end{equation*}
+
+\pause
+\begin{theorem}[Thm 4.4]
+Define {  \bf occupancy matrix   } $M(T):=[m_{ij}(T)]$, then 
+\[M(T)=\int_0^T \Pm(t)\ \mathrm{d}t  \]
+\end{theorem}
+
+}
+
+
+
+%
+%\frame{{Uniformization Method of Computing Occupancy Times\footnote{optional, not required}}
+%
+%Recall that Thm 4.4 asserts
+%\[
+%P(t)=\sum_{k=0}^\infty\mathrm{e}^{-rt}\frac{(rt)^k}{k!}\hat{P}^k.
+%\]
+%So by Thm 4.4,
+%\begin{equation*}
+%%\begin{split}
+%M(T)=\int_0^T P(t)\ \mathrm{d}t=\int_0^T \sum_{k=0}^\infty\mathrm{e}^{-rt}\frac{(rt)^k}{k!}\hat{P}^k\ \mathrm{d}t
+%=\sum_{k=0}^\infty\hat{P}^k\int_0^T \mathrm{e}^{-rt}\frac{(rt)^k}{k!}\ \mathrm{d}t.
+%%\end{split}
+%\end{equation*}
+%Using integration by parts repeatedly, we get
+%\[
+%\int_0^T \mathrm{e}^{-rt}\frac{(rt)^k}{k!}\ \mathrm{d}t=\frac{1}{r}\biggl(1-\sum_{\ell=0}^k\mathrm{e}^{-rT}\frac{(rT)^\ell}{\ell!}\biggr).
+%\]
+%
+%\begin{theorem}[Thm 4.5]
+%\[M(T)=\frac{1}{r}\sum_{k=0}^\infty\p(Y>k)\hat{P}^k, \]
+%where  $Y\sim \mathrm{Poi}(rT)$.
+%\end{theorem}
+%}
+
+\frame{{Example: Two-State CTMC}
+\begin{example}
+Consider a two-state CTMC with the infinitesimal generator
+\[ Q=\begin{bmatrix}
+-\alpha & \alpha \\
+\beta & -\beta
+\end{bmatrix},\]
+with $\alpha,\beta\geq 0$. Find $M(T)$.
+\end{example}
+\pause
+\vspace{15pt}
+We already obtained
+\begin{equation*}
+P(t)=\frac{1}{\alpha+\beta}\begin{bmatrix}
+\beta & \alpha \\
+\beta & \alpha
+\end{bmatrix}
++\frac{1}{\alpha+\beta}
+\begin{bmatrix}
+\alpha & -\alpha \\
+-\beta & \beta
+\end{bmatrix}
+\mathrm{e}^{-(\alpha+\beta)t}.
+\end{equation*}
+Then using Thm 4.4, we get
+\begin{equation*}
+\begin{split}
+M(T)&=\int_0^T \Pm(t)\ \mathrm{d}t\\&=\frac{T}{\alpha+\beta}\begin{bmatrix}
+\beta & \alpha \\
+\beta & \alpha
+\end{bmatrix}
++\frac{1}{(\alpha+\beta)^2}
+\begin{bmatrix}
+\alpha & -\alpha \\
+-\beta & \beta
+\end{bmatrix}
+\left(1-\mathrm{e}^{-(\alpha+\beta)T}\right).
+\end{split}
+\end{equation*}
+
+}
+
+
+\frame{ Limiting behavior}
+
+
+\frame{ {Limiting behavior}
+
+\begin{definition}
+The limiting distribution of   CTMC  $\{ X(t): t\in \Real_+\}$ 
+with transition semigroup $\{\Pm(t)=[P_{ij}(t)]\}$ is
+$\pi=[\pi_j]$ where
+\[ \pi_j:=\lim_{t\to\infty} P_{ij}(t) \]
+provided the above limit exists and is independent $i$, i.e.,
+the limit $\lim_{t\to\infty}\Pm(t)$ have the same row vectors, which is $\pi$.
+\end{definition}
+\pause 
+
+\begin{definition}
+  CTMC  $\{ X(t): t\in \Real_+\}$ is {\bf  irreducible}
+if its embedded DTMC
+$\{Z_n:n=0,1,\ldots\}$ is irreducible.
+\end{definition}
+}
+
+\frame{{Balance Equation}
+
+\begin{theorem}[Thm 4.6,4.7,4.8]
+\biz
+\item
+An irreducible CTMC  $\{ X(t): t\in \Real_+\}$
+with (strictly positive) rate matrix $R=[r_{ij}]$ has a unique
+limiting distribution $\pi$.
+\item $\pi$ is
+the solution to the balance equation and the normalizing equation
+\begin{equation*}
+\boxed{\pi_j r_j =\sum_{i} \pi_i r_{i,j}, \quad \sum_{i}\pi_i =1.}
+\end{equation*}
+\item  $\pi$ is also the stationary distribution of   $X$.
+\item  $\pi$ is also the occupancy  distribution of   $X$, i.e., $\displaystyle\lim_{T\rightarrow\infty}\frac{m_{ij}(T)}{T}=\pi_j$.
+\eiz
+\end{theorem}
+
+
+The balance equation can be rewritten as \[\boxed{\pi Q=0}.\]
+By Kolmogorov equation, the distribution $\pi(t):=\pi(0)\Pm(t)$ of $X(t)$ satisfies
+\[
+\pi'(t)=\pi(0)\Pm'(t)=\pi(0)\Pm(t)Q=\pi(t)Q.
+\]
+So $\pi(t)\equiv \pi(0)$ if and only if $\pi(0)Q=0$.
+}
+
+\frame{{Example(Example 4.22): Two-State CTMC}
+
+Consider a two-state CTMC with the infinitesimal generator
+\[ Q=\begin{bmatrix}
+-\alpha & \alpha \\
+\beta & -\beta
+\end{bmatrix},\quad \alpha,\beta\geq 0.\]
+It is irreducible. Hence it has a unique limiting distribution $[\pi_0, \pi_1]$.
+Solving simultaneously the two balance equations
+\begin{equation*}
+\begin{split}
+\alpha \pi_0&=\beta \pi_1,\\
+\beta \pi_1&=\alpha \pi_0
+\end{split}
+\end{equation*}
+and the normalizing equation
+\[\pi_0+\pi_1=1\]
+yields
+\[\pi_0=\frac{\beta}{\alpha+\beta}, \quad \pi_1=\frac{\alpha}{\alpha+\beta}.\]
+Note that this is also the stationary distribution and the occupancy distribution of the CTMC.
+}
+
+
+\frame{{Example: Birth and Death Process}
+Consider the birth and death process on $\{0,1,...,N\}$ with the generator
+\[ Q=\begin{bmatrix}
+-\lambda_0 & \lambda_0 & 0 & 0 & \cdots &\cdots &\cdots & 0 & 0 \\
+\mu_1 & -\lambda_1-\mu_1 & \lambda_1 & 0 & \cdots &\cdots &\cdots & 0 & 0 \\
+0 & \mu_2 &-\lambda_2-\mu_2&  \lambda_2  & \cdots&\cdots &\cdots & 0 & 0 \\
+\vdots & \vdots & \vdots & \vdots & \ddots & \ddots & \ddots &\vdots&\vdots\\
+0 & 0 & 0 & \vdots & \ddots & \ddots & \mu_{N-1} &-\lambda_{N-1}-\mu_{N-1}&\lambda_{N-1}\\
+0 & 0 & 0 & 0 & \ddots & \ddots & \ddots &\mu_N&-\mu_N
+\end{bmatrix}.\]
+The balance equation reads
+\begin{equation*}
+\begin{cases}
+&0=-\lambda_0\pi_0+\mu_1\pi_1,\\
+&0=\lambda_0\pi_0-(\lambda_1+\mu_1)\pi_1+\mu_2\pi_2,\\
+&\vdots\\
+&0=\lambda_{j-1}\pi_{j-1}-(\lambda_j+\mu_j)\pi_j+\mu_{j+1}\pi_{j+1},\\
+&\vdots\\
+&0=\lambda_{N-1}\pi_{N-1}-\mu_N\pi_N.
+\end{cases}
+\end{equation*}
+}
+
+
+\renewcommand{\thefootnote}{\fnsymbol{footnote}}
+\setcounter{footnote}{1}
+
+\frame{{Example: Birth and Death Process}
+\small
+$0=-\lambda_0\pi_0+\mu_1\pi_1$ gives $\pi_1=\frac{\lambda_0}{\mu_1}\pi_0$,\\
+$0=\lambda_0\pi_0-(\lambda_1+\mu_1)\pi_1+\mu_2\pi_2$ gives $\pi_2=-\frac{\lambda_0}{\mu_2}\pi_0+\frac{\lambda_1+\mu_1}{\mu_2}\pi_1
+=-\frac{\lambda_0}{\mu_2}\pi_0+\frac{\lambda_1+\mu_1}{\mu_2}\frac{\lambda_0}{\mu_1}\pi_0
+=\frac{\lambda_1\lambda_0}{\mu_2\mu_1}\pi_0$,\\
+$\vdots$\\
+$0=\lambda_{j-1}\pi_{j-1}-(\lambda_j+\mu_j)\pi_j+\mu_{j+1}\pi_{j+1}$ gives
+$\pi_{j+1}=-\frac{\lambda_{j-1}}{\mu_{j+1}}\pi_{j-1}+\frac{\lambda_j+\mu_j}{\mu_{j+1}}\pi_j
+=-\frac{\lambda_{j-1}}{\mu_{j+1}}\frac{\lambda_{j-2}\cdots\lambda_0}{\mu_{j-1}\cdots\mu_1}\pi_{0}
++\frac{\lambda_j+\mu_j}{\mu_{j+1}}\frac{\lambda_{j-1}\cdots\lambda_0}{\mu_j\cdots\mu_1}\pi_0
+=\frac{\lambda_j\cdots\lambda_0}{\mu_{j+1}\cdots\mu_1}\pi_0$,\\
+$\vdots$\\
+$0=\lambda_{N-1}\pi_{N-1}-\mu_N\pi_N$ gives
+$\pi_{N}=\frac{\lambda_{N-1}}{\mu_N}\pi_{N-1}
+=\frac{\lambda_{N-1}}{\mu_N}\frac{\lambda_{N-2}\cdots\lambda_0}{\mu_{N-1}\cdots\mu_1}\pi_0
+=\frac{\lambda_{N-1}\cdots\lambda_0}{\mu_{N}\cdots\mu_1}\pi_0$.
+
+Then  the normalizing equation
+\[
+1=\sum_{i=0}^N\pi_i=\pi_0\sum_{i=0}^N\frac{\lambda_{i-1}\cdots\lambda_0}{\mu_{i}\cdots\mu_1}
+\footnote{The conventions $\lambda_{i-1}\cdots\lambda_0=\prod_{j=0}^{i-1}\lambda_j=0$ for $i=0$ and
+$\mu_{i}\cdots\mu_{1}=\prod_{j=1}^i\mu_j=0$ for $i=0$ are adopted.}\Longrightarrow
+\pi_0=\frac{1}{\sum_{i=0}^N\frac{\lambda_{i-1}\cdots\lambda_0}{\mu_{i}\cdots\mu_1}},
+\]
+and so
+\[
+\pi_j=\frac{\lambda_{j-1}\cdots\lambda_0}{\mu_j\cdots\mu_1\sum_{i=0}^N\frac{\lambda_{i-1}\cdots\lambda_0}{\mu_{i}\cdots\mu_1}},
+\quad  j=0, \cdots, N.
+\]
+}
+
+
+
+
+
+
+\frame{{Expected Total Cost}
+
+Assume that whenever the CTMC is in state $i$, it incurs costs at rate $c(i)$.
+
+%\vspace{10pt}
+
+\biz
+\item   The cost rate at time $t$ is $c\bigl(X(t)\bigr)$.
+\item   The total cost up to time $T$ is given by $\int_0^T c\bigl(X(t)\bigr) \mathrm{d}t$.
+\item   The expected total cost up to $T$, starting from state $i$, is given by
+\[g(i,T)=\e\left(\left.\int_0^T c\bigl(X(t)\bigr) \ \mathrm{d}t\right|X(0)=i\right).\]
+\eiz
+\begin{equation*}
+\begin{split}
+g(i,T)&=\int_0^T\e\left(\left. c\bigl(X(t)\bigr) \right|X(0)=i\right)\mathrm{d}t\\
+&=\int_0^T\sum_{j=1}^Nc(j)\p\left(\left.X(t)=j \right|X(0)=i\right)\mathrm{d}t\\
+&=\sum_{j=1}^Nc(j)\int_0^T P_{ij}(t)\ \mathrm{d}t=\sum_{j=1}^Nc(j)m_{i,j}(T).
+\end{split}
+\end{equation*}
+}
+
+\frame{
+\begin{theorem}[Thm 4.9]
+Write   $c=\begin{bmatrix}c(1)\\\vdots\\c(N)\end{bmatrix}$ and   $g(T)=\begin{bmatrix}g(1,T)\\\vdots\\g(N,T)\end{bmatrix}$ as column vectors,  then the expected  total cost is 
+\[g(T)=M(T)c\]
+where $M(T)$ is the occupancy matrix.
+\end{theorem}
+}
+
+
+\frame{{Example(Example 4.28): Two-State CTMC}
+\begin{example}
+Consider a two-state CTMC with the infinitesimal generator
+\[ Q=\begin{bmatrix}
+-\alpha & \alpha \\
+\beta & -\beta
+\end{bmatrix},\quad \alpha,\beta\geq 0.\]
+Set $c(0)=-B$, $c(1)=A$ where $A$ and $B$ are two positive numbers.
+ Find the expected total cost $g(T)$.
+\end{example}
+\pause
+\vspace{15pt}
+
+We already computed
+\[
+M(T)=\frac{T}{\alpha+\beta}\begin{bmatrix}
+\beta & \alpha \\
+\beta & \alpha
+\end{bmatrix}
++\frac{1}{(\alpha+\beta)^2}
+\begin{bmatrix}
+\alpha & -\alpha \\
+-\beta & \beta
+\end{bmatrix}
+\left(1-\mathrm{e}^{-(\alpha+\beta)T}\right).
+\]
+Then by Thm 4.9, we have
+\begin{equation*}
+\begin{split}
+g(T)&=M(T)c=\left(\frac{T}{\alpha+\beta}\begin{bmatrix}
+\beta & \alpha \\
+\beta & \alpha
+\end{bmatrix}
++\frac{1-\mathrm{e}^{-(\alpha+\beta)T}}{(\alpha+\beta)^2}
+\begin{bmatrix}
+\alpha & -\alpha \\
+-\beta & \beta
+\end{bmatrix}\right)
+\begin{bmatrix}-B\\A\end{bmatrix}\\
+&=\frac{\left(\alpha A-\beta B\right)T}{\alpha+\beta}\begin{bmatrix}1\\1\end{bmatrix}+\frac{B+A}{(\alpha+\beta)^2}\left(1-\mathrm{e}^{-(\alpha+\beta)T}\right)
+\begin{bmatrix}-\alpha\\\beta\end{bmatrix}.
+\end{split}
+\end{equation*}
+
+}
+
+
+
+\frame{{Long-run Cost Rates}
+
+\biz
+\item   The long-run cost rate is defined as
+\[g(i)=\lim_{T\rightarrow\infty}\frac{g(i,T)}{T}.\]
+\eiz
+
+\begin{theorem}[Thm 4.10]
+Suppose $\{ X(t): t\in \Real_+\}$ is an irreducible CTMC with limiting distribution $\pi=[\pi_1, \cdots, \pi_N]$. Then
+\[g=g(i)=\sum_{j=1}^N\pi_jc(j), \quad 1\le i\le N. \]
+\end{theorem}
+\begin{equation*}
+\begin{split}
+g(i)&=\lim_{T\rightarrow\infty}\frac{g(i,T)}{T}=\lim_{T\rightarrow\infty}\frac{\sum_{j=1}^Nm_{i,j}(T)c(j)}{T}\\
+&=\sum_{j=1}^Nc(j)\lim_{T\rightarrow\infty}\frac{m_{i,j}(T)}{T}=\sum_{j=1}^Nc(j)\pi_j.
+\end{split}
+\end{equation*}
+%Intuition: the CTMC incurs a cost at rate $c(j)$
+
+}
+
+\frame{{Example(Example 4.30): Two-State CTMC}
+\begin{example}
+Consider a two-state CTMC with the infinitesimal generator
+\[ Q=\begin{bmatrix}
+-\alpha & \alpha \\
+\beta & -\beta
+\end{bmatrix},\quad \alpha,\beta\geq 0.\]
+Set $c(0)=-B$, $c(1)=A$. Find the long-run cost rate $g$.
+\end{example}
+\pause
+\vspace{15pt}
+
+We already computed
+\[\pi_0=\frac{\beta}{\alpha+\beta}, \quad \pi_1=\frac{\alpha}{\alpha+\beta}.\]
+Then by Thm 4.10, we get
+\[g=-B\pi_0+A\pi_1=\frac{A\alpha-B\beta}{\alpha+\beta}.\]
+
+}
+
+
+
+\frame{{First-Passage Times}
+\begin{definition}
+The expected first-passage time to a subset $A\subset S$ is 
+defined as  $h_A(i)=\e(T_A|X(0)=i)$, where $T_A=\inf \{t\geq 0: X(t) \in A \}$ is the first-passage time into a set $A$.
+\end{definition}
+\vspace{10pt}
+\pause
+
+Start from time $t=0$ now. 
+Let  $\tau$  be on the time of the first jump of $X$.
+Conditioning on  the state $X(\tau)$ of the CTMC
+ (i.e., the embedded chain $Z_1$), 
+we perform the following ``one-more-step analysis",
+\begin{equation*}
+\begin{split}
+h_A(i)&=\e(T_A|X(0)=i)=\sum_{j}\e(T_A|X(0)=i,X(\tau)=j)\p(X(\tau)=j|X(0)=i)\\
+&=\sum_{j}\bigl[\e(\tau|X(0)=i)+\e(T_A|X(0)=\hb{j})\bigr]\p(X(\tau)=j|X(0)=i)\\
+&=\sum_{j}\left(\frac{1}{r_i}+h_A(j)\right)\frac{r_{i,j}}{r_i}
+=\frac{1}{r_i^2}\sum_{j}r_{i,j}+\frac{1}{r_i}\sum_{j}r_{i,j}h_A(j)=\frac{1}{r_i}+\frac{1}{r_i}\sum_{j\notin A}r_{i,j}h_A(j).
+\end{split}
+\end{equation*}
+{\small 
+Here  we use the facts that
+the expectation of the first jump  time
+$\e(\tau|X(0)=i)=\frac{1}{r_i}$
+and transition probability of the embedded DTMC $p_{i,j}=\frac{r_{i,j}}{r_i}$,
+as well as $r_i=\sum_j r_{ij}$.
+}
+
+}
+\frame{{First-passage time Formula}
+\begin{theorem}[Thm 4.11]
+The mean first passage times $\{h_A(i):i\notin A\}$ satisfy
+\[r_ih_A(i)=1+\sum_{j\notin A}r_{i,j}h_A(j), \quad i\notin A,\]
+and the boundary condition $h_A(i)=0$ for $i\in A$.
+\end{theorem}
+
+}
+
+\frame{
+\begin{example}[Example 4.32]
+Consider a CTMC with the infinitesimal generator
+\[ Q=\begin{bmatrix}
+-5& 2 & 3 & 0 \\
+4 & -6 & 2 & 0\\
+0 & 2 & -4 & 2\\
+1 & 0 & 3 & -4
+\end{bmatrix}.\]
+Compute the expected time to reach state $4$.
+\end{example}
+\pause
+\vspace{15pt}
+
+By Thm 4.11, we have
+\begin{equation*}
+\begin{cases}
+5h_{\{4\}}(1)=1+2h_{\{4\}}(2)+3h_{\{4\}}(3),\\
+6h_{\{4\}}(2)=1+4h_{\{4\}}(1)+2h_{\{4\}}(3),\\
+4h_{\{4\}}(1)=1+2h_{\{4\}}(2).
+\end{cases}
+\end{equation*}
+Solving simultaneously, we get
+\[
+h_{\{4\}}(1)=\frac{14}{11}\approx1.2727, \quad h_{\{4\}}(2)=\frac{29}{22}\approx1.3182, \quad h_{\{4\}}(3)\approx\frac{10}{11}=0.9091.
+\]
+}
+
+\frame{
+\begin{example}[ Birth and Death Process]
+Consider the birth and death process on $\{0,1,...,N\}$ with the generator
+\[ Q=\begin{bmatrix}
+-\lambda & \lambda & 0 & 0 & \cdots &\cdots &\cdots & 0 & 0 \\
+\mu & -\lambda-\mu & \lambda & 0 & \cdots &\cdots &\cdots & 0 & 0 \\
+%0 & \mu &-\lambda-\mu&  \lambda  & \cdots&\cdots &\cdots & 0 & 0 \\
+\vdots & \vdots & \vdots & \vdots & \ddots & \ddots & \ddots &\vdots&\vdots\\
+0 & 0 & 0 & \vdots & \ddots & \ddots & \mu &-\lambda-\mu&\lambda\\
+0 & 0 & 0 & 0 & \ddots & \ddots & \ddots &\mu &-\mu
+\end{bmatrix}.\]
+Compute the expected time to reach states $0$ and $N$.
+\end{example}
+\pause
+\vspace{10pt}
+
+By Thm 4.11, we have the boundary conditions $h_{\{0,N\}}(0)=h_{\{0,N\}}(N)=0$ and
+\[
+h_{\{0,N\}}(i)=\frac{1}{\lambda+\mu}+\frac{\mu}{\lambda+\mu}h_{\{0,N\}}(i-1)+\frac{\lambda}{\lambda+\mu}h_{\{0,N\}}(i+1),
+\quad 1\le i\le N-1.
+\]
+We can verify that the solution is given by
+\[
+h_{\{0,N\}}(i)=
+\begin{cases}
+\frac{1}{\mu-\lambda}\Bigl(i-N\frac{1-(\mu/\lambda)^i}{1-(\mu/\lambda)^N}\Bigr),\quad &\text{if} \quad \mu\neq \lambda,\\
+\frac{1}{2\mu}i(N-i), &\text{if} \quad \mu=\lambda,
+\end{cases}
+\quad  i=0,\cdots, N.
+\]
+
+
+}
+
+\frame{{\hw}
+\biz 
+ \item
+TEXTBOOK:  
+ Page 142: 4.11,  4.20,   4.22, 4.32
+\item 
+ %The book of  "Understanding Markov Chain" Ex.  10.11. (see below)
+%  (solution P327, under Ex.10.1)
+A workshop has five machines and one repairman. Each machine functions until it fails at an exponentially distributed random time with parameter $0.20$ per hour. On the other hand, it takes a exponentially distributed random time with parameter (rate) $0.50$ per hour to repair a given machine. We assume that the machines behave independently of one another, and that
+(a) up to five machines can operate at any given time, (b) at most one can be under repair at any time.
+Compute the proportion of time the repairman is idle in the long run.
+\eiz
+}
+
+\frame{{\hw}
+\biz 
+ \item 
+ %The book of  "Understanding Markov Chain" Ex.  10.11. (see below)
+%  (solution P327, under Ex.10.7)
+
+A system consists of two machines and two repairmen. Each machine can work until failure at an exponentially distributed random time with parameter $0.2$. A failed machine can be repaired only be a single repairman, within an exponentially distributed random time with parameter $0.25$. We model the number$  X(t)$ of working machines at time $t\in\Real_+$ as a continuous-time Markov process.
+ \ben
+ \item Complete the missing entries in the generator  matrix
+\[ Q=\begin{bmatrix}
+\square  &0.5 & \square \\
+0.2  & \square & \square \\
+0 & \square & -0.4
+\end{bmatrix}.\] 
+
+\item 
+Calculate the long-run probability distribution $(\pi_0,\pi_1,\pi_2)$ of $X(t)$.
+
+\item Compute the average number of working machines in the long
+run.
+\item Given that a working machine can produce  $100$ units every hour, how many units can the system produce per hour in the long run?
+\een
+ 
+\eiz 
+}
+  
+
+
+
+
+\end{document}
