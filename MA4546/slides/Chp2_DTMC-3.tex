@@ -1,0 +1,798 @@
+\documentclass[english,10pt,handout]{beamer}
+%\documentclass[english,10pt]{beamer}
+
+
+\include{frontpage}
+
+
+\begin{document}
+
+
+
+
+ 
+
+ \frame{{Chapter 2   Discrete-Time Markov Models (Part iv)}
+\begin{center}
+\includegraphics[scale=0.4]{Markov-chain-banner.png}
+\bigskip \par 
+ Andrey  Markov (1856-1922, Russian mathematician)
+\end{center}
+}
+
+ 
+
+\frame{{Section 2.7 First-Passage Time (hitting problem)}
+\only<1>{
+\begin{example}[Example 2.33]
+ Gambler's  Ruin Problem (page 43).
+\end{example}
+}
+
+\pause 
+
+\only<3|handout:0>
+{
+\begin{center}
+\includegraphics[width=0.3\textwidth]{duxia.jpg}
+~~\hfill ~~{Zhou {\huge VS} Zhou} \hfill
+\includegraphics[width=0.3\textwidth]{dushen.jpg}
+\par
+They are both ``God of Gamblers''. 
+{  Who loses first \scalebox{2}{\textbf{?} } }
+\end{center}
+}
+
+\only<2->{
+\begin{example}
+ DTMC model :  
+Simple random walk on $\{0,1,2,\ldots, N\}$ with absorbing boundary condition.
+\end{example}
+}
+
+
+
+
+
+}
+
+\frame{
+{Hitting Problem}
+\begin{definition}
+Let $\{X_n, n\geq 0\}$ be a DTMC on state space $S$, 
+let $A\subset S$ be a subset of $S$. 
+\biz[<+->]
+\item 
+The {\bf first passage time to hit $A$ } is 
+\[  T_A = \inf\{n\geq {\color{blue}{0}}:  X_n \in A\} \]
+and $T_A=\infty$ if 
+$\{n\geq 0:  X_n \in A\}=\emptyset$.
+\item The expectation of $T_A$ is called 
+the {\bf  mean first passage time}, denoted as
+\footnote{The textbook uses the notation $m$   instead of $h$. 
+Please use $h$ in this course.}
+\[ h_A(i) =\e ( T_A  | X_0=i). \]
+
+\item  {\it Where} the process $X$ hits the set $A$ for the first time? It is the 
+location of $X$ at the   time $T_A$: 
+ \[ X_{T_A}\]
+ which is a random variable taking values in $A$.
+\item The {\bf hitting probability} is the distribution of $X_{T_A}$, denoted by
+\[g_{\hb{j}}(i) =\p (X_{T_A} = j | X_0=i) , \forall i \in S , \hb{j}\in A.\]
+
+\eiz
+\end{definition}
+}
+
+\frame{
+\biz[<+->]
+\item 
+$T_A \in \{0,1,2,\cdots,\} \cup \{ \infty\}$
+\item $h_A(i)=0$ for all $i \in A$.
+\item Law of Total Probability gives  $$ \sum_ {\hb{j}\in A} g_\hb{j}(i) = \p( T_A < \infty | X_0= i)  $$
+\eiz
+\begin{center}
+\includegraphics[width=0.4\textwidth]{hita.pdf}
+\end{center}
+}
+\frame{
+{Equation for the mean first passage time $h_A(i)$}
+\framesubtitle{one-more-step analysis}
+For   $i\in A$, then $T_A(i)=0$, $h_A(i)=0$.  
+For all other $i\notin A$,  by Markov property
+{\small 
+\[
+\begin{split}
+h_A(i)& \triangleq  \e (T_A |X_0=i) =\sum_{j\in S} \e (T_A \cdot 1_{\set{X_1=j}} |X_0=i)  \\
+& = \sum_{j\in S} \e (T_A  |X_0=i, \hb{X_1=j}) \p(X_1=j|X_0=i) \\
+& = \sum_{j\in S} {\color{blue}{(\e (T_A  | X_0=j) +\color{red}{1} ) }} p_{ij}\\
+& = ( \sum_{j\notin A} h_A(j) p_{ij}) +1 
+\end{split}
+\]
+}
+\pause
+\begin{theorem}[Thm 2.13] The mean first passage time $h_A(i)$ satisfies 
+the following linear equation
+\[  \sum_{j\in A^c} p_{ij} h_A(j)  - h_A(i) = -1   , \quad \forall i\in A^c  \]
+and the boundary condition $ h_A(i) =0, \forall i\in A.$
+\end{theorem}
+
+}
+
+\frame{{exercise}
+\biz
+\item
+Consider the DTMC on $S=\set{1,2,\ldots,N}$ with 
+$p_{11}=1-a$
+where $0<a\leq 1$. Let $A=\set{2, 3,\ldots, N}$. Prove that 
+$h_A(1) = 1/a$.
+\begin{align*}
+h_A(1) = p_{11}(h_A(1)+1) + \sum_{j\in A}p_{1j} (h_A(j)+1)\\
+= p_{11}(h_A(1)+1)+a =(1-a)  (h_A(1)+1)+a.
+\end{align*}
+So $h_A(1)=1/a$.
+
+\eiz
+
+}
+
+\frame{{Cost Model :  Utility Functionals}
+The above ``one-more-step analysis'' technique can be applied to 
+derive an equation for an expectation of the form
+\[
+c_A(i) := \e \left[ \sum_{t=0}^{T_A-1} f(X_t) | X_0=i \right]
+\]
+where $f: A^c \to \Real$ is a given utility function\footnote{accumulated cost before hitting $A$}. 
+For $i\in A$, we define $c_A(i)=0$.
+For $i\notin A$, then
+{\small
+\[
+\begin{split}
+c_A(i)
+& = \sum_{j\in S} \e \left[ \sum_{t=0}^{T_A-1} f(X_t) \bigg |  X_0=i, X_1=j \right] \p( X_1=j| X_0=i) \\
+& = \sum_{j\in S}  (c_A(j) + f(i) ) p_{ij}=  ( \sum_{j\in A^c}  (c_A(j) p_{ij} ) )+ f(i)  
+\end{split}
+\]
+}
+
+\[
+\boxed
+{ \sum_{j\in A^c} p_{ij} c_A(j)  - c_A(i) = - f(i)   , \quad \forall i\in A^c  
+}
+\]
+}
+
+\frame{{Example:}
+A lift stops at the ground,   first, second and    third floor.
+Initially, it is at the third floor $X_0=3$.
+Each time it moves to one of three available  floors    with equal probability $1/3$.
+When the lift runs upward,   $3$ unit of power energy is used
+to lift the cart for  each  floor height;
+while as the lift runs downward, it just consumes   $1$ unit of power energy to travel each floor.
+What is the average unit of total power energy the lift consumes  before it stops at the ground floor? 
+
+{\it solution:} Define $c(i)$ be the expected unit of power before the lift stops at $A=\{0\}$ for $X_0=i$.
+Then 
+\[ c(i)=\sum_{j\in S}p_{ij} (d(i,j)+ c(j))\]
+where $d(i,j)$ is the cost  from floor $i$ to floor $j$:
+$d(i,j)=3*(j-i)$ if $j>i$ and $d(i,j)=(i-j)$ if $j<i$. 
+The boundary condition is $c(0)=0$.
+\[\begin{split}
+c(3) = 1/3 * ( 1+c(2) ) + 1/3*(2+c(1)) + 1/3 *(3+c(0)); \\
+c(2) = 1/3 * ( 3+c(3) ) + 1/3*(1+c(1)) + 1/3 *(2+c(0));\\
+c(1) = 1/3 * ( 6+c(3) ) + 1/3*(3+c(2)) + 1/3 *(1+c(0)).
+\end{split}
+\]
+So $c(3)=c(2)=7$ and $c(1)=8$.
+The answer is $7$.
+}
+
+
+
+\frame{
+{Hitting Probability $g_j(i), ~~ j\in A$}
+For $i\in A$, then $X_{T_A}=X_0$, 
+$g_j(i) = \delta_{ij}$ ($\triangleq 1$ if $j=i$; $\triangleq 0$ if $j\neq i$).
+
+
+For $i\in A^c$, by Markov property, 
+{\small
+\[
+\begin{split}
+g_j(i) & = \p ( X_{T_A} =j | X_0 = i ) \\
+ & = \sum_{k\in S}  \p ( X_{T_A} =j | X_0 = i , X_1=k)  p_{ik} \\
+ & =\sum_{k\in S} {\color{blue}{  \p ( X_{T_A} =j | X_0 = k )}} p_{ik}\\
+ & =\sum_{k\in S}  p_{ik}  g_j(k) 
+\end{split}
+\]
+}
+
+\bigskip 
+\pause
+
+The expected exit location:
+$\e (X_{T_A}\vert X_0=i) = \sum_{j\in A} g_{j}(i) j $
+
+}
+
+
+\frame{
+
+\begin{theorem} The hitting probability $g_j(i) = \p ( X_{T_A} =j | X_0 = i )$
+ satisfies  (for each {\bf fixed} $j\in A$)  the linear system, 
+\[  \sum_{k\in S}  p_{ik}  g_j(k)  - g_j(i) =0, \quad \forall i\in A^c   \]
+and the boundary condition $ g_j(i)  =\delta_{ij}, \forall i\in A$.
+Furthermore, the expected hitting location  is
+\[\e(X_{T_A}|X_0=i) = \sum_{j\in A}j g_j(i)\]
+\end{theorem}
+\pause 
+\begin{example}
+For a symmetric random work on $S=\set{0,\ldots, N}$.
+Let $A=\set{0,N}$. Show that 
+$g_{0}(i)=(N-i)/N$
+and $g_{N}(i)=i/N$.
+Then the expected value $$\e[X_{T_A}\vert X_0=i)=0\times g_0(i) + N \times g_N(i)=i=X_0.$$
+\end{example}
+}
+
+
+
+\frame{
+{ The case that $T_A=\infty$}
+  Note that\[
+\begin{split} 
+  1 &= \p(T_A=\infty | X_0=i) + \p(T_A<\infty | X_0=i) 
+\\
+&=\p(T_A=\infty | X_0=i) +\p( X_{T_A}\in A | X_0=i)  
+\\
+&=\p(T_A=\infty | X_0=i) +\sum_{j\in A}g_j(i)  
+\end{split}
+ \]
+\bigskip
+Note that we may have $\p(T_A=\infty  | X_0=i)>0$.
+ Consider the transition matrix ( state space $S=\{1,2,3\}$)
+$\begin{bmatrix}
+1 & 0 & 0\\
+0.5 & 0 & 0.5 \\
+0 & 0 &1 .
+\end{bmatrix}$
+and $A=\{1\}$ and $i=2$.  Then, 
+
+$\p(T_A=\infty | X_0=2) = 0.5$.
+ $\p(T_A=1| X_0=2) = 0.5$. 
+State ``1" and ``3" are  {\it absorbing states}.}
+
+\frame{
+\large First Return Time 
+\par --- {\it when  I go home ?}
+\bigskip
+\par
+\pause
+\includegraphics[scale=0.3]{Forrest_BiggestBeard_end.jpg}
+}
+
+
+
+
+\frame{
+{The first {\it return} time }
+Assume $X_0=i$.
+We know $T_{i}(i)$ is the first passage time to hit the state  itself,
+so $T_{i}(i)=0$. What is more useful is when the chain 
+will come back to state $i$ after it {\it leaves} $i$.
+
+\bigskip
+
+
+\begin{definition}
+The {\bf first return time} for a state $j\in S$ is defined by 
+\[
+T^\rt_j  = \inf\set{  n{\color{blue}{\geq}} 1:  X_n=j   } ~~\geq 1.
+\]
+The expectation of $T^\rt_j$ is called the {\bf mean return time}:
+\[ h^\rt_j(i) = \e \left[T^\rt_j \,\vert X_0=i\right] ~~\geq 1.\]
+
+\end{definition}
+(we implicitly assume that $X_0=i$ in this symbol $T^\rt_j$.)
+\par
+\pause
+Recall  $ T_{j} = \inf~\{n\geq  0:  X_n =j\} $.  Then
+  $T^\rt_j =T_ {{j} } > 0$ for all     $j \neq i$,  and it follows 
+$$\boxed{h^\rt_j(i) = h_j (i).~~\forall j \neq i}$$
+All important conclusions come from the case $i=j$
+where $h^\rt_i (i) $ is unknown while $h_i(i)=0$
+}
+
+
+\frame{
+
+\ben
+\item[\circled{1}] Note that $T^\rt_j \geq 1 $ and $h^\rt_j(i) \geq 1 $  while   $T_i=0$ and $h_i(i)=0$.
+\item[\circled{2}]  If $X_0=i, X_1=j$,  then $T^\rt_j=1 $.
+\item[\circled{3}] 
+ If    $X_0=i$, then  $T^\rt_i$  
+or $h^\rt_i(i)$ literally means the   first  {\it return} (or mean first) time from the state $i$ and back to $i$.
+\een
+In the next, we shall prove that 
+\begin{equation}\label{eqn:hr}\tag{*}
+\boxed{
+h^\rt_i(i)
+= \left( \sum_{k\neq i} h_i(k) p_{ik} \right) +1, ~~\forall i\in S.
+}
+\end{equation}
+}
+
+\frame{{Equations for the mean return time $h^\rt_j(i)$: }
+   Similar to deviation for $h_j(i)$,   we have that for \hb{\it any }$ i, j$
+\[
+\begin{split}
+&h^\rt_ j (i) \triangleq  \e (T^\rt_j \vert X_0=i)
+~~~\because {\mbox{ law of total prob.}}\\
+&  =\sum_{k\in S , k \neq j} \e (T^\rt_j \cdot 1_{\set{X_1=k}} |X_0=i)  
++\e (T^\rt_j \cdot 1_{\set{X_1=j}} |X_0=i)
+\\
+& =  \sum_{k\neq j} \e (T^\rt_j  |X_0=i, \hb{X_1=k}) \p(X_1=k|X_0=i)
++ \e (T^\rt_j  |X_0=i, \hb{X_1=j}) p_{ij} 
+~~\because \circled{2}
+\\
+& = \sum_{k \neq j} {\left(\e ({T^\rt_j}  | X_0=k) +1 \right) } p_{ik}
++ {\color{blue}{\bf 1}} \times p_{ij}
+=\sum_{k \neq j} { \left( h^\rt_j(k) +1 \right) } p_{ik}
++    p_{ij}
+\\
+& = \left( \sum_{k\neq j} h^\rt_j(k) p_{ik} \right) +\sum_{j\in S}p_{ij} 
+= \left( \sum_{k\neq j} h_j(k) p_{ik} \right) +1 
+\end{split}
+\]
+This is   the  same  equation as  for $h_j(i)$ but  {\bf all} $i\in S,  j\in S$:
+\begin{equation*} \label{eqnr}
+\boxed{\sum_{k\in S, k\neq j} p_{ik}h^\rt_j (k) - h^\rt_j(i) = -1, ~~ \forall i \in S
+  }
+ \end{equation*}
+W do not need the boundary condition here.
+For each fixed $j$, 
+we have $N$ unknowns $h^\rt_j (i),  i\in S$   with the above  $N$ equations.
+  }
+
+ 
+
+
+\frame{{return probability and recurrent state \footnote{\optional from this slide}}
+\begin{definition} The {\bf return probability} is the  probability of return to state $j$ in a finite time starting from state
+$i$: 
+ $$\rho_{ij} \triangleq  \p\left(T^\rt_j < \infty \vert X_0=i \right)
+ =\p\left(\exists n\geq \hb{1} ,   \text{ such that  }X_n =j     \vert X_0=i\right).$$
+  
+  
+    We focus on the return probability $\rho_{ii}$ by letting  $i=j$.
+
+\bizp  
+ \item
+A state $i$ is said to be {\bf \uwave{recurrent}} if (it always return in finite time)
+  $$\rho_{ii}  =1.$$ Otherwise, it is called {\bf \dotuline{transient} }. \par
+\item{\small A recurrent state $i$ is called {\bf positive recurrent} if  (the mean return time is finite)
+$$h^\rt_i(i)=\e(T^\rt_i | X_0=i)< \infty$$
+and {\bf null recurrent} if  $h^\rt_i(i)= \infty$.(it always return but the expectation is infinity.)
+} 
+\eiz
+ \end{definition}
+}
+ 
+\frame{{Remark}
+ \bizp
+ \item Compare with the ``accessible''  concept before.
+For any state $i$, $i$ always communicate with itself.
+But it might  not return itself almost surely (e.g., it is a transient state, $\rho_{ii} < 1$). 
+\item 
+ If $i$ and $j$ are two different states, then  
+ {\it $\rho_{ij}>0$ if and only if $i$ can access $j$.}
+ \item For any $i,j,k$, $\rho_{ij} \geq \rho_{ik}\rho_{kj}$.
+
+  \item Note 
+ $$ \p\left(T^\rt_i = \infty \vert X_0=i\right)=1-\rho_{ii}$$
+ So   if  $\rho_{ii}<1$ (\dotuline{transient state}), then   it follows that
+ \[ h^\rt_i(i)=\e\left(T^\rt_i | X_0=i\right) =  \infty \times  (1-\rho_{ii}) +  \e\left(T^\rt_i \times 1_{T^\rt<\infty} | X_0=i\right)\rho_{ii}\geq\infty.
+ \]  
+ i.e., the non-vanishing probability of taking value $\infty$ will lead to the infinity of the expectation.
+\item However, if $\rho_{ii}=1$ (\uwave{recurret state}),  although 
+$$ T^\rt_i  < \infty, ~~~  a.s. $$
+  it might occur that  its expectation $h^\rt_i(i)$ is infinite
+( for instance, $f(x)=1/ {x}<\infty$ for all $x>0$, but $\int_{0}^1 f(x)dx =\infty$.), 
+ \eiz
+}
+
+\frame{
+{Exercise:   }
+
+\biz
+\item 
+ the two-state DTMC.
+
+ $$P = \begin{bmatrix} 1 & 0 \\ b & 1-b \end{bmatrix}$$
+  $b>0$.
+  Show that  state $2 $ is transient and state $1$ is (positive) recurrent.
+  \item 
+  A periodic DTMC on the ring $S=\set{0, 1,\ldots, N} $ is positive recurrent.
+  (see \hw)
+\eiz
+\bigskip
+
+
+
+}
+
+\frame{
+{Occupancy time at a given state }
+
+ \begin{definition}
+The {\bf number of returns} is the  total number of steps the chain visits a give state during an infinitely long period
+\[
+R_j \triangleq \sum_{t=1}^\infty  1_{\set{X_t = j}}, ~~~\forall j \in S
+\]
+\end{definition}
+
+\pause
+
+Recall the occupancy matrix $\Mm^{(n)}$ and the theorem that $\Mm^{(n)} = \sum_{t=0}^n \Pm^t$.
+So, 
+\[ 
+\e[R_j | X_0=i] + \Pr(X_0=j| X_0=i) =\e\left[  \sum_{t=0}^\infty  1_{\set{X_t = j}} | X_0=i \right]
+= \displaystyle \lim_{n\to\infty} m^{(n)}_{i,j} = \sum_{t=0}^\infty (\Pm^t)_{ij}
+\]
+It follows that
+\[\boxed{\e[R_j | X_0= i] ~~~=~~~  \sum_{t=1}^\infty (\Pm^t)_{ij}   
+  }
+\]
+}
+\frame{{Return probability $\rho_{ii}$ and the finite number of returns}
+{heuristic on return:   --- ``once return, always return''}
+
+If a state $i$ is recurrent, then its return probability $\rho_{ii}=1$:
+it will always return to itself in finite time; after the first return, due to Markovian property,
+it will return again for second time, and so on. Thus, the number of return will be infinite ! i.e., 
+\[
+R_i =+\infty
+\] 
+
+\centering{
+\includegraphics[scale=0.4]{recurrent.pdf}
+}
+}
+
+\frame{
+\begin{theorem}
+\[
+\p(R_i = +\infty | X_0 = i ) = \begin{cases}
+1 & \text{  if }  \rho_{ii}=1;
+\\
+0 & \text{  if }  \rho_{ii}<1;
+\end{cases}
+\]
+\end{theorem}
+
+{\it proof:}  
+Consider the   Bernoulli trial   that repeats an experiment  with exactly two possible outcomes each time:
+``return'' (w.p. $\rho_{ii} $) or ``not return'' (w.p. $1-\rho_{ii}$).  Then
+$\set{R_i=m}$ means exactly $m$ returns followed by a ``no return''.
+So
+  we have the following geometric distribution
+ \[
+\boxed{ \p(R_i = m \vert X_0=i) = (\rho_{ii})^{m} (1-\rho_{ii}), ~~~m \geq 0}
+ \]
+Then $\p(R_i < \infty \vert X_0=i) = \sum_{m=0}^\infty \p(R_i = m \vert X_0=i)=
+\begin{cases}
+1 & ~~\text{if}   ~~  \rho_{ii} <1;
+\\
+0 & ~~\text{otherwise}.
+\end{cases}
+$\par
+Note $\p(R_i = +\infty | X_0 = i )= 1-\p(R_i <\infty | X_0 = i )$.
+The proof is completed.
+}
+
+\frame{ 
+The proof of the following theorem is left as an exercise
+by noting 
+\[
+{ \p(R_j = m \vert X_0=i) =\rho_{ij} \times (\rho_{jj})^{m-1} \times (1-\rho_{jj}), ~~~m \geq 1}
+ \]
+\begin{theorem}
+\[
+\e[R_j | X_0= i] = \begin{cases}
+\frac{\rho_{ij}}{1-\rho_{jj}},   & \text{  if }  \rho_{jj}<1; \\
++\infty , & \text{  if }  \rho_{jj}=1.\end{cases}
+\]
+ \end{theorem}
+ \bigskip 
+ \pause
+From the Theorem, we have  the equivalent conditions  that a state is recurrent: 
+\[
+\boxed{
+\begin{split}
+& i 
+\mbox{  is  \uwave{recurrent} }
+\\
+\Leftrightarrow 
+&\rho_{ii}=1\\
+ \Leftrightarrow &\p(R_i = +\infty | X_0 = i ) = 1  \\
+ \Leftrightarrow&
+ \p(R_i < +\infty | X_0 = i ) = 0 \\
+ \Leftrightarrow&
+  \e[R_i | X_0= i] =\infty \\
+  \Leftrightarrow &   \sum_{t=1}^\infty (\Pm^t)_{ii} = +\infty 
+ \end{split}
+ }
+ \]
+
+
+}
+
+
+\frame{{Recurrent DTMC}
+
+
+
+ \begin{theorem}
+Assume  a state  $i$ is recurrent
+(i.e., $\rho_{ii} =1$), and $j\neq i$.
+If  $i$ can access $j$ (i.e., $\rho_{ij}>0$),   then
+$j$ is also recurrent (i.e., $\rho_{jj} =1$),
+ and 
+$\rho_{ji}=1$.
+\end{theorem}
+{\it Proof}: use $ \sum_{t=0}^\infty (\Pm^t)_{ii} = +\infty $
+and the CK equation to prove  $\sum_{t=0}^\infty (\Pm^t)_{jj} = +\infty $.
+And consider the first time that $i$ can reach $j$: $k\triangleq\inf\set{t: (\Pm^t)_{ij}>0}$.
+The detail is left as exercise.
+
+
+\begin{ex}
+If there exists a state $j$ such that $\rho_{ij} > 0$ but $\rho_{ji}=0$,
+then 
+ $i$ is transient.
+\end{ex}
+{\it Proof:} If $i$ is recurrent, then $\rho_{ij} > 0$ implies $i$ can access $j$;
+So by the Theorem, $j$ should also be recurrent, and  $\rho_{ji}=1$: contradicting the condition.
+
+\medskip
+
+
+\pause
+\begin{definition}[recurrent chain]
+  An irreducible DTMC is called {\bf recurrent} if any state is recurrent.
+\end{definition}
+
+
+}
+
+
+
+\frame{
+{Existence of  recurrent state for finite state DTMC}
+
+{\large Assume that the state space $S$ of a Markov chain  is finite}
+
+\begin{theorem}
+Any {\it finite state } DTMC has a recurrent state.
+\end{theorem}
+{\it Proof:} Assume $\abs{S}=K$ and all states are transient, i.e., $\rho_{jj}<1,\forall j$,
+then
+ $C:=\underset{i\in S, j\in S }\max \frac{\rho_{ij}}{1-\rho_{jj}}$
+ is finite. We then have the following contradiction:
+
+\[
+K C\geq \sum_{j\in S}\frac{\rho_{ij}}{1-\rho_{jj}}=
+\sum_{j\in S}\e[R_j | X_0= i] 
+=\sum_{j\in S} \left( \sum_{t=1}^\infty (\Pm^t)_{ij}    \right)
+=\sum_{t=1}^\infty \left( \sum_{j\in S}   (\Pm^t)_{ij}    \right)
+=\sum_{t=1}^\infty 1=\infty
+\]
+  
+\vfill
+\pause
+\begin{property}
+ Any recurrent state in  a {\it finite state } DTMC   is  positive recurrent.
+\end{property}
+}
+
+
+
+\frame{{
+Example: Random work on $\ZZ=\set{\ldots, -2, -1 ,0 , 1 ,2 ,\ldots}$
+\footnote{In multiple dimension $\ZZ^d$, the symmetric random walk is recurrent for $d=1,2$ but transient for $d\geq 3$.}
+}
+
+
+The transition matrix $\Pm=[p_{ij}]$ satisfies that 
+$p_{i,i+1}=q$ and $p_{i,i-1}=p$. Now   calculate 
+$ \sum_{t=1}^\infty (\Pm^t)_{ii} $.
+It is clear it always takes even steps to return. So  
+$(\Pm^{2n+1})_{ii}=0$
+and 
+\[ (\Pm^{2n})_{ii}=  
+\left(\begin{array}{c}2n \\ n \end{array}\right)
+p^n q^n \]
+
+So,
+\[
+ \sum_{t=1}^\infty (\Pm^t)_{ii} =
+ \sum_{n=1}^\infty (\Pm^{2n})_{ii} 
+ =\sum_{n=1}^\infty  \frac{(2n)!}{n! n!}
+p^n q^n =
+\frac{1}{\sqrt{1-4pq}}-1.
+ \footnote{The proofs are too advanced and thus skipped. Refer to $\S$4.4 of ``Understanding ...''}
+\]
+
+If $p=q=1/2$, then this series diverges and the random walk is recurrent;
+Otherwise, the  state $i$ is transient. 
+Actually, we can directly calculate the return probability:
+ \[
+  \rho_{ii}  =  \p(T^\rt_i < \infty \vert X_0=i)
+ =1-\sqrt{1-4pq}~^*=2\min(p,q)
+ \]
+which is equal to $1$  (recurrent) iff $p=q=1/2$.
+But when $p=q=1/2$, the state is null recurrent!
+(because $\e[T^\rt_i \cdot1_{T^\rt_i <\infty} \,| X_0=i] = \frac{4pq}{\abs{p-q}}\to \infty$ as $p= q~~^*$.)
+}
+
+
+
+\frame{{Revisit the occupancy distribution}
+Now consider a recurrent and  irreducible DTMC. 
+Then any state is recurrent.
+Recall that 
+\[ 
+\e[R_j | X_0=i]  =\e\left[  \sum_{t=1}^\infty  1_{\set{X_t = j}} | X_0=i \right]
+=   \sum_{t=1}^\infty (\Pm^t)_{ij}
+\]
+and $T^\rt_i=\inf\set{n\geq1: X_n =i}$.
+So,
+\[
+X_t \neq i , ~~   {\forall   t < T^\rt_i }
+\]
+
+\hb{  Intuition: }{\small
+
+
+The dynamics looks like:  the chain starts from $i$ and returns $i$ at time $T^\rt_i$.
+
+
+Due to the (strong) Markov property,  the next cycle   {\it statistically} follows the  same pattern.
+Thus, we only look at the occupancy distribution within {\bf one } time period $[0, T^\rt_i )$:}
+\[
+\wt{\nu}_i(j) :=  \e\left[  \sum_{t=0}^{T^\rt_i -1 }  1_{\set{X_t = j}}  \vert  X_0=i,\right ]
+~~\forall j\in S
+ \]
+ And we expect this is the same as the true occupancy $\nu$ after normalization.
+ }
+
+\frame{
+Note $\wt{\nu}_i(i)=  \e\left[    1_{\set{X_0 = i}}  \vert  X_0=i\right]+0=1$
+ and 
+ \[ \sum_{j\in S} \wt{\nu}_i(j) =  \e\left[  \sum_{t=0}^{T^\rt_i -1 }  \sum_{j\in S} 1_{\set{X_t = j}}  \vert  X_0=i\right ]
+ = \e\left[  \sum_{t=0}^{T^\rt_i -1 }  1  \vert  X_0=i\right ]
+  =\e\left[   T^\rt_i    \vert  X_0=i \right] = h^{\rt}_i(i)
+  \]
+  is equal to the mean return time: finite if $i$ is positive recurrent and $=\infty$ if $i$ is null recurrent.
+ 
+
+After the normalization, our intuition leads to the conjecture  that \[
+\nu_j =\frac{\wt{\nu}_i(j)}{\sum_{j\in S} \wt{\nu}_i(j)}=
+\frac{\wt{\nu}_i(j)}{h^{\rt}_i(i)}, ~~~\forall j \in S
+\]
+In particular take $j=i$, then 
+\[ \nu_i =\frac{\wt{\nu}_i(i)}{h^{\rt}_i(i)} =\frac{1}{h^{\rt}_i(i)} \]
+}
+
+
+\frame{ {Revisit the limiting distribution}
+\begin{theorem}
+If a DTMC is  irreducible,   recurrent and aperiodic, then
+\[ \lim_{n\to\infty}\p(X_n= j |X_0=i) = \frac{1}{h^\rt_j(j)} , ~~~i,j\in S\]
+where $h^\rt_j(j) = \e[T^\rt_j | X_0=j] \in [1,\infty]$ 
+\par
+If furthermore, the chain is positive recurrent, then 
+the above limit is  the  limiting distribution  $\pi_j $ and 
+all $\pi_j, j\in S$ is strictly positive since $h^\rt_j(j)<\infty$.
+\end{theorem}
+
+\begin{corollary}
+For a  finite state space, an irreducible, aperiodic DTMC is always positive recurrent and the above theorem 
+guarantee the existence of limiting distribution which is constructed abve.
+\end{corollary}
+}
+
+\frame{{\hw}
+
+\biz
+
+
+\item  
+For the two-state DTMC with $ {S}=\set{1,2}$ and 
+ $\Pm = \begin{bmatrix} 1- a & a \\ b & 1-b \end{bmatrix}$ where 
+$a,b\in [0,1]$. 
+Let $T_j(i)$ be the first passage time of reaching the state $j$ if $X_0=i$.
+$h_j(i)=\e[T_j(i)|X_0=i]$.
+(i): 
+Calculate $h_1(1)$, $h_2(2)$ %=0
+ and $h_2(1)$ and $h_1(2)$. %=1/a, 1/b.
+ (ii): What is the distribution of $T_2(1)$? 
+ Calculate its expectation from  this distribution.
+(iii) \footnote{\optional}:  Let $T^\rt_j(i)$ be the first return time and $h^\rt_j(i)$ is its expectation.
+ Show that if $b>0$, then $h^\rt_1(1)=1+\frac{a}{b}$, $h^\rt_1(2)=\frac{1}{b}$.
+ What is the distribution of $T^\rt_1(1)$?
+What is the distribution of    $T^\rt_2(1)$?
+What is the return probability $\rho_{11}=\p(T^\rt_1(1)<\infty \vert X_0=1)$?
+When do we have $\rho_{11}=1$, i.e, the state $1$ is recurrent ?
+ 
+ \item  For Gambler's Ruin Problem
+ (Example 2.33, page 43), 
+ What is the expected dollars
+ the gambler A  has when the game stops?
+ (hint for $p\neq q$ case:  consider the difference $d_i\triangleq g(i+1)-g(i)$ )
+ \item 
+Consider the symmetric random walk on $S=\set{1,\ldots,N}$ with periodic boundary on two ends
+$1$ and $N$. Find the mean first passage time to $N$ if starting from $1$, i.e.,
+ $\e( T_{\set{N}}  | X_0=1)$.
+ Find the expected return time $h_1^\rt(1)=\e T^\rt_1(1)^*$.
+
+
+  \item Textbook page  57:   2.42, 2.43. 
+
+
+%  
+%
+%
+% \item \hws   A circle loop has $4m$ states $\{1,2,3,\ldots, 4m\}$. 
+%A man and his dog are both drunk and they independently  do the symmetric random walk
+%on the loop: 
+%equal probability $1/2$ to jump left or right. Initially,  the man and his dog are at  state $1$ and 
+%state $2m+1$, respectively. Calculate the average time that the man finds his dog.
+%({\it hint:  model the distance between the dog and the man 
+%as a   random walk  with two absorbing states $\{0,2m\}$}.)
+%
+
+
+
+\eiz
+
+ }
+ 
+ \frame{
+ \optional
+ \biz
+
+ 
+
+
+ \item  Prove the following theorem\footnote{\optional}.
+ If  a state  $i$ is recurrent
+(i.e., $\rho_{ii} =1$),
+and $i$ can access $j$
+(i.e. $\rho_{ij}>0$),   then
+$j$ is also recurrent(i.e., $\rho_{jj} =1$),
+ and 
+$\rho_{ji}=1$.
+
+
+\item  The Department of Security  has  three floors, 0th(ground), 1st  and 2nd floor.
+Each floor has three rooms: Room $A$, $B$ and $C$ from left to right.
+Let $A_i$ be the room $A$ at Floor $i$ , $i=0,1,2$. $B_i$ and $C_i$ are defined likewise.
+There is a door between two  neighbouring rooms at the same level.
+It is also possible to break windows to climb upstair or downstair vertically into the room on the neighbouring floor. See figure for illustration.
+\begin{center}
+\includegraphics[width=0.3\textwidth]{lattice.png}
+\end{center} 
+The only exit of this building is located in Room $B_0$.
+At initial time,  there is a spy at Room $C_2$,   unfortunately  triggering  the security alarm 
+and without knowing which room is exit unless inside this room,  he starts to run in panic randomly in this building. At each step,  the spy, with equal probability, moves to one of  the rooms that he can access
+through  doors (taking $2$ seconds)  or by  breaking windows (taking $15$ seconds). 
+  On average, how much time does the spy need to escape this building? 
+
+
+ \eiz
+ }
+
+
+
+\end{document}
