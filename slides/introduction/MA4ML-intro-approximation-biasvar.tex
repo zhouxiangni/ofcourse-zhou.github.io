@@ -179,7 +179,7 @@ Test different dataset/parameters/methods.
 \frame{
 
 
-{\color{blue} \huge 
+{\color{blue} \huge \bf
 {   Learning Theory:  An Approximation  Theory  Viewpoint}
 
 }
@@ -192,11 +192,17 @@ by F. Cucker and  D.X. Zhou,
  Cambridge University Press 2007
 \end{center}
 
+
+\bigskip
+\noindent\rule{\textwidth}{.5pt}
+
 Given r.v.s $X $ and $Y$, find a function 
 $f: \Xcal\to \Ycal$ so that 
 $f(X)$ can explain $Y$ best in certain sense. 
 
 }
+
+%--------
 \frame{
 {Conditional Expectation as Optimal Prediction}
 
@@ -213,13 +219,26 @@ has a minimum  at
 \otherbox{ f^*(x)=\e(Y|X=x)}.\]
  i.e., 
 \[ \e   |Y-f^*(X)|^2= \min_{f \mbox{\footnotesize: a Borel   function }}  \e (  |Y-f(X)|^2    ) \]
+
+\vskip 16mm
+\footnotesize{$f$ in fact should satisfy the 
+condition that the RHS $L_2$ norm exists.}
 }
+
+%%%--------------------------
 \frame{
 \begin{proof}
 \biz
 \item 
-We show first that   $\e[(Y-f^*(X) )  h(X) ]=0$ is true  for any function $h$.
-Using the double expectation theorem, we have 
+We show first that   $\e[(Y-f^*(X) )  h(X) ]=0$
+\footnote{
+sometimes it is denoted 
+$Y-f^*(X) \perp h(X)$,
+the perpendicular property in $L_2$ space.
+}
+ is true  for any function $h$.
+Using the double expectation theorem
+\footnote{$\e [\e( Y|X )] = \e Y$}, we have 
 \[
 \begin{split}
 &\e[(Y- f^*(X) )  h(X) ] = \e \left[ \e[Y-f^*(X) ) | X]  h(X)    \right ]\\
@@ -239,6 +258,7 @@ then for any $f$
 \end{equation}
  \eiz 
 \end{proof}
+
 }
 
 
@@ -259,10 +279,13 @@ Projection}
 \frame{
 
 The following exercise is to use the viewpoint of variational calculus:
-minimizing in functional space
+minimizing functions in the  function space
 
 \begin{ex}
 Use the method of Calculus of Variation to solve 
+\footnote{Rigorously, $f$ is in the $p$-weighted $L_2$
+space}
+
 \[
 \inf_{f} \iint (f(x)-y)^2 p_{X,Y}(x,y) dx dy
 \]
@@ -273,6 +296,7 @@ $$ \int (f^*(x)-y)p_{X,Y}(x,y)dy=0,~~
 i.e., $\e Y = \e f^*(X)$
 \end{ex}
 What if generalized  the $L_2$ norm to $L_p $ norm ?
+\bigskip
 }
 
 \frame{
@@ -316,15 +340,25 @@ is the   variance  of the measurement error $Y-f^*(X)$:
 \frame 
 {{Notations}
 We have shown that \eqref{proj-cond-exp-3}
+for any two r.v. $X, Y$:
 \begin{equation}
  \begin{split}
-\e_{X,Y}(  |f(X)-Y|^2    )
- & = \e_{X,Y} (  |f^*(X)-Y|^2   ) + \e_X\left[ \abs{f(X)-f^*(X)} ^2 \right]
- \\
-&=\mbox{Bayes error} + \mbox{model error}
+\Ecal(f)= \underbrace{
+\e(  |f(X)-Y|^2    )}
+_{\text{\bf Mean Square Error }}
+ & = 
+ \underbrace{\e_{X,Y} (  |f^*(X)-Y|^2   )}
+ _{\Ecal(f^*), {\text{\bf Bayes error} } } + 
+ \underbrace{
+ \e_X\left[ \abs{f(X)-f^*(X)} ^2 \right]
+ }
+ _{\text{\bf model error} } 
 \end{split}
 \end{equation}
-where $f^*(x)=\e(Y \vert X=x)$ is called {\bf Bayes rule}.
+where $f^*(x)=\e(Y \vert X=x)$ is called {\bf Bayes rule}.\biz
+\item Bayes error:  irreducible error;
+\item Model error:  the distance from $f$ to $f^*$.
+\eiz
 }
 
 \frame {
@@ -336,7 +370,12 @@ where $f^*(x)=\e(Y \vert X=x)$ is called {\bf Bayes rule}.
 \item A Loss function $\ell(Y, f(Y))$ for penalizing errors in misclassification.
 \item Most Common choice is the 0-1 loss
 $$
-\ell (Y , f(X))=I(Y \neq f(X)).
+\ell (Y , f(X))=I(Y \neq f(X))
+=\begin{cases}
+1 & \mbox{ if } Y \neq f(X)
+\\
+0 &   \mbox{ if }   Y = f(X)
+\end{cases}.
 $$
 \item The expected prediction error, or the generalization error, is
 $$
@@ -372,14 +411,23 @@ A natural way to approximate the function $\e (Y \vert X=x)$ is to
 replace the expectation by the average:
 $$f^*(x)=\e (Y\vert X=x) \approx \mbox{AVE}\set{y_i :  \mbox{ where } ~x_i=x},
 ~~\forall x\in \Xcal$$
+or
+$$f^*(x)=\int_\Ycal y\, p_{Y|X}(y;x ) dy $$ 
+where $p_{Y|X}(y;x )
+=\frac{p_{X,Y} (x,y)}{p_X(x)}$
+by estimating the density $p_{X,Y}(x,y)$ first?
 
-Question: Would this work well in practice ? in high dimension ?
+Question: Would these work well in practice ? in high dimension ?
 
 \pause
 
-(1) this formula is defined point-wisely; 
+(1) this formula is defined point-wisely;
 (2) one does not have an accurate estimation of the expectation or the joint distribution $p(x,y)$,
 particularly in high dimension.
+}
+%%% ------
+\frame{
+{$k$-NN}
 
 \biz 
 \item Use windows with size $\Delta$
@@ -422,7 +470,7 @@ to estimate a function in ${\Real}^1$, $100^{10}$ are needed to achieve similar
 accuracy in ${\Real}^{10}$.
 \end{itemize}
 This is similar to the curse of dimensionality in using the mesh grid based method to solve
-high dimension PDE.
+high dimensional PDE.
 
 }
 
@@ -439,13 +487,13 @@ Minimizing the generalization error: learning as minimization}
 }
 \frame{
 \biz
-\item Loss function $\ell(y, \hat{y}):  \Ycal  \times \Ycal \to \Real^+$
+\item Loss function $\ell(y, \hat{y}):  \Ycal  \times \Ycal \to \Real^+\cup\set{0}$
 \biz
 \item  $L_2$, $L_1$ norm
 \item  0-1 loss:  $\ell(y,\hat{y})= I( y\neq \hat{y})$.
 \item  ...
 \eiz
-\item $\Ecal (f) = \e \ell (Y, f(X))$
+\item Population loss(Generalization error): $\Ecal (f) = \e \ell (Y, f(X))$
 \eiz
 
 
@@ -456,12 +504,13 @@ The direct  approach  of minimizing the risk \[ \min_{f} \mathcal{E}(f)=
 where $f$ can be in a very general class of functions, such as
 continuous function on $\Xcal$, or even piecewise continuous function.
 
+It is important to specify a  hypothesis space $\mathcal{H}$ to restrict the search space.
+
 \ben
 
 \item 
 the function space of $f$  to search:  \hb{ hypothesis space(model class)} $\mathcal{H}$.
 
-It is important to specify a  hypothesis space $\mathcal{H}$ to restrict the search space.
 
 
 \item approximate the expectation $\e$ in $\mathcal{E}$ with  the use of data $\Dcal=\set{x_i, y_i}$.
@@ -481,6 +530,8 @@ is denoted by $f_{\mathcal{H}}$.
  
 
 \item  
+Population risk is approximated by 
+empirical risk associated with $\Dcal=\set{(x_i, y_i)}: i=1,\ldots,N$:
 \[
 \mathcal{E}(f) = \e \left [ \abs{Y-f(X)}^2\right]
 \approx 
@@ -491,8 +542,12 @@ The learning algorithm produces the  learnt function  $ \hat{f}_\Dcal $
 as the  solution to  $$
 \Ecal_N ( \hat{f}_\Dcal ) = \min_{f\in \Hcal}\mathcal{E}_N(f)=
 \min_{f\in \Hcal} \frac{1}{N} \sum_{(x_i,y_i)\in \Dcal}\ell(y_i,f(x_i))$$
-  The {\bf training error} (empirical risk) is   $\mathcal{E}(\hat{f}_\Dcal)$ .
-
+\biz
+\item 
+The {\bf training error} is   $\mathcal{E}_N(\hat{f}_\Dcal)$ .
+\item
+  The {\bf test error} is   $\mathcal{E}(\hat{f}_\Dcal)$ .
+\eiz
 \een
 
 
@@ -593,7 +648,7 @@ lower bias
 \item 
 Sampling error:
 vanishes if the number of data
-points is infinity. This error may be analyzed by
+points $N$ goes to infinity. This error may be analyzed by
 probability inequality 
 (e.g. Chebychev);
 analysis method used for 
@@ -605,14 +660,39 @@ A larger sample size for training data indicates:
 \eiz
 \item  
 Training error: 
-optimization method 
-
+\biz
+\item design of optimization method, numerical convergence rate,
+\item  the time and memory cost ... 
+\item the output is  a further approximation to $\hat{f}_\Dcal$:
+the optimization algorithm stops with a time cost $T$:
+$\hat{f}_{\Dcal}^{(T)}$
+\eiz 
  \eiz
- These three topics are not completely separate.
+ }
+ 
+ %%%--------------------------------------
+\frame{
+{Very Important Remarks }
+
+\biz
+\item Although different fields focus on
+each of three errors separately,
+to address the problems for machine learning 
+needs  trans-disciplinary efforts:
+\biz
+\item approximation theory
+\item statistical learning
+\item computation  
+\eiz
+A   joint strategy  is very important to have
+a complete picture of the machine learning problem.
+
+\item  These three topics are not completely separate.
  For example, the necessary number of sample size $N$
  may depend on the complexity of hypothesis space,
  which further depends  on the  dimension of $\Xcal,\Ycal$
- and the specific representation form of functions in $\Hcal$.
+ and the specific representation form of functions in $\Hcal$. 
+\eiz
 }
 
 
@@ -702,6 +782,11 @@ Based on a {training} dataset $\Dcal=\set{x_i, y_i}$ where $y_i=f(x_i)+\eps_i$ a
 denoted by 
 $\hat{f}_\Dcal(\cdot)$, then
 the {\bf test error} 
+\footnote{
+also called {\bf Prediction Error}.
+In some cases, this definition does 
+not contain $\eps_0$ contribution.
+}
 at a new input $x_0$ 
 (with a new independent measurement error $\eps_0\sim \eps$) is 
 \begin{align*}
@@ -724,8 +809,8 @@ at a new input $x_0$
 _\text {Bias$^2$}
  + 
  \underbrace{
- \Var (\hat{f}_\Dcal(x_0))}
- _\text{Variance}}
+ \Var (\hat{f}_\Dcal(x_0))
+ } _\text{Variance}}
 \end{align*}
  Sometimes, this quantity should be taken expectation w.r.t. 
  $x_0 \sim p_X$.
@@ -780,6 +865,17 @@ cross-validation
 \eiz
 }
 
+%%%------------------------------------------------------
+\frame{
+\begin{center}
+\begin{figure}
+\includegraphics[width=\textwidth]{bias-variance-tradeoff.png}
+\caption{  Bias-Variance Tradeoff as a Function of Model Capacity/Complexity
+}
+\end{figure}
+\end{center}
+}
+%%%------------------------------------------------------
 
 
 \frame {
