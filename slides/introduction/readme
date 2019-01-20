@@ -6,8 +6,17 @@ mean square error
 generalization gap
 hypothesis space
 train error
-test error
+test error/prediction error
+k-nearest neighboring
+curse of dimensionality
 
 viewpoints:
-[1]approximation theory
-[2]bias-variance
+[1]approximation theory:  decomposition of population risk 
+[2]bias-variance :  decomposition of expected prediction square errors: bias+variance+irreudible error
+
+This part essentially covers some core concepts in chaper 2 and 7 of ESL 2nd Edition.
+Many concepts are particularly confusing and abstract for the beginners, 
+but for a student in favor of rigorous math style,  these are important and the reading maybe enjoyable.
+In fact, due to the terrible abuse of termilogies, the clear mathematical definitions are criticcally important. 
+
+
