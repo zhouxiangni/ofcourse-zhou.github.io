@@ -92,15 +92,18 @@ model reduction.
 \eiz
 }
 \frame{
-{Output as perturbed   truth}
-\biz
+{Additive error model}\biz
 \item The observed $x^{(i)}\in \Xcal$ are samples from 
 the marginal distribution $p_X$, i.e., $x^{(i)}\sim X$; in some cases,
 they are deterministic and assigned by a procedure of experiment design.
-\item  The  corresponding observed $y^{(i)}$ are assumed to be 
+\item  In the additive error model,  the  corresponding observed $y^{(i)}$ are assumed to be 
 the {\it perturbed} truth $f^\star (x^{(i)})$   with additional measurement error $\eps^{(i)}$ which are assumed to be iid and independent from $X$.
  $$y^{(i)}=f^\star (x^{(i)}) + \eps^{(i)}.$$
  $\set{\eps^{(i)}}$ are assumed iid  and distributed as a generic r.v. $  \eps$.
+ \item This is a convenient model/assumption
+ to specify the joint pdf of $(X,Y)$,
+ even though there might be other types of uncertainty in 
+ output observations.
 \item The effect of the noise $\eps$ can never be eliminated by any statistical learning algorithms (\hb{irreducible error}).
 \eiz
 }
@@ -202,7 +205,7 @@ $f(X)$ can explain $Y$ best in certain sense.
 
 }
 
-%--------
+%%%-------------------------------
 \frame{
 {Conditional Expectation as Optimal Prediction}
 
@@ -219,13 +222,16 @@ has a minimum  at
 \otherbox{ f^*(x)=\e(Y|X=x)}.\]
  i.e., 
 \[ \e   |Y-f^*(X)|^2= \min_{f \mbox{\footnotesize: a Borel   function }}  \e (  |Y-f(X)|^2    ) \]
+\bigskip
+Note: 
+We did not assume the additive error model here.
+The applicability of the theorem here is very general.
+The expectation is w.r.t. the joint pdf of $(X,Y)$.
 
-\vskip 16mm
-\footnotesize{$f$ in fact should satisfy the 
-condition that the RHS $L_2$ norm exists.}
+
 }
 
-%%%--------------------------
+%%%-------------------------------
 \frame{
 \begin{proof}
 \biz
@@ -278,11 +284,10 @@ Projection}
 
 \frame{
 
-The following exercise is to use the viewpoint of variational calculus:
-minimizing functions in the  function space
+The following exercise is to directly minimize functions in the  function space.
 
 \begin{ex}
-Use the method of Calculus of Variation to solve 
+Use the method of perturbation  to solve 
 \footnote{Rigorously, $f$ is in the $p$-weighted $L_2$
 space}
 
@@ -295,7 +300,7 @@ $$ \int (f^*(x)-y)p_{X,Y}(x,y)dy=0,~~
 \quad \forall x$$
 i.e., $\e Y = \e f^*(X)$
 \end{ex}
-What if generalized  the $L_2$ norm to $L_p $ norm ?
+What if generalized  the $L_2$ norm to $L_p$ norm ?
 \bigskip
 }
 
@@ -330,25 +335,25 @@ $$\sigma^2_*(x):= \e  \left[(Y-f^*(X))^2 \vert X=x\right]$$
   \item
   Take average of $\sigma^2(x)$ over $x$, then
 the averaged uncertainty is 
- \[ \sigma^2_* := \e_X  \sigma^2(X)=\e  \left[\abs{Y-f^*(X)}^2 \right]=\mathcal{E}(f^*)
+ \[ \sigma^2_* := \e_X  \sigma^2_*(X)=\e  \left[\abs{Y-f^*(X)}^2 \right]=\mathcal{E}(f^*)
  \]
-is the   variance  of the measurement error $Y-f^*(X)$:
+This is the   variance  of the measurement error $Y-f^*(X)$:
 \hb{irreducible error}
 \eiz
 }
 
 \frame 
 {{Notations}
-We have shown that \eqref{proj-cond-exp-3}
-for any two r.v. $X, Y$:
+We have shown in \eqref{proj-cond-exp-3}
+for any two r.v.s  $X, Y$ and an arbitrary function $f$: 
 \begin{equation}
  \begin{split}
 \Ecal(f)= \underbrace{
-\e(  |f(X)-Y|^2    )}
+\e_{X,Y}(  |f(X)-Y|^2    )}
 _{\text{\bf Mean Square Error }}
  & = 
  \underbrace{\e_{X,Y} (  |f^*(X)-Y|^2   )}
- _{\Ecal(f^*), {\text{\bf Bayes error} } } + 
+ _{=\Ecal(f^*), {\text{\bf Bayes error} } } + 
  \underbrace{
  \e_X\left[ \abs{f(X)-f^*(X)} ^2 \right]
  }
@@ -357,21 +362,27 @@ _{\text{\bf Mean Square Error }}
 \end{equation}
 where $f^*(x)=\e(Y \vert X=x)$ is called {\bf Bayes rule}.\biz
 \item Bayes error:  irreducible error;
-\item Model error:  the distance from $f$ to $f^*$.
+\item Model error:  the distance from $f$ to 
+the optimal prediction $f^*$.
 \eiz
+\bigskip
+
+Next, \hb{  the same idea,  $\inf_f \Ecal(f)$,  applied to classification problem...}
 }
 
 \frame {
-\frametitle{ Application to classification with 0-1 loss}
+\frametitle{ Baye classifier for classification:
+optimal for the 0-1 loss}
 
 \begin{itemize}[<+->]
 \item Assume $Y \in \{1,\ldots,K\}$ and $X \in {\Real}^p$.
-\item $f:\Xcal \to \Ycal$ is a piece-wise constant function.
-\item A Loss function $\ell(Y, f(Y))$ for penalizing errors in misclassification.
-\item Most Common choice is the 0-1 loss
+So a function $f:\Xcal \to \Ycal$ is a piece-wise constant function.
+\item A loss function $\ell(Y, f(Y))$ for penalizing errors in misclassification.
+\item Most Common choice for classification problem is the {\bf  0-1 loss}
+\footnote{corresponding to the Dirac delta function }
 $$
 \ell (Y , f(X))=I(Y \neq f(X))
-=\begin{cases}
+:=\begin{cases}
 1 & \mbox{ if } Y \neq f(X)
 \\
 0 &   \mbox{ if }   Y = f(X)
@@ -383,22 +394,70 @@ $$
 $$
 \item The Bayes rule minimizing $\Ecal(f)$ is
 the one maximizing $\p(Y=f(X))=
-\int_\Xcal  \p(Y=f(x) \vert X=x) p_{X}(x)dx$,
+\int_\Xcal  \p(Y=f(x) \vert X=x) p_{X}(x)\dx$,
 which is 
 $$
+\otherbox{
 f^*(x)=\argmax_k \p(Y=k|X=x).
+}
 $$
 since  $\p(Y=k|X=x) \leq \p(Y=f^*(x) \vert X=x ), \forall k $
 \end{itemize}
 
 }
 
+\frame{
+{Notation for classification}
+
+\biz
+\item {\bf Bayes classifier}: the maximizer of 
+conditional probability 
+\[
+f^*(x)=\argmax_k \p(Y=k|X=x).
+\]
+\item {\bf Bayes error rate}:
+the minimal value of $\Ecal$
+\[ \inf_{f}\Ecal(f) = \Ecal(f^*)=1- \p(Y=f^*(X))=
+1-\int_\Xcal \p(Y=f^*(x))p_X(x)\dx\]
+\item  {\bf Bayes decision boundary}
+
+The boundary separating the $K$ partition domains in $\Xcal$
+on each of which $f^*(x)$ is constant.
+For the binary classification 
+($K=2, \Ycal=\set{-1,1}$), 
+the boundary  corresponds to
+the level set  where $ \p(Y=1\vert X=x)= \p(Y=-1\vert X=x)=0.5$.
+\eiz
+
+\bigskip 
+\footnotesize{We focus on the regression fit first
+and will come back to classification later.
+}
+}
+
+%%%%--------------------------------
+\begin{frame}
+\begin{ex}[Ex. 2.2 in ESL]
+Let $\Xcal=\Real^2$ and $\Ycal=\set{0,1}$
+and the conditional distribution $X \vert Y$ is the normal   
+$\mathcal{N}(\mu_Y, (1+Y)I_2)$ where 
+$\mu_y= (y,y)^\tr$ for $y\in \Ycal$,
+$I_2$ is identify matrix.
+Find the Bayes decision boundary
+and the Bayes error rate for this problem.
+\end{ex}
+ 
+
+\end{frame}
+
+%%%%--------------------------------
 
 
 \frame{
 {How do we estimate $f^*$ ? }
 \biz
-\item direction method by definition of conditional expectation; 
+\item direction method by definition of conditional expectation
+\footnote{or conditional probability for the Bayes classifier}; 
 \item optimization method by minimization of generalization error;
 \eiz
 
@@ -408,7 +467,8 @@ since  $\p(Y=k|X=x) \leq \p(Y=f^*(x) \vert X=x ), \forall k $
 \frametitle{Nearest neighbors method to approximate  condition expectation}
 
 A natural way to approximate the function $\e (Y \vert X=x)$ is to 
-replace the expectation by the average:
+replace the expectation by the average
+from the data $\Dcal=\set{(x_i,y_i)}$:
 $$f^*(x)=\e (Y\vert X=x) \approx \mbox{AVE}\set{y_i :  \mbox{ where } ~x_i=x},
 ~~\forall x\in \Xcal$$
 or
@@ -417,8 +477,8 @@ where $p_{Y|X}(y;x )
 =\frac{p_{X,Y} (x,y)}{p_X(x)}$
 by estimating the density $p_{X,Y}(x,y)$ first?
 
-Question: Would these work well in practice ? in high dimension ?
-
+Question: Would these work well in practice ? 
+ 
 \pause
 
 (1) this formula is defined point-wisely;
@@ -436,18 +496,29 @@ particularly in high dimension.
 \abs{x_i-x} \leq \Delta}
 \]
 
-\item Use $k$ -nearest neighbors:
+\item Use $k$ -nearest neighbors
+(KNN):
 have a look at its neighbors,
 and take a vote:
 $$
 \e (Y\vert X=x) \approx \mbox{AVE} \set{y_i :  x_i   \in {\cal N}_k(x) }
 $$
 where ${\cal N}_k(x)$ is a neighborhood of $x$ that contains exactly $k$ neighbors
-(k-nearest neighbors).
-
+(k-nearest neighbors). The number samples in $\mbox{AVE}$
+is fixed ($k$).
 \eiz 
+
+Two approximations are happening here:\ben
+\item  expectation is approximated by averaging over sample data;\item conditioning at a point is relaxed to conditioning on some region
+``close'' to the target point.
+\een
+
+\bigskip
+Note: \hb{ A metric on $\Xcal$ is  necessary     here. 
+The choice of metric, $|x-x_i|$, is a practical issue.}
 }
 
+%%%%--------------------------------------
 \frame {
 
 \frametitle{Curse of dimensionality}
@@ -462,7 +533,8 @@ the variance of the estimate increases.
 \end{itemize}
 
 \pause
-In general (see Figure 2.6),
+In general (see Figure 2.6. [ESL]), when the dimension of $\Xcal$
+is very large (the sample size $N$ is fixed.)
 \begin{itemize}[<+->]
 \item Most points are at the boundary, and points tend to be equidistant (Hall et al., JRSS-B, 2005).
 \item Sampling density is proportional to $n^{1/p}$: the number of sample size increases exponentially in dimension $p$: If 100 points are sufficient
@@ -493,7 +565,7 @@ Minimizing the generalization error: learning as minimization}
 \item  0-1 loss:  $\ell(y,\hat{y})= I( y\neq \hat{y})$.
 \item  ...
 \eiz
-\item Population loss(Generalization error): $\Ecal (f) = \e \ell (Y, f(X))$
+\item Population risk/loss (Generalization error): $\Ecal (f) = \e \ell (Y, f(X))$
 \eiz
 
 
@@ -530,8 +602,8 @@ is denoted by $f_{\mathcal{H}}$.
  
 
 \item  
-Population risk is approximated by 
-empirical risk associated with $\Dcal=\set{(x_i, y_i)}: i=1,\ldots,N$:
+Population loss/risk is approximated by 
+{\bf empirical} loss/risk associated with $\Dcal=\set{(x_i, y_i): i=1,\ldots,N}$:
 \[
 \mathcal{E}(f) = \e \left [ \abs{Y-f(X)}^2\right]
 \approx 
@@ -546,7 +618,11 @@ as the  solution to  $$
 \item 
 The {\bf training error} is   $\mathcal{E}_N(\hat{f}_\Dcal)$ .
 \item
-  The {\bf test error} is   $\mathcal{E}(\hat{f}_\Dcal)$ .
+  The {\bf test error/prediction error} is   $\mathcal{E}(\hat{f}_\Dcal)
+  =\e_{X,Y}\ell (Y,\hat{f}_\Dcal(X))$.
+  \item The expected test/prediction error is
+  $\e_\Dcal  \left[ \mathcal{E}(\hat{f}_\Dcal) \right ]$, which requires
+ running on several (statistically identical) datasets  $\sim\Dcal$.
 \eiz
 \een
 
@@ -557,7 +633,8 @@ The {\bf training error} is   $\mathcal{E}_N(\hat{f}_\Dcal)$ .
 
 
 \biz
-
+\item $f_\Hcal$ may not equal to $f^*$ unless 
+the ground truth $f^*\in \Hcal$;
 \item
 $\hat{f}_\Dcal$ depends on {\it three} elements:
  the hypothesis space $\Hcal$,  the (training) data $\Dcal$ ( random ! ) and  the loss function $\ell$.
@@ -677,7 +754,7 @@ $\hat{f}_{\Dcal}^{(T)}$
 \biz
 \item Although different fields focus on
 each of three errors separately,
-to address the problems for machine learning 
+to address the problems in machine learning 
 needs  trans-disciplinary efforts:
 \biz
 \item approximation theory
@@ -686,6 +763,11 @@ needs  trans-disciplinary efforts:
 \eiz
 A   joint strategy  is very important to have
 a complete picture of the machine learning problem.
+ 
+ 
+\hb{A small value of training error  $\Ecal_N(\hat{f}_\Dcal)$
+does not imply a small value of  $\Ecal(\hat{f}_\Dcal)$. 
+}
 
 \item  These three topics are not completely separate.
  For example, the necessary number of sample size $N$
@@ -710,7 +792,24 @@ it measures to which extent
 the performance of the algorithm
 learnt from a given training data set $\Dcal$
 is valid for the whole distribution $p(x,y)$.
+
+\bigskip
+Remark
+\biz
+\item 
+$ \Ecal(\hat{f}_\Dcal) - 
+\Ecal(f^*) $ can be either positive or negative;
+\item 
+$ \Ecal(\hat{f}_\Dcal) - 
+\Ecal(f^*) $ still depends on $\Dcal$.
+One can use the expected 
+$ \e_{\Dcal} \left [
+\Ecal(\hat{f}_\Dcal) - 
+\Ecal(f^*) 
+\right ] $ to represent the average.
+\eiz
 }
+%%%---------
 \frame{
 {First inequality for Generalization Gap}
 \begin{ex}
@@ -718,8 +817,9 @@ Prove the upper bound of the generalization gap:
  \[
  \begin{split}
  \otherbox{
- \Ecal(\hat{f}_\Dcal) 
+ \abs{ \Ecal(\hat{f}_\Dcal) 
  - \Ecal(f^*)
+ }
 % =
 % \Ecal(\hat{f}_\Dcal) - 
 %\Ecal_N(\hat{f}_\Dcal)
@@ -732,23 +832,46 @@ Prove the upper bound of the generalization gap:
 \leq 2 \sup_{f\in \Hcal} \abs{ \Ecal_N (f)- \Ecal(f)}
 }
 \\
-\approx 2 \sup_{f\in \Hcal}  \frac{1}{\sqrt{N}} \Var (\ell(Y,f(X)))
+\approx 2 \sup_{f\in \Hcal}  \frac{1}{\sqrt{N}} 
+\sqrt{\var (\ell(Y,f(X)))}
 \end{split}
  \]
   \end{ex}
- The first RHS depends on the hypothesis space
- $\Hcal$ and the dataset $\Dcal$ of size $N$ in $\Ecal_N$;
- and the second depends on $\Hcal$ and the joint distribution $p(x,y)$
- of $(X,Y)$.
-
-
-The supremum in the above inequality
- can describe the {\bf complexity } of  hypothesis space $\Hcal$,
- which increases when $\Hcal$ is ``larger''.
- WARNING: this upper bound is not sharp.
- A good lower bound is extremely difficult to obtain.
 }
 
+\frame{
+ 
+  
+ 
+ 
+ 
+~{Limitation of the previous boundedness}:
+\biz
+\item The first RHS depends on the hypothesis space
+ $\Hcal$ and the dataset $\Dcal$ of size $N$ in $\Ecal_N$;
+ and the second depends on $\Hcal$ and the joint distribution $p(x,y)$
+ of $(X,Y)$.   The ``$\approx$'' is due to the central limit theorem.
+ 
+ \item 
+The $\var$ in RHS is w.r.t.  $\Dcal$, and eventually for $p_{X,Y}$.
+ \item 
+ The supremum in the above inequality
+ can describe the {\bf complexity } of  hypothesis space $\Hcal$,
+ which increases when $\Hcal$ is ``larger''.
+ 
+ \item
+Although this upper bound 
+ is quite useful and not  too far way from the true gap;
+ but it is not sharp in many cases and fail to serve as 
+ a good indicator of the generalization gap.
+ A good lower bound is extremely difficult to obtain.
+ 
+  \item $\Ecal(\hat{f}_\Dcal)$ 
+  depends on $\Dcal$. When $\Dcal$ is regarded as random,
+$\Ecal(\hat{f}_\Dcal)$ is also random.
+
+\eiz
+}
 
 \frame{
 
@@ -756,66 +879,141 @@ The supremum in the above inequality
 Statistical  Learning:
 Viewpoint of Bias-Variance
 Trade-off}
+}
 
-
+\frame{
+\bigskip 
+\biz
+\item
+In the approximation theory above,
+the introduction of the dataset $\Dcal$ is only used to   
+approximate the expectation
+w.r.t. the generic r.v.s $X, Y$ 
+by their sample average:
+population risk $\To$ empirical risk.
+\item
+In statistical learning, 
+$\Dcal$ is regarded as random, 
+then $\hat{f}_\Dcal(\cdot)$ is a random function on $\Xcal$,
+then  its prediction ability, measured by 
+$\Ecal (\hat{f}_\Dcal)$,
+is random.
+Then it makes sense to consider
+\[ \e_{\Dcal} \Ecal (\hat{f}_\Dcal) \]
+\eiz
 }
 \frame{
 {Bias-Variance Decomposition / Trade-off}
 
-Let $f$ be a given deterministic function 
+
+
+Let $f$ be a given deterministic function (ground truth)
 $\mathcal{X}\to\mathcal{Y}$.
 
 Assume that the response r.v. 
-$Y$ is defined by 
+$Y$ is defined by the 
+ {additive error 
+statistical model}: 
 \[
 Y=f(X)+\eps
 \]
 where  the 
 r.v.  $\eps$ is independent of $X$
 and has mean $0$ and variance $\sigma_\eps^2$.
-Then 
-$f^*(x)=\e[Y\vert X=x]=f(x)$ is the optimal approximation
-in the square error sense.
+
+Assume this model generates on the {training} dataset $\Dcal=\set{(x_i, y_i):1\leq i\leq N}$, i.e.,  $y_i=f(x_i)+\eps_i$ and $\eps_i  \sim \eps$
+($\e \eps=0, \var(\eps)=\sigma^2$).
+Assume  one learns a  function based on $\Dcal$, 
+still denoted by 
+$\hat{f}_\Dcal(\cdot)$.
+\footnote{it does not have to be
+the one in previous part associated with $\Ecal_N$.
+For example, $\hat{f}_\Dcal$ can be the $k$-NN model.} 
+
+The key question is 
+the prediction performance of this function $\hat{f}_\Dcal$
+on a new data $(x_0, y_0)$ where  $x_0\in\Xcal$ is arbitrary and $y_0=f(x_0)+\eps_0$
+with the new measurement error $\eps_0$
+being independent of 
+ $\Dcal$ and distributed as $\eps$.
+
 }
-\frame{ {test error decomposition}
-Based on a {training} dataset $\Dcal=\set{x_i, y_i}$ where $y_i=f(x_i)+\eps_i$ and $\eps_i  \sim \eps$, one learns a regression  function, 
-denoted by 
-$\hat{f}_\Dcal(\cdot)$, then
-the {\bf test error} 
-\footnote{
-also called {\bf Prediction Error}.
-In some cases, this definition does 
-not contain $\eps_0$ contribution.
-}
-at a new input $x_0$ 
-(with a new independent measurement error $\eps_0\sim \eps$) is 
+
+%%%--------
+\frame{ {Decomposition of expected prediction 
+(squared) error}
+The  {\bf expected prediction error} 
+(generalization error)
+in terms of $L_2$ criterion,
+at a new input value $x_0$ is  
 \begin{align*}
 & \e [  ( Y-\hat{f}_\Dcal(X))^2
 \vert X=x_0] 
 =
- \e_{\eps_0, \Dcal} [  ( f(x_0)+\eps_0-\hat{f}_\Dcal(x_0))^2
-] ~~\\
-=&\sigma_\eps^2+ \e_\Dcal [  \left( f(x_0)-\hat{f}_\Dcal(x_0)\right)^2] 
+ \e_{\eps_0, \Dcal}   ( f(x_0)+\eps_0-\hat{f}_\Dcal(x_0))^2
+ ~~\\
+=&\sigma_\eps^2+ \e_\Dcal   \left( f(x_0)-\hat{f}_\Dcal(x_0)\right)^2
 ~~\because   \e (\eps_0)=0 , \mbox{ and } \Dcal \perp \eps_0
 \\
 =&
-\sigma_\eps^2+ \e_\Dcal [  \left( f(x_0)-
-\e\hat{f}_\Dcal(x_0) + \e \hat{f}_\Dcal(x_0)- \hat{f}_\Dcal(x_0) \right)^2] \\
+\sigma_\eps^2+ \e_\Dcal   \left( f(x_0)-
+\e\hat{f}_\Dcal(x_0) + \e \hat{f}_\Dcal(x_0)- \hat{f}_\Dcal(x_0) \right)^2 \\
 =&
 \otherbox{
 \sigma_\eps^2+ 
 \underbrace{ ( f(x_0)-
-\e \hat{f}_\Dcal(x_0))^2}
+\e_\Dcal \hat{f}_\Dcal(x_0))^2}
 _\text {Bias$^2$}
  + 
  \underbrace{
- \Var (\hat{f}_\Dcal(x_0))
+ \var_{\Dcal} (\hat{f}_\Dcal(x_0))
  } _\text{Variance}}
 \end{align*}
- Sometimes, this quantity should be taken expectation w.r.t. 
- $x_0 \sim p_X$.
- }
+Here the subscripts emphasize the random elements to take expectation.
+$\sigma^2_\eps=\var(\eps_0)$ is the \hb{irreducible} uncertainty of the new measurement error.
+\begin{den}
+ $\hat{f}_\Dcal$ is called {\bf unbiased}
+if the functions $\e_{\Dcal} \hat{f}_\Dcal (x)$ and $f(x)$ are equal.
+\end{den}
+}
+
+%%%------------------------------------------
+\frame{ 
+
+Sometimes, this quantity is further  taken expectation for 
+ $x_0$ w.r.t.  $p_X$.
+
+ Use the generic r.v. $(X,Y=f(X)+\eps)$ for a new {\bf testing} pair,
+ which is independent of the training set $\Dcal$:
+
+ \begin{align*}
+&\e_{X,Y}  \left[ \e_{\Dcal}  \left(Y- \hat{f}_\Dcal(X)\right)^2 \right]\\
+=&\e_{X,\eps, \Dcal} 
+\left(f(X)-\hat{f}_\Dcal(X) + \eps
+\right)^2
+\\
+=&\sigma_\eps^2+ \e_X
+ \left(
+ f(X) - \e_\Dcal \hat{f}_\Dcal(X)
+ \right)^2
+ +\e_X \left[ \var_{\Dcal} (\hat{f}_\Dcal(X)  
+ \right].
+\end{align*}
+This is simply equal to  $ \e_\Dcal \Ecal (\hat{f}_\Dcal) = 
+\e_{\Dcal} \e_{X,Y} \abs{Y-\hat{f}_\Dcal(X)}^2 $.
  
+ \bigskip
+  The variance term 
+ $ \var_{\Dcal} (\hat{f}_\Dcal(x_0))
+$ is typically $\sim \frac{1}{N}\times C$ for which 
+$C$ may depend on complexity of the model space $\Hcal$.
+
+
+  }
+ 
+
+
+%%%------------------------------------------
  
 \frame{
 %For linear regression:
@@ -851,7 +1049,7 @@ or model complexity to have analytical
 results (very limited cases)
 \item  
 A practical method is to estimate $\e [  ( Y-\hat{f}_\Dcal(X))^2]
-\approx \frac{1}{n} \sum_j (Y'_j-\hat{f}_\Dcal(X'_j))$
+\approx \frac{1}{n} \sum_j (Y'_j-\hat{f}_\Dcal(X'_j))^2$
 where $X'_j$ are not from $\Dcal$
 but an independent dataset $\Dcal'$.
 \item Where is the ``new'' dataset $\Dcal'$?
@@ -869,34 +1067,80 @@ cross-validation
 \frame{
 \begin{center}
 \begin{figure}
-\includegraphics[width=\textwidth]{bias-variance-tradeoff.png}
+\includegraphics[width=.8\textwidth]{bias-variance-tradeoff.png}
 \caption{  Bias-Variance Tradeoff as a Function of Model Capacity/Complexity
 }
 \end{figure}
 \end{center}
 }
+
+
+%%%------------------------------------------------------
+\frame{
+\begin{center}
+\begin{figure}
+\includegraphics[width=.98\textwidth]{Fig2_11.png}
+\end{figure}
+\end{center}
+Exercise:  Prove that  the blue curve is always below 
+the red curve. (Ex. 2.9 in [ESL])
+}
+
+
+%%%------------------------------------------------------
+
+\frame{ {Application of Bias-Variance decomposition
+to $k$-NN}
+
+Consider the $k$-nearest-neighbor regression fit 
+to the data $\Dcal=\set{(x_i,y_i)}$
+arising from the additive model $Y=f(X)+\eps$: 
+$$\hat{f}_\Dcal^k(x)=\frac{1}{k}\underset{x_i \in N_k(x)}\sum   y_i
+=\frac{1}{k}\underset{x_i \in N_k(x)}\sum   (f(x_i) +\eps_i) .$$
+WLOG, we assume that the input design points $\set{x_i}$ in
+the training $\Dcal$ is 
+deterministic. Then the expectation w.r.t. $\Dcal$
+is only for the measurement errors $\eps_i$:
+\biz
+\item 
+The bias is $f(x_0)-\e_\Dcal [\hat{f}^k_\Dcal  (x_0)]=
+f(x_0)-
+\frac{1}{k}  \underset{x_i \in N_k(x_0)}\sum   f(x_i)$;
+\item 
+The variance is $\var_{\Dcal} ( \hat{f}^k_\Dcal  (x_0) )
+=\frac{1}{k}\sigma^2_\eps$
+\eiz
+\begin{ex}
+Assume $x_0=0$, $x_i=i/N, ~~i=1,2,\ldots N$.
+Compute the $\mbox{EPE}(k)$, the expected prediction error, 
+as a function of  $k$ and fine the optimal $k^*$ 
+in this special case.
+\end{ex}
+
+}
+
+
 %%%------------------------------------------------------
 
 
 \frame {
 
-\frametitle{Model assessment}
+\frametitle{Model Assessment: practical techniques}
 
 Typical objectives:
-\begin{itemize}
+\ben
 \item Choose a value of a tuning parameter  (\hb{hyperparameter})
 used in the model
 (such as $k$ in k-NN)
 \item Estimate the prediction performance  (test error) of a given model
-\end{itemize}
-
+\een
 \vspace{3mm}
 Remarks:
 \begin{itemize}
 \item For both objectives, the best approach is to run the procedure on
 an independent test set, if one is available.
 \item If possible, one should use different test data for (1) and (2) above: a
-{\it validation set} for (1) and a {\it test set} for (2).
+{\it validation set} for objective (1) and a {\it test set} for  objective (2).
 \item Often there is insufficient data to create a separate validation or test set. In this case, {\it Cross-Validation} is useful.
 \end{itemize}
 
@@ -963,8 +1207,6 @@ and predictions are made on the original training set.
 \end{itemize}
 
 }
-
-
 
 
 
