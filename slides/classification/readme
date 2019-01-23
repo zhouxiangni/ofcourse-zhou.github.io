@@ -1,0 +1,10 @@
+
+Bayes classifier   :  0-1 loss
+logistic regression:  negative log-likelihood loss = binomial deviance = cross-entropy loss
+sigmoid function, softmax, softplus function
+
+
+Support vector classifier:
+linear separating
+hinge loss
+relaxing in optimization
