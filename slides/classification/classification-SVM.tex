@@ -1,9 +1,9 @@
 %\documentclass[english,10pt]{beamer}
-\documentclass[english,  handout]{beamer}
+\documentclass[english, handout]{beamer}
 
 \input{../frontpage}
 
-\title{Classification: Support Vector Classifier}
+\title{Classification: Support Vector Machine}
 \author{\includegraphics[height=1.1cm,width=2.2cm]{../CityU_Logo_Basic_Signature.eps}
 \\ $\ $ \\
 Xiang Zhou  \\ $\ $ \\
@@ -32,14 +32,18 @@ City University of Hong Kong
  
  
  
-\frame{{SVM}
-developed by computer science 
+\frame{{SVM: support vector machine}
+Mainly developed and was dominantly hot in computer science / pattern recognition  
 
 \biz
 \item Vapnik 1995:  Geometric Viewpoint + Primal-Dual for Quadratic Programming (+ Kernel trick, new def of metric)   ~~
-\item Sollich 2002: \href
-{https://link.springer.com/content/pdf/10.1023/A:1012489924661.pdf}{Bayesian Viewpoint} 
+\item Major developments throughout
+1990’s
+\item Has good generalization properties;
+\item One of the most important and successful 
+developments before deep learning. 
 \eiz
+
 
 \begin{table}
 \begin{center}
@@ -48,32 +52,33 @@ Method & main properties
 \\
 \hline
 \hline
-{maximal margin classifier}
+\hb{maximal margin classifier}
  & only for linear separable dataset
   \\
 \hline
-  {support vector classifier}
+  \hb{support vector classifier}
   & slack variable, linear classifier 
  \\
  \hline
-  {support vector machine} & kernel trick, nonlinear classifier
+  \hb{support vector machine} & kernel trick, nonlinear classifier
   \\ \hline
 \end{tabular}
 \end{center}
 \caption{Development of SVM}
 \end{table}
+
+\footnote{ Sollich 2002: \href{https://link.springer.com/content/pdf/10.1023/A:1012489924661.pdf}{Bayesian Viewpoint} of SVM }
+
 \footnote
 {
 We do not  discuss here the numerical optimization   part of SVM 
-(a good example for convex optimization .
-online resource: \url{http:/uito/www.robots.ox.ac.uk/~az/lectures/ml/index.html}).
+(\href{http:/uito/www.robots.ox.ac.uk/~az/lectures/ml/index.html}{ref}).
 The focus here is the geometric intuition and modelling.
 }
 
 }
-\frame{{Linear Separable Problem}
+\frame{{Linear Separation  for binary classification}
 Binary classification problem:  dataset $\set{x_i, y_i}$ where $y_i\in \mathcal{Y}=\set{-1,1}$.
-Recall 
 \biz
 \item Logistic regression assumes: log odd $\log h(x)$ is linear in $x$. 
 The decision boudary
@@ -82,9 +87,8 @@ $h(x)=0.5$ is equivalent to $\beta \cdot x   =0.5$
 \item SVM is also a linear classifier, with a strong geometric intuition.
 \eiz
 
-
- \begin{remark}
- \biz
+Summary:
+  \biz
  \item 
 The logistic  regression =
 sigmoid  activation function 
@@ -100,7 +104,6 @@ The support vector machine (SVM) =
 linear classifier 
 + max margin
 \eiz
-\end{remark}
 
 }
 
@@ -113,58 +116,80 @@ Then decision boundary is $f(x)=0$, not $h(x)=0.5$.
 \eiz
 This set of notation is convenient because
 if $y $ belong to $ \set{-1,1}$
-$$\otherbox
+$$\tcbhighmath
 {\mbox{sign} f(x) = y \iff  y f(x)  >0.}$$ 
 
- Remember $\mbox{sign} f(x)  = \mbox{sign}( \lambda f(x) )$ for any $\lambda>0$. 
-
-{\rule{\paperwidth}{0.5pt}}
-The 0-1 loss then can be written as
-$$
-\ell_{01}(f(x), y) =   1- \mbox{heaviside}(y f(x) ) 
-= (1-\mbox{sign}(y f(x) ))/2 $$
-which is equal to 
-$\ell_{01}(\phi(x),y)=
-\ell_{01}(\mbox{sign}f(x), y)$.
-We extend $\ell_{01}$'s  domain $\Ycal\times \Ycal$
-to $\Real\times \Real$.
-
-}
-
+ Note
+  $\mbox{sign} f(x)  = \mbox{sign}( \lambda f(x) )$ for any $\lambda>0$. 
+ }
+ 
 \frame{
 
 \begin{ex}
  A linear discriminant function is $f(x)=w\cdot x + b$.
-Only the sign matters, so w.l.o.g., we assume $\norm{w}=1$.
+Assume $\norm{w}=1$.
 Given a point $x^*$, show the  signed distance between $x^*$
 and the hyperplane $f(x)=0$ is $$ {f(x^*)}$$ ( or $f(x^*)/\norm{w}$ in general).
+The positive sign of $f(x^*)$ means that $x^*$ on the same side of the hyperplane as the normal direction vector $w$.
 \end{ex}
+
+Given one data example $(x_i, y_i)$,
+if $f$ correctly classifies $x_i$, then $\mbox{sign} f(x_i)=y_i$,
+the absolute  distance to the hyperplane $f(x)=0$ is 
+$$\frac{1}{\norm{w}}\abs{f(x_i)} = \frac{1}{\norm{w}} f(x_i) \cdot \mbox{sign} f(x_i) = 
+\tcbhighmath{
+ \frac{1}{\norm{w}} {f(x_i) y_i }=:M_i},$$
+which is   the {\bf  margin} of $x_i$ and $y_i$  to the separating hyperplane.
+If $f$ misclassifies $x_i$, then $M_i <0$.
 }
 
 \frame{
-Given one data example $(x_i, y_i)$,
-if $f$ correctly classifies $x_i$, then $\mbox{sign} f(x_i)=y_i$
-the  distance to the hyperplane $f(x)=0$ is 
-$$\abs{f(x_i)} = f(x_i) \cdot \mbox{sign} f(x_i) = \tcbhighmath{f(x_i) y_i }=:M_i,$$
-which is   the {\bf  margin} from $x_i$ to the separating hyperplane.
  
-\begin{den}[margin]
+\begin{definition}[margin]
 Given   the dataset $(x_i, y_i), i=1,\ldots, n$  
 and a linear function $f(x)=w\cdot x+b$, then 
-the margin of the dataset $(x_i, y_i), i=1,\ldots, n$ to the hyperplane $f(x)=0$ is 
+the margin
+\footnote{
+Sometimes, the margin refers to $2M$, the distance between 
+the two hyperplanes 
+$w\cdot x + b = \pm M/\norm{w}$.
+}
+ of the dataset $(x_i, y_i), i=1,\ldots, n$ to the hyperplane $f(x)=0$ is 
 \[
-M= \min_{1\leq i \leq n}  \set{ y_i (w\cdot x_i +b) / \norm{w} }
+M= \min_{1\leq i \leq n} M_i =\min_{i} \set{ y_i (w\cdot x_i +b) / \norm{w} }
 \]
-The support vectors are the collection of $\set{x_j}$
+The {\bf support vectors} are the collection of $\set{x_j}$
 such that $M=y_j (w\cdot x_j +b)$.
-Sometimes, the margin refers to the two hyperplanes 
-$w\cdot x + b = \pm M/\norm{w}$ where support vectors lie.
-\end{den}
-$M>0 \iff $ the dataset is linearly separable, i.e. 
-$$\mbox{sign}f(x_i) = y_i, \forall i.$$
+\end{definition}
 }
 
 \frame{
+
+\biz
+
+\item $M$ depends on $w, b$ and the dataset $\set{x_i,y_i}$.
+\item If there exists a linear function $f=w\cdot x+b$ such that 
+$M>0 \iff $ the dataset is linearly separable, i.e. 
+$$\mbox{sign}f(x_i) = y_i, \forall i.$$
+
+\item
+The margin $M$ is a function of $w$ and $b$,
+we consider its maximal value over the choice of $w$ and $b$:
+\begin{equation}\label{maxm7}
+M^*:=\max_{w,b} M(w,b)=\max_{w,b}  \left(  \min_{i} \set{ y_i (w\cdot x_i +b) / \norm{w} }
+\right)
+\end{equation}
+\item  If $M^*$ is positive, then the corresponding optimal $w^*$ and $b^*$ :
+ the dataset is linearly separabble
+\item If $M^*$ is negative,  then for any $w$ and $b$, $M<0$,
+i.e., there exist some data $i$ such that $M_i<0$, misclassified.
+The dataset is not linearly separable.
+
+\eiz
+}
+
+\frame{{Maximal Margin Classifier}
+Write \eqref{maxm7} in standard constrained optimisation form: 
 \begin{definition}[maximal margin classifier]
 {The maximal margin classifier} solves the problem 
 \begin{equation}\label{eq:mmc}
@@ -185,32 +210,30 @@ The equivalent form of maximal margin classifier is
 &\max_{w\in \Real^d,b\in \Real} M
 \\
 \mbox{subject to} ~~
- &  y_i (w\cdot x_i +b) / \norm{w}\geq M , ~~\forall i
+ &  y_i (w\cdot x_i +b) / \norm{w}\geq M , ~~  i=1,2,\ldots, n
 \end{split}\end{equation}
 \item The constraint $\norm{w}=1$ is only for the uniqueness of $w$ and $b$;
 without this constraint, the solution  is a family of the linear discriminant functions
 $\set{\lambda f^{*}(x): \lambda>0}$, which all share 
-the {\bf same} classifier $\phi^{*}=\mbox{sign}f$.
+the {\bf same} classifier $\phi^{*}=\mbox{sign}f^*$.
 
-\item This form is applicable to non linear separable case.
-If the maximal $M$ is negative, then the dataset is not linearly separable. 
-Otherwise, the dataset is   linearly separable.
 \eiz
 
 }
 
 \frame{
 \begin{ex}[XOR]
-Suppose the dataset has $n=4$ examples as follows:
+Suppose the dataset has $n=4$ examples in $\Real^2$ plane as follows:
 \begin{tabular}{ll}
 $ x_1$=(1, -1)&  $y_1$ = -1\\
  $x_2$=(1, 1) &  $y_2$ =   1\\
  $x_3$=(-1, 1)&  $y_3$ = -1\\
  $x_4$=(-1, -1)&  $y_4$ = 1
 \end{tabular}.
-Find the maximal margin classifier $f(x)=w_1 x_{(1)} + w_2 x_{(2)} + b$.
+Find the maximal margin classifier $f(x)=w_1 x_{(1)} + w_2 x_{(2)} + b$
+where $x=(x_{(1)},x_{(2)})\in\Real^2$
 \end{ex}
-{\footnotesize
+{\tiny
 \begin{align*}
 &\max_{w\in \Real^d,b\in \Real} M
 \\
@@ -235,18 +258,29 @@ $f(x)=(-x_1-x_2\pm1)/\sqrt{2}$
 
 }
 
+\frame{{Cover theorem: increasing dimension improves linear separability}
+
+\href{http://web.mit.edu/course/other/i2course/www/vision_and_learning/perceptron_notes.pdf}
+{Cover’s theorem}:
+\begin{quote}
+“pattern-classification problem cast in a high dimensional
+space non-linearly is more likely to be linearly separable
+than in a low-dimensional space”
+\end{quote}
+Kernel trick: 
+\begin{center}
+\includegraphics[width=0.6\textwidth]{kernel-trick.png}
+\end{center}
+ \href{https://www.hackerearth.com/blog/machine-learning/simple-tutorial-svm-parameter-tuning-python-r/}{image source}
+
+}
+
 
 \frame{
-The alternative form of maximal margin classifier is
-\begin{align*}
-&\max_{w\in \Real^d,b\in \Real} M
-\\
-\mbox{subject to} ~~
- &  y_i (w\cdot x_i +b) / \norm{w}\geq M , ~~\forall i
-\end{align*}
+Recall the maximal margin classifier \eqref{eq:mmc2}
 Since we can scale $w,b$ by a {\bf positive} factor arbitrarily, we
-can assume  $M>0$ and $ M \norm{w} =1 $ {\it if the dataset is linearly separable},
-instead of using the rescaling $\norm{w}=1$.
+can assume  $M>0$ and use the normalization $ M \norm{w} =1 $ {\it if the dataset is linearly separable},
+instead of using the normalization $\norm{w}=1$.
 Then
 \begin{equation}\label{eq:mmc3}
 \begin{split}
@@ -258,23 +292,26 @@ Then
 \end{equation}
 \biz
 \item
-Now there is NO solution if not linear separable, in contrast to  \eqref{eq:mmc2} and \eqref{eq:mmc}.
-\item The problem  \eqref{eq:mmc3} is the standard quadratic programming problem \faSmileO ,
-in contrast to  \eqref{eq:mmc2} and \eqref{eq:mmc}.
+Now there is NO admissible solution if the dataset is  not linearly separable, in contrast to  \eqref{eq:mmc2} and \eqref{eq:mmc}.
+\item The problem  \eqref{eq:mmc3} is the standard quadratic programming problem \faSmileO .
 \item
-The margin corresponds to the equalities when the inequality constraint, i.e., 
-the  two parallel hyperplanes for the margin are given 
-\[ \boxed{ w\cdot x + b =\pm 1}.\]
-The margin width is $\frac{2}{\norm{w}}$
+The margin now is $M=\frac{1}{\norm{w}}$.
+ 
+\item The support vectors are those on the two hyperplanes 
+\[ \boxed{ w\cdot x + b =\pm 1},\]
+i.e., the inequality constraints at these support vectors 
+actually are equalities.
+
 \par 
 \eiz
 
 }
 
 
-\frame{{Support Vector Classifier}
+\frame{{\faLightbulbO
+~Support Vector Classifier}
 \framesubtitle
-{soft margin and slack variable}
+{soft margin and slack variable for nonseparable dataset}
 
 \underline{But linear separation assumption is too strong in practice}
 
@@ -282,49 +319,165 @@ The non-separable case means there are some examples $(x_m, y_m)$ such that
 $y_m (w\cdot x_m +b) < 0$.  Then by adding $n$ slack variables $\xi=(\xi_1,\ldots, \xi_n)$, we have the support vector classifier 
 \begin{definition}[support vector classifier]
 \begin{align}
-&\min_{w\in \Real^d,b\in \Real} \frac12 \norm{w}^2
+&\min_{w\in \Real^d,b\in \Real, \xi \in \Real^n} \frac12 \norm{w}^2
 \\
 \mbox{subject to} ~~
  &  y_i (w\cdot x_i +b) \geq 1-\xi_i , \forall i
  \\
  &\xi_i \geq 0, \forall i
  \\
- & \sum_{i=1}^n {\xi_i} \leq const
+ & \sum_{i=1}^n {\xi_i} \leq s
 \end{align}
-where $const>0$ is a tuning parameter.
+where the constant $s>0$ is a tuning parameter.
 \end{definition}
-$const=0\iff$ maximal margin classifier (for linear separable case), do not allow violation of the margin.
-\par
-If $const=\infty$, then  $w=0$, $b$ arbitrary. No data $(x_i, y_i)$ is used.
+This is in the standard form of 	quadratic programming. 
 }
-\frame{{Understand SVC's geometric perspective}
+\frame{{Remarks on relaxation budget}
+
 \biz
-\item The margin is given by two hyperplanes :  $w\cdot x + b= \pm 1$
-with the margin gap $2M=\frac{2}{\norm{w}}$.
-\item $\xi_i >1$ means  $y_i (w\cdot x_i +b)$ is negative:      $y_i$ is on the other side of the hyperplane predicted by $f(x)$ .
-\item $\xi_i >0$ then $y_i$ violates the margin;
-\item $\xi_i = 0$, then $y_i$ is on the same side predicted by the margin;
-Furthermore,  $y_i (w\cdot x_i +b)  = 1 \iff $ support vectors  
+\item hyperparameter $s$ controls the budget of relaxation:
+\biz
+\item $s=0\iff \xi_i \equiv 0$,   maximal margin classifier becomes \eqref{eq:mmc3}(for linearly separable case)
+and  does not allow violation of the margin.
+\item 
+If $s=+\infty$, any $w$ and $b$ are admissible, and then the optimal  $w^*=0$, $b$ arbitrary:
+huge bias, low variance 
+\eiz
+\item The budget $\sum_i \xi_i < s$ can be rewritten as the penalty form 
+with the parameter $C>0$
+\begin{align}
+\label{eq:svc9}
+&\min_{w\in \Real^d,b\in \Real, \xi\in\Real^n} \frac12 \norm{w}^2
++  C \sum_{i=1}^n {\xi_i}
+\\
+\mbox{subject to} ~~
+ &  y_i (w\cdot x_i +b) \geq 1-\xi_i , \forall i
+ \\
+ &\xi_i \geq 0, \forall i
+ \end{align}
+ Totally, $d+1+n$ unknowns.
+\eiz}
+
+\frame {{Interpretation of slack variables at optimality }
+There are two constraints:
+\[  y_i (w\cdot x_i +b) \geq 1-\xi_i , ~\mbox{ and } \xi_i \geq 0\]
+At the optimal values, some constraints may be active, some others may be inactive.
+
+With the abuse of language, we define ``margin''
+as the set between two hyperplanes 
+$
+\mathcal{M}:=\set{x:    \abs{w\cdot x + b}  \leq  1}
+$
+\biz
+\item $\xi_i = 0$, then   $x_i$ is correctly classified and even better that it is not inside of the margin $\mathcal{M}$.
+Furthermore, if additionally  $y_i (w\cdot x_i +b)  = 1$, then $x_i$ is a support vector, sitting on the boundary of margin.
+\item $\xi_i >0$,  then  $y_i (w\cdot x_i +b) = 1-\xi_i$ and is less than $1$,
+  $x_i$ violates the margin boundary and enters $\mathcal{M}$;
+\biz
+\item  $0<\xi<1 $:  $x_i$ is still correctly classified but too close to the decision boundary. 
+\item $\xi_i >1$ :   $y_i (w\cdot x_i +b)$ is negative so,       $x_i$ is misclassified.
+\eiz
 \eiz
 
+\footnote{The theory of constrained optimization such as linear programming theory is helpful in understanding this part.}
+}
+
+ 
+\frame{
+
+
+\begin{center}
+\begin{figure}
+\includegraphics[width=0.8\textwidth]
+{SVM-slack.png}
+\caption{The slack variables for the data point  in class $+1$, markers(``$\times$'').
+$x\in \Real^2$.}
+ \end{figure}
+ \end{center}
+ The larger value of $\xi_i$, the further the point $x_i$ away from the correct domain.
+This justifies the penalty of $\sum_i \xi_i$.
 }
 
 
 \frame{
-Note that $ y_i f(  x_i  ) \geq 1-\xi_i  $  and $\xi_i \geq 0$ together 
-are equivalent to $\xi_i \geq \max\set{0, 1-y_if(x_i)}=: (1-y_i f(x_i))_+$.
-Then the SVC 
-\begin{align*}
-&\min_{w\in \Real^d,b\in \Real} \frac12 \norm{w}^2
-\\
-\mbox{subject to} ~~
-  &\xi_i \geq (1-y_i (w\cdot x_i + b))_+, \forall i
- \\
- & \sum_{i=1}^n {\xi_i} \leq const
-\end{align*}
+\begin{center}
+\includegraphics[width=0.98\textwidth]
+{SVC-margin-slack.png}
+\par From [ESL]: here $\xi^*_i: =M \xi_i$
+\end{center}
+Exercise:   discuss the range of $\xi^*_i=M \xi_i$ in the right figure.
+}
+
+
+\frame{{Interpretation  of Support vectors}
+The support vectors are those $x_i$ such that 
+$y_i (w \cdot x_i +b ) = 1-\xi_i$.
+This equation of $w$, $b$ can  easily solved if 
+ these support vectors as well as $\xi_i$ are known. 
+In fact 
+the solution of SVC is 
+\[
+w^* = \sum_{ i \in S }\hat{\alpha} y_i x_i
+\]
+where $S=\set{i: y_i (w \cdot x_i +b ) = 1-\xi_i}$.
+Refer to Section 12.2.1 in [ESL].
+
+ \biz
+ \item 
+Complexity of the classifier is characterized by the number
+of support vectors rather than the dimensionality.
+   \item The solution is insensitive to the outliers  (the data points significantly far away from the decision boundary).
+   \eiz
+}
+
+
+
+%%%--------------------------------------------------------------------
+
+\frame {
+
+\frametitle{  SVM with kernel tricks: nonlinear decision boundaries}
+
+The key idea of extending linear SVC, and many other linear procedures, to nonlinear is to:
+\begin{itemize}
+\item Enlarge the predictor space using basis expansion functions $h_1(x),\ldots,h_M(x)$
+\item Construct a linear separating hyperplane $f(x) =  w\cdot h(x) + b$ in the enlarged space for better training performance
+\item The linear separating hyperplane in the enlarged space can be translated into a nonlinear separating hyperplane in the original space.
+\end{itemize}
+
+The procedure is to replace $x$ in SVC by $h(x)$ in SVM.
+We do not discuss the details further: this is a general principle.
+}
+
+
+
+\frame{
+NEXT:
+
+Rewrite the Constraint Optimization  form of SVC 
+into the classic form 
+
+{Loss function  + Penalty }
+
+
+\bigskip
+
+Note that two constraints in SVC 
+$ y_i f(  x_i  ) \geq 1-\xi_i  $  and $\xi_i \geq 0$ together 
+are equivalent to 
+
+$$\xi_i \geq \max\set{0, 1-y_if(x_i)}=: (1-y_i f(x_i))_+.$$
+
+
+}
+
+
+\frame{{   SVM= hinge Loss + $L_2$-Regularization}
+
+Then the SVC  in \eqref{eq:svc9}
 is equivalent to 
 \begin{align*}
-&\min_{w\in \Real^d,b\in \Real} \frac{1}{2C} \norm{w}^2 + \sum_{i} \xi_i
+&\min_{w\in \Real^d,b\in \Real, \xi \in \Real^n} \frac{1}{2} \norm{w}^2 + C\sum_{i} \xi_i
 \\
 \mbox{subject to} ~~
   &\xi_i \geq (1-y_i (w\cdot x_i + b))_+, \forall i
@@ -334,22 +487,33 @@ is equivalent to
 \min_{w\in \Real^d,b\in \Real} \frac{1}{2C} \norm{w}^2 + \sum_{i} (1-y_i (w\cdot x_i + b))_+
  \end{equation}
  This is the form of  (hinge) loss + ($L_2$) regularization
- 
-
-}
-\frame{
-{\bf SVC :  hinge Loss + Regularization}
-\begin{equation}
-\min_{w,b} \sum_{i=1}^n  \ell_{\mbox{hinge}}(y_i, f(x_i)) + \frac{C}{2}\norm{w}^2
-\end{equation}
-
-where $f(x)=w\cdot x +b$ and 
 \[
 \otherbox{
-\ell_{\mbox{hinge}}(y,f) = (1-y f)_+ , ~~ y\in \set{-1,1}, f \in \Real}
+\ell_{ {hinge}}(y,f) = (1-y f)_+ , ~~ y\in \set{-1,1}, f \in \Real}
 \]
-$C=\infty\iff w=0$; \par$C=0\Longrightarrow$  (1) min=0 means the linear separation case
-(2) min $>0$ is the non separable; in both, the solution $f^*$ is not unique, even restricted to linear. 
+}
+
+
+\frame{
+The population risk is 
+\[
+ \Ecal ( f) =  \e \ell_{ {hinge}} (Y, f(X))
+\]
+The penalty for the roughness of $f$ :
+$R(f)=\norm{f}$.
+
+When  $f(x)=w\cdot x +b$, 
+\begin{equation}
+\min_{w,b} \sum_{i=1}^n  \ell_{ {hinge}}(y_i, f(x_i)) + \frac{\lambda}{2}\norm{w}^2
+\end{equation}
+
+\biz
+\item
+$\lambda = 1/C$: the budget for relaxation.
+\item $\lambda>0$: the penalty on the margin-relevant variable $\|w\|$.
+\item The soft margin  performs like regularization; so the SVM is usually 
+good at generalization.
+\eiz
 }
 
 \frame{
@@ -357,57 +521,128 @@ $C=\infty\iff w=0$; \par$C=0\Longrightarrow$  (1) min=0 means the linear separat
 
 Recall the logistic regression solves
 \begin{equation}
-\min_{f}  \e \ell_{\mbox{bd}}(Y, f(X))  \approx  \frac{1}{n} \sum_{i=1}^n  \ell_{\mbox{bd}}(y_i, f(x_i)) 
+\min_{f}  \e \ell_{ {bd}}(Y, f(X))  \approx  \frac{1}{n} \sum_{i=1}^n  \ell_{ {bd}}(y_i, f(x_i)) 
 \end{equation}
-where $f(x)=\mbox{logit}(h)=\log \frac{h}{1-h}$ with $h(x)=\p(Y=+1\vert X=x)$
-and the binomial deviance loss
+where
+ the binomial deviance loss
 \[
-\ell_{\mbox{bd}}(y,f)=\log (1+e^{-yf}), ~~y\in \set{-1,1}.
+\ell_{ {bd}}(y,f)=\log (1+e^{-yf}), ~~y\in \set{-1,1}.
 \]
+We know  the optimal $f^*_{bd}(x)=\mbox{logit}(h)=\log \frac{h}{1-h}$ where $h(x)=\p(Y=+1\vert X=x)$.
+The classifier is 
+$$x\to \mbox{sign}(f^*_{bd}(x))$$
+\par
+This is equivalent to the  Bayes classifier with the 0-1 loss $\e \ell_{01}(Y, G(X))$:  
+$G^*(x) = \sign (h(x)-0.5) = \sign{f^*_{bd}(x)} $
+
 }
+
+
+%%%------------
 \frame{
-Recall the 0-1 loss \eqref{01loss} in the Bayesian classifier, we rewrite it in term of $f$: 
-$\ell_{01}(y,f) 
- =\idor(y \neq \mbox{sign}(f(x)) )= \begin{cases}
-1 & \mbox{if }  y  f(x)<0  \\
-0   & \mbox{if }  yf(x)>0  
-\end{cases}=1- \mbox{Heaviside}(yf)$.
-Then we have three loss functions $\ell_{\mbox{bd}}$, $\ell_{\mbox{hinge}}$, $\ell_{01}$
-which are all functions effectively in term of the product $yf(x)$
+
+Then we have three loss functions $\ell_{ {bd}}$, $\ell_{ {hinge}}$ and $\ell_{01}$.
+They   are   functions   in term of the product $yf(x)$.
+More choice of loss functions are in Table 12.1 [ESL].
 \begin{figure}[htbp]
 \begin{center}
 \includegraphics[width=0.6\textwidth]{lossclassification.eps}
   \end{center}
 \end{figure}
 \dis { What differences ?  Computational issues ? Which data examples
-feel the ``gradient'' force?
-Why need regularization for hinge?
-What else of loss function do you like to propose ? }
+feel the ``gradient'' force?}
+}
 
+
+%%%%-------------------------------------------
+\frame{
+
+
+\begin{ex}
+Consider the minimization problem 
+\[ \inf_f \e \ell_{hinge} (Y, f(X))\]
+for the $\set{\pm 1}$-encoded binary classification problem.
+Show that the optimal $f^*_{hinge}$ is 
+$\mbox{sign}(h(x)-0.5  )$
+where $h(x)=\p(Y=+1\vert X=x)$.
+\end{ex}
+Recall a similar exercise for the binomial deviance loss.
+
+\biz
+\item
+Note  $\mbox{sign}(f^*_{hinge})=f^*_{hinge}$ 
+since $f^*_{hinge}$ only takes value $\pm 1$.
+\item $f^*_{bd}$ is continuous, but $f^*_{hinge}$
+is a step-type function.
+\eiz
+%\noindent\rule{\textwidth}{0.5pt}
 }
 
 \frame{
 
-We already know that the optimal solution to the 0-1 loss 
-\[ \inf_f \e \ell_{0,1} (Y, f(X))\]
-is Bayesian classifier $\phi^*(x)=\mbox{sign}(f^*) =\mbox{sign} ( h(x) - 0.5)$
-where $h(x)=\p(Y=+1\vert X=x)$. Only the sign $f^*$ is determined.
+\footnotesize
+\begin{align*}
+  &\e \ell_{hinge} (Y, f(X))\\
+=&
+\pi_+ \e_{X|Y=+1} \ell_{hinge} (+1, f(X))   
++\pi_-\e_{X|Y=-1} \ell_{hinge} (+1, f(X)) 
+\\
+= &\pi_+  \int_\Xcal I(1-f(x)>0) \, (1-f(x))\,  \rho_+(x)\dx \\
+& ~
++\pi_-  \int_\Xcal I(1+f(x)>0)\, (1+f(x)) \, \rho_-(x)\dx 
+\end{align*}
+Consider the domain $\Omega_+ \subset \Xcal $
+where $f(x)>1$, then the integration over 
+$\Omega_+$ is 
+$\pi_-\int_{\Omega_+}  (1+f(x) )\rho_-(x) \dx$:
+by decreasing the value of $f$ on this domain $\Omega_+$
+to the minimal possible value $1$, one has a smaller loss.
+So, for $f^*$ to be optimal, $\Omega_+$ must be empty.
+For the same reason for $\Omega_-$ case, we deduce that 
+$f^*(x) \in [-1,1]$ almost everywhere.
+Then we only consider to minimize within  this bounded function class
+$\set{f: \abs{f(x)} \leq 1}$
+$\pi_+  \int_\Xcal  (1-f(x))\,  \rho_+(x)\dx
++\pi_-  \int_\Xcal   (1+f(x)) \, \rho_-(x)\dx 
+= \int_{\Xcal} f(x)  \left ( \pi_-  \rho_-(x)  -\pi_+\rho_+(x) \right)  \dx
++ 1
+$. So if $\pi_-\rho_-(x) <\pi_+\rho_+(x)$,
+the minimizer is $f^*(x)=1$;
+otherwise $f^*(x)=-1$. Equivalently,
+$f^*(x)=\sign(\pi_+\rho_+(x) - \pi_+\rho_+(x) )
+=\sign(h(x)-0.5)$
+since $h(x)= \frac{\pi_+\rho_+(x)}{ 
+\pi_+\rho_+(x) + \pi_+\rho_+(x) 
+}
+ $
 
-\begin{ex}
-Consider the minimization problem 
-\[ \inf_f \e \ell_{\mbox{bd}} (Y, f(X))\]
-for the $\set{\pm 1}$-encoded binary classification problem.
-Show that the optimal $f^*$ is the log odd:
- $$f^*(x)=\mbox{logit}(h(x))=\log \frac{h}{1-h}$$ where $h(x)=\p(Y=+1\vert X=x)$.
-\end{ex}
-The two problems are not variation of calculus, but are solved in point-wise sense.
 }
 
-\frame{\includegraphics[width=0.3\textwidth]{logith.png}}
-\frame{Kernel logistic regression vs Kernel SVM
-\url{https://stats.stackexchange.com/questions/43996/kernel-logistic-regression-vs-svm}
+
+%%%-------------------------------------
+
+\frame{
+{ Regularization  in SVM smoothes $f^*_{hinge}$}
+\biz
+\item
+The  objective function with regularization 
+$$\inf_{f\in \Hcal}  \e \ell_{hinge} (Y, f(X))  + \lambda R(f)$$ 
+gives a smooth function approximation $f_\lambda$ to
+the step function $f^*_{hinge}$, and the classifier is 
+$$x\to \mbox{sign}(f_\lambda)$$
+places back $f_\lambda$ to step function by thresholding. 
+\item
+For SVC, the hypothesis space $\Hcal$ is linear function space,
+and SVC use  a linear function to approximate a step  function with jumps. The maximal margin $\|w\|$  has the meaning of penalty.
+\eiz
 }
-\include{svmtalk.pdf}
+
+\frame{{topics not touched here for SVM}
+\biz
+\item kernel trick, RKHS
+\item optimization theory and methods for SVM
+\eiz
+}
 
 \end{document}
 
