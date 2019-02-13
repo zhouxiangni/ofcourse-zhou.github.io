@@ -22,7 +22,7 @@
 \newtheorem*{lem}{Lemma}
 
 
-\title{ Regularization Technique for Linear  Regression: \\
+\title{ Regularization Technique for Linear  Regression in High Dimension: \\
  Ridge Regression and LASSO}
 
 \author{\includegraphics[height=1.1cm,width=2.2cm]{../CityU_Logo_Basic_Signature.eps}
@@ -63,7 +63,7 @@ here is used as a second example
 
 
 \bigskip 
-Not intended to cover at all:
+Not intention  to cover the followings:
 the optimization theory and 
 numerical methods  for the ridge regression and LASSO,
 which is very important in practice but more
@@ -384,8 +384,8 @@ $\beta ^\lambda$ and $\beta^t $ are the same.
  \frame
  {~
  {\footnotesize 
-  The least square error as the 
-  $\D$-weighted distance to $\bh^{OLS}$
+  The   square error can be rewritten  as the 
+  $\D$-weighted $L_2$ distance to $\bh^{OLS}$
 in the transformed coordinate system
  \begin{align*}
  &\|{\bf y}- {\bf X} \beta\|_2^2 
@@ -451,6 +451,7 @@ $$
 
 \begin{itemize}
 \item $L_0(\beta) = \sum_{j=0}^p I(\beta_j \neq 0)$; (Hard thresholding)
+\footnote{This gives subset selection}
 \item $L_1(\beta) = \sum_{j=0}^p |\beta_j|$; (Lasso)
 \item $L_2(\beta) = \sum_{j=0}^p \beta_j^2$; (Ridge regression)
 \item $L_{\infty}(\beta) = \max_j~|\beta_j|$.
@@ -515,8 +516,11 @@ Due to the nature of the $l_1$-norm constraint, if $t$ is small enough some coef
 \item  The $l_r$ regularization results in sparsity when $0 \le r \le 1$, and is
   convex when $1 \le r < \infty$. 
   
-\item  {\bf Lasso is sparse and convex.}
- Original implementation involves quadratic programming
+\item  {\bf Lasso is sparse and convex}:\footnote{not strictly convex. At a fixed $\lambda$, the coefficient $\hat{\beta}$ 
+exists but may not be unique but the prediction $\hat{\y}=\X \hat{\beta}$ is unique
+(Tibshirani, R. J. (2013). The lasso problem and uniqueness. Electronic Journal of Statistics, 7, 1456–
+1490.).}
+ the original implementation involves quadratic programming
 techniques from convex optimization
 \item Efron et al. (Annals of Statistics 2004) proposed {\bf LARS}
 ({\bf least angle regression}), which computes the LASSO path
@@ -554,9 +558,9 @@ Consider a simple but illuminating example:
  Show the solutions  
  \begin{align*}
     \hat{\beta}^{ ridge}  & = \argmin_{\beta}
-    \left\{ \|  \beta -\bh \|_2^2 + \lambda \|\beta\|^2_2 \right\}, \\
+    \left\{ \|  \beta -\bh \|_2^2/2 + \lambda \|\beta\|^2_2 \right\}, \\
     \hat{\beta}^{ lasso} & = \argmin_{\beta}
-    \left\{ \|  \beta -\bh \|_2^2 + \lambda \|\beta\|_1 \right\}  \end{align*}
+    \left\{ \|  \beta -\bh \|_2^2/2 + \lambda \|\beta\|_1 \right\}  \end{align*}
     are
     
 \begin{itemize}
@@ -568,8 +572,7 @@ Consider a simple but illuminating example:
 \href{https://www.desmos.com/calculator/uqt4bgkpky}{visualization
 of $\bh^{ridge}$ and $\bh^{lasso}$} from desmos.com webpage
 
-Warning:  taking the traditional derivative for lasso objective function is the wrong way!
-
+ 
 Ridge regression shrinks the $\bh$ in all components/directions.
 Lasso translates them towards zero by a constant, truncating at zero.
 }
@@ -582,15 +585,59 @@ Lasso translates them towards zero by a constant, truncating at zero.
 
 }
 
+%%%----------------------------
+
+
 %%%--------------------------------------------------------------------
+\frame{{Maximum number of selected covariates}
+The number of parameter/covariates selected by the lasso regression estimator is bounded non-trivially.
+The cardinality (i.e. the number of included covariates) of every lasso estimated linear regression model is
+smaller than or equal to $\min\{n, p\}$.
 
-\frame {
 
-\frametitle{Solution path}
+\bigskip 
+For any $\lambda>0$,   $\hat{\beta}^{lasso}(\lambda)$ has at most $\min(n,p)$ non-zeros entries. 
+Here $p$ is the number of parameters, and $n$ is the number of training samples.
+\footnote{Osborne, M. R., Presnell, B., and Turlach, B. A. (2000). On the lasso and its dual. Journal of Computational and Graphical Statistics, 9(2), 319–337.}
+
+\bigskip
+The number of all possible sub-models from variable selection (such as subset selection) is $2^{p}$.
+However, the typical number of different Lasso-estimated sub-models is  at the order of 
+\[ O( \min(n,p)) \]
+which is significantly smaller than $2^p$ if $p\gg n$.
+}
+
+
+%%%----------------------------
+
+
+
+\frame {{sparsity of the lasso solution}
+\biz
+\item A large $\lambda$ helps increase the sparsity \footnote{Theory: \href{https://terrytao.wordpress.com/2008/03/22/the-dantzig-selector-statistical-estimation-when-p-is-much-larger-than-n/\#more-290}
+{blog article of Terence Tao}
+}. 
+\item However, 
+$\norm{\hat{\beta}^{lasso}(\lambda)}_1$ decreases monotonically as $\lambda$ increases,
+but   the number of non-zero coefficients does not.
+\eiz
+\begin{center}
+\includegraphics[width=0.8\textwidth]{lasso-L1vsL0.png}
+\par
+{\small  \href{https://arxiv.org/abs/1509.09169v3}{source of figure}}
+\end{center}
+
+}
+
+%%%----------------------------
+
+
+\frame{
+\frametitle{Solution path of LASSO}
 
 \begin{itemize}
-\item Clearly, the lasso solution $\hat \beta^{lasso}$ changes with the value of $\lambda$
-\item Even better, $\hat \beta^{lasso}(\lambda)$ is a \structure{piecewise linear} function of $\lambda$
+\item The solution $\hat \beta^{lasso}(\lambda)$ is a \structure{piecewise linear} function of $\lambda$. \footnote{Rosset, S. and Zhu, J. (2007). 
+ The Annals of Statistics, pp 1012–1030.}
 \item The path algorithm starts at $\lambda=\infty$ or $s=0$, and traces the solution path
 by continuously changing $\lambda$ \footnote{homotopy method}. 
 Each new $\lambda$-solution is computed successively
@@ -603,31 +650,28 @@ precise solution for a neighboring old $\lambda$.
 {Regularization Paths for Generalized Linear Models
 via Coordinate Descent}
 \item Path algorithms are available for many methods, such as fused lasso, trend filtering, locally adaptive regression splines, SVMs, 1-norm SVMs, relaxed maximum entropy method ...
+\item One can compute all possible Lasso sub-models $\cup_{\lambda>0} \set{j:  \hat{\beta}^{lasso}(\lambda)\neq 0}$
+with $O(np \min\set{n,p})$ operation counts.
  \end{itemize}
 
 }
 
-
-%
-%\begin{frame}{Lasso}
-%
-%  \begin{figure}
-%   % \includegraphics[width=0.4\textwidth]{fig_lasso_geo.png}
-%    
-%    %\includegraphics[width=0.4\textwidth]{fig_lasso_path.png}
-%    \caption{%
-%      The geometric explanation (left) and regularization path (right) of Lasso.
-%      Note that the $x$-axis of the regularization path is the shrinkage factor
-%      $s = t / \sum_{j=1}^d |\hat{\beta}_j|$.
-%    }\footnote{%
-%      Trevor Hastie et al. (2008). The Elements of Statistical Learning: Data
-%      Mining, Inference, and Prediction. Figure 3.11 and 3.8.
-%    }
-%  \end{figure}
-%
-%\end{frame}
-
-
+%%%--------------------------------------------------------------------
+\frame{
+{Consistence of variable selection}
+\biz
+\item Empirical fact: The set of variables selected by Lasso contains the true (non-zero) variables in the sparse model, with high chance:
+\[ \set{j:  \hat{\beta}^{lasso}_j \neq 0} \supseteq  \set{j:  \hat{\beta}^{true}_j \neq 0} \]
+ \item 
+ The Theory(Meinshausen and Buhlmann 2006): Under some (restrictive and crucial) assumptions, if $\lambda=\lambda_n\gg \sqrt{\log(p)/n}$,
+ then 
+ \[ \set{j:  \hat{\beta}^{lasso}_j \neq 0} \to   \set{j:  \hat{\beta}^{true}_j \neq 0} ,~~p\gg n\to \infty \]
+with prob. 1.
+\item For high-dimensional model selection, with strongly correlated design $\X$, the Lasso can perform very poorly for variable selection.
+\eiz
+  }
+  
+  
 %%%--------------------------------------------------------------------
 \frame{
 
@@ -639,14 +683,6 @@ $$
 \min_{ c_j \geq 0, \forall j}~\frac{1}{2} \sum_{i=1}^n \big (y_i - \sum_{j=1}^p c_j \hat \beta_j x_{ij} \big )^2 + \lambda \sum_{j=1}^p c_j
 $$
 and then $\hat \beta_j^{ng} = \hat c_j \hat \beta_j$.
-\begin{ex}
-Show when $\X^\tr\X = n \eye$,  the non-negative Garotte  estimator
-is
-$$
-\hat \beta_j^{ng} = \left ( 1-\frac{\lambda}{2 \hat \beta_j^2} \right )_+ \hat \beta_j.
-$$
-\end{ex}
-
 
  \begin{itemize}
 \item It shrinks small $|\hat \beta_j|$ to zero.
@@ -660,8 +696,21 @@ and Johnstone (1994),   and boosting method.
 \end{itemize}
 }
 
+%%%%%----------------------
 
-%%%%%-----------
+\frame{
+
+\begin{ex}
+Show when $\X^\tr\X = n \eye$,  the non-negative Garotte  estimator
+is
+$$
+\hat \beta_j^{ng} = \left ( 1-\frac{\lambda}{2 \hat \beta_j^2} \right )_+ \hat \beta_j.
+$$
+\end{ex}
+
+}
+
+%%%%%----------------------
 \frame {
 
  
@@ -684,43 +733,108 @@ $$
 }
 
 
+%%%--------------------------------------------------------------------
+
+\frame{ {Ridge regression vs LASSO}
+\biz
+\item Both  can yield a reduction in variance at the expense of a small increase in bias.
+\item 
+Bayesian Interpretation for Ridge Regression and the Lasso:
+Figure 6.11, [ISL].
+The prior  distribution for $\beta$ in  ridge regression is Gaussian distribution;
+the prior distribution for $\beta$ in LASSO is  Laplace distribution $p(x)=\exp(-\abs{x}/\lambda)/2\lambda$.
+ 
+\item 
+Unlike ridge regression, the lasso performs variable selection when estimating the coefficients, and hence results in models easier to interpret.
+\item 
+Ridge regression tends to give similar coefficient values to {\it correlated variables}, whereas the lasso may give quite different coefficient values to correlated variables. 
+\eiz
+\begin{ex}
+Ex. 7,  Ex. 5, in Section 6.8, [ISL]
+\end{ex}
+
+}
 
 %%%--------------------------------------------------------------------
 
+\frame{{The Grouped Lasso}
+
+\biz
+
+\item
+In some problems, the predictors belong to pre-defined groups:
+genes that belong to the same biological pathway;
+
+\item Want to shrink and select the members of a group together:
+an entire group of predictors may drop out of the model.
+
+\item  Suppose   that the $p$ predictors are divided into $L$ groups.
+ Group $\ell$ has $p_\ell$ number of predictors, with design matrix $\mathbf { X } _ { \ell } $
+ and the coefficient $\beta_\ell \in \Real^{p_\ell}$.
+The grouped-lasso minimizes the convex criterion:
+$$
+\min _ { \beta \in \mathbb { R } ^ { p } } \left( \left\| \mathbf { y } - \beta _ { 0 } \mathbf { 1 } - \sum _ { \ell = 1 } ^ { L } \mathbf { X } _ { \ell } \beta _ { \ell } \right\| _ { 2 } ^ { 2 } + \lambda \sum _ { \ell = 1 } ^ { L } \hb{\sqrt { p _ { \ell } } \left\| \beta _ { \ell } \right\| _ { 2 }} \right).
+$$
+This procedure encourages sparsity at both the group and individual levels
+\eiz
+
+}
+
+
+%%%--------------------------------------------------------------------
+\frame {{elastic-net penalty}
+
+Zou and Hastie (2005) introduced the elastic-net penalty:
+ $$
+\lambda \sum _ { j = 1 } ^ { p } \left( \alpha \beta _ { j } ^ { 2 } + ( 1 - \alpha ) \left| \beta _ { j } \right| \right)
+$$
+ a different compromise between ridge and lasso from using $\norm{\cdot}_r$ norm.
+ 
+ \bigskip
+ The elastic-net selects variables like the lasso, and shrinks together the coefficients of correlated predictors like ridge. 
+}
 
 
 %%%--------------------------------------------------------------------
 
 \frame {
-
-\frametitle{SCAD (Fan and Li, 2001; JASA)}
-
+\frametitle{SCAD}
+One can modify the lasso penalty function so that larger coefficients are shrunken less severely
+(this may help reduce the unnecessary bias); the smoothly clipped absolute deviation (SCAD) penalty of Fan and Li (2005): 
 $$
 \min_{\beta}~\frac{1}{2} \| {\bf y} - {\bf X} \beta\|^2 + \sum_{j=1}^p q_{\lambda}(|\beta_j|),
 $$
-where
+where for some $a\ge 2$, such that 
+the derivative $q_\lambda(|\beta|) $
+is
 $$
-q_{\lambda}(\beta) = \left \{
-\begin{array}{ll}
-\lambda \beta & \mbox{if}~|\beta| \leq \lambda, \\
--\frac{(|\beta|^2-2a\lambda |\beta|+\lambda^2)}{2(a-1)} & \mbox{if}~\lambda < |\beta| \leq a \lambda, \\
-\frac{(a+1)\lambda}{2} & \mbox{if}~|\beta| > a \lambda.
-\end{array}
-\right .
+\frac { d q_\lambda ( \beta  ) } { d \beta } = \lambda \cdot \operatorname { sign } ( \beta ) \left[ I ( | \beta | \leq \lambda ) + \frac { ( a \lambda - | \beta | ) _ { + } } { ( a - 1 ) \lambda } I ( | \beta | > \lambda ) \right]
 $$
-
 \begin{itemize}
-\item Similar to the truncated lasso penalty, but it is smooth everywhere.
+\item  The derivatives decreases  from $\lambda$ to $0$ as $\abs{\beta}$ increases.
+\item  $q_\lambda ( \beta  ) $ is not convex, a drawback for computation.
 \end{itemize}
 }
 
 
+
+\frame {
+
+\frametitle{ }
+ 
+\begin{figure}[htb]
+\centering
+\includegraphics[width=\textwidth]{ESLFig3-20.png}
+\end{figure}
+}
 
 %%%--------------------------------------------------------------------
 
 \frame {
 
 \frametitle{ }
+
+$\beta\to\hat{\beta}$
 
 \begin{figure}[htb]
 \centering
@@ -730,8 +844,60 @@ Reference:
  Antoniadis and Fan (2001);  Fan and Li (2001)
 }
 
+
+
+%%%--------------------------------------------------------------------
+
+\frame {
+
+\frametitle{Adaptive Lasso (Zou, 2006; JASA)}
+Adaptive Lasso is an important two-stage procedure to address some bias problems of the Lasso.
+$$
+\min_{\beta}~\frac{1}{2} \|\y - \X \beta\|^2 + \lambda \sum_{j=1}^p w_j |\beta_j|,
+$$
+where $w_j>0$ and adjusts the penalty on each $\beta_j$.
+
+\begin{itemize}
+\item The resulting estimator is
+    $$
+    \hat \beta_j = \sign(\hat \beta_j) (|\hat \beta_j|-\lambda w_j)_+.
+    $$
+\item A reasonable choice for $w_j$ is obtained from the first stage:
+    $$
+    w_j = |\hat \beta^{OLS}_j|^{-\nu}, \mbox{ or }  |\hat \beta^{lasso}_j|^{-\nu}
+    $$
+   with $\nu>0$ 
+    \item If $|w_j|$ is small, the adaptive Lasso employs a small regularization for the
+    coefficient $\beta_j$ which implies less bias.
+\end{itemize}
+
+}
+
 \frame{
-{Revisit Bias-Variance (again !)}
+{What not covered here}
+
+\biz
+\item Optimization theory and computational method for LASSO:  Least Angle Regression, Dantzig Selector  
+\item 
+Principal Components Regression, partial linear regression
+(Section 3.5 in [ESL])
+
+\item 
+Further reading on LASSO:
+{\it Statistics for High-Dimensional Data: Methods, Theory and Applications},
+by Peter Buhlmann and  Sara van de Geer,
+Springer Series in Statistics (2011)
+ \eiz
+}
+
+
+\frame {
+~~
+Revisit Bias-Variance
+}
+
+\frame{
+{Revisit Bias-Variance}
 \biz
 \item
 In the beginning,
