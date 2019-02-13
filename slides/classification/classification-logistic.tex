@@ -3,7 +3,7 @@
 
 \input{../frontpage}
 
-\title{Classification: Logistic Regression}
+\title{Classification: LDA and  Logistic Regression}
 \author{\includegraphics[height=1.1cm,width=2.2cm]{../CityU_Logo_Basic_Signature.eps}
 \\ $\ $ \\
 Xiang Zhou  \\ $\ $ \\
@@ -32,25 +32,13 @@ City University of Hong Kong
  
 
 
-
-
-\frame{{Statistical Decision Theory for Classification }
-
  
-\biz
-
-\item 
-$k$-NN method
-\item
-Bayes classifier
-\item  LDA and QDA
-\eiz
-}
-
+%%%-----------------------------------------------------------------
 \frame{
 ~~{\huge \hb{Review of Bayes Classifier}}
 }
     
+%%%-----------------------------------------------------------------
 \frame{{  0-1 loss}
 We use 0-1 loss to evaluate the performance of classifiers.
  
@@ -93,6 +81,7 @@ $ and $-\mbox{sign}(y  \hat{y})$.
 }
 
 
+%%%-----------------------------------------------------------------
 \frame{
   For any classifier  \myhl{$G: \mathcal{X}\to \set{1,\ldots, K}$}, its 0-1 loss 
 overall  test error rate 
@@ -123,6 +112,7 @@ G^*(x) = \argmax_{k\in\set{1,\ldots,K}}  \p ( Y= k \vert X=x)
 \]
 }
 
+%%%-----------------------------------------------------------------
 \frame{
 
 \begin{definition}[{\bf Bayes classifier}]
@@ -149,6 +139,7 @@ $
  }
  
  
+%%%-----------------------------------------------------------------
 \frame{{\faLightbulbO~ Bayes classifier is optimal
 for misclassification error}
 
@@ -177,6 +168,7 @@ is called  {\bf Bayes error rate}:
 
 
 
+%%%-----------------------------------------------------------------
 \frame{{Bayes Theorem for Bayes Classifier}
  \biz
  
@@ -221,6 +213,7 @@ One might estimate   $\rho_k(x)$ ( ``density estimation'') and  $\pi_k$ ( the fr
   \eiz
 }
 
+%%%-----------------------------------------------------------------
 \frame{
 { Bayesian  classifier}
 \biz
@@ -251,7 +244,9 @@ connection to missing data problem, EM algorithm.
 
 
 
-\frame{\frametitle{mixed Gaussian:   $\rho_k \sim \mathcal{N}(\mu_k,\sigma^2_k)$}
+%%%-----------------------------------------------------------------
+\frame{%%%-----------------------------------------------------------------
+\frametitle{mixed Gaussian:   $\rho_k \sim \mathcal{N}(\mu_k,\sigma^2_k)$}
 Recall the posterior distribution in   \eqref{eqn:BayesC}
 $ \p(Y = k|X = x)  = 
  \frac{ {\color{red}{\rho_k(x)} }  { \color{blue}{\pi_k } } } { \sum_{l=1}^K \rho_l(x) \pi_l }
@@ -274,7 +269,8 @@ When $K=2$, find the point corresponding  to the   Bayes decision boundary.
 
 
  
- \frame{{{\bf Naive} Bayesian Classifier: 
+ %%%-----------------------------------------------------------------
+\frame{{{\bf Naive} Bayesian Classifier
  } 
  If $\mathcal{X}$ has a dimensionality $d \gg 1$, then the class-conditional pdf $\rho_k(x)$ 
  is a high dim fun of $x$.
@@ -298,7 +294,8 @@ learning methods.''
  \end{quote}
  }
  
- \frame{{Bayes learning: Bayesian Belief Network}
+ %%%-----------------------------------------------------------------
+\frame{{Bayes learning: Bayesian Belief Network}
  Bayesian Belief Network assumes the $k$ class-conditional pdf 
  dependency in the form of a network representing 
 the conditional information  (causal knowledge).  
@@ -307,7 +304,8 @@ the conditional information  (causal knowledge).
    
  }
  
- \frame{
+ %%%-----------------------------------------------------------------
+\frame{
 {Linear/Quadratic Discriminant Analysis (LDA/QDA)}
 
 Recall the mixed Gaussian model \eqref{eqn:LDA2}
@@ -348,7 +346,14 @@ The decision boundary of QDA is (quadratically) curved.
  
 
 %%%------------------------------------------
+%%%-----------------------------------------------------------------
 \frame{
+
+\begin{ex}
+Ex. 4.2. [ESL]
+\end{ex}
+
+
 \begin{ex}
 In LDA, consider the eigen-decompositon  of the sample covariance matrix $\hat{\Sigma}$ and derive the reduced rank LDA.
 \end{ex}
@@ -359,7 +364,9 @@ In LDA, consider the eigen-decompositon  of the sample covariance matrix $\hat{\
 
  
 
+%%%-----------------------------------------------------------------
 \frame{ {   \faWrench ~  $k$-NN (nearest neighboring) methods}
+%%%-----------------------------------------------------------------
 \framesubtitle{a non-parametric approach to regression and classification}
   $k$-NN   method
   \footnote{{\tiny \faWarning}~   $k$
@@ -387,10 +394,12 @@ where $N_k(x)$ is the collection of
 
 
 
+%%%-----------------------------------------------------------------
 \frame{
 {Logistic, LDA, QDA,  k-NN ?
  %Alchemy or Chemistry ? 
  }
+%%%-----------------------------------------------------------------
 \framesubtitle{ model selection -- to be addressed later}
 \begin{quote}[p154, [ISL]]
 ``When the true decision boundaries are linear, then the LDA and logistic regression approaches will tend to perform well. When the boundaries are moderately non-linear, QDA may give better results. Finally, for much more complicated decision boundaries, a non-parametric approach such as KNN \footnote{with correct choice of $k$ such as by the cross-validation} can be superior. ''
@@ -403,6 +412,7 @@ where $N_k(x)$ is the collection of
 \section{Logistic
 Regression}
 
+%%%-----------------------------------------------------------------
 \frame{{Logistic
 Regression  }
 
@@ -435,7 +445,8 @@ We focus on the following four questions which   we shall always follow for any 
 }
 
 
- \frame{{Logistic regression model for binary classification}
+ %%%-----------------------------------------------------------------
+\frame{{Logistic regression model for binary classification}
 Now $\Ycal=\set{0,1}$.
 Recall that in Bayes classifier, we introduced a function
 $h(x)$ as the  
@@ -466,6 +477,7 @@ to search the best $f$ in this space.
  \eiz
 }
 
+%%%-----------------------------------------------------------------
 \frame{
  
 \begin{definition}
@@ -482,7 +494,8 @@ z\to h  = \otherbox{ \sigma(z):=\frac{1}{1+ e^{-z}} }  \]
  
  
  
- \frame {
+ %%%-----------------------------------------------------------------
+\frame {
  {activation function family}
  Why $\sigma$ this form  ? 
  \biz
@@ -512,7 +525,8 @@ the activation  function:
  }
  
  
- \frame{{Sigmoid logistic  function}
+ %%%-----------------------------------------------------------------
+\frame{{Sigmoid logistic  function}
 \biz
 \item 
 The logistic function was invented for the purpose of
@@ -531,7 +545,8 @@ $$\sigma(x)+\sigma(-x)=1$$
  }
  
  
- \frame
+ %%%-----------------------------------------------------------------
+\frame
  {
  
  \begin{ex}
@@ -579,6 +594,7 @@ the RELU: $\mbox{RELU}(x)= \max(0,x)$
 
 
 
+%%%-----------------------------------------------------------------
 \frame{
 {framework}
 
@@ -629,8 +645,10 @@ or  any possibility of nonlinear functions
   
  %%-------------------------------------------%%
 
+%%%-----------------------------------------------------------------
 \frame{
 { Logistic regression model for $K>2$ classes} 
+%%%-----------------------------------------------------------------
 \framesubtitle
 {Softmax regression (multinomial logistic regression) }
 
@@ -660,6 +678,7 @@ $h_K =\left(\sum_{k=1}^{K} e^{z_k }\right)^{-1}$ and
 
 %%%--------------------------------------------------------------
 
+%%%-----------------------------------------------------------------
 \frame{{Softmax function}
 \begin{definition}
  The {\bf softmax} function is the following nonlinear mapping $\Real^K \to  (0,1)^K$:  
@@ -686,7 +705,8 @@ corresponds to
  
  %%%--------------------------------------------------------------
 
- \frame{
+ %%%-----------------------------------------------------------------
+\frame{
  
  It takes a vector of arbitrary real-valued scores  and squashes 
  the vector to a 
@@ -714,6 +734,7 @@ or adding the linear constraint $\sum \theta_k =0$.
 
 
 %%%-------------------------------------------------------
+%%%-----------------------------------------------------------------
 \frame
 {
 {Linear model assumption  for $z_k$ }
@@ -748,7 +769,8 @@ The result is a huge success.
  
  }
  
- \frame{
+ %%%-----------------------------------------------------------------
+\frame{
  {Decision rule of softmax regression}
  
 \[
@@ -782,6 +804,7 @@ draw the three domains where $x$ are classified as $1,2,3$, respectively.
 
 
 
+%%%-----------------------------------------------------------------
 \frame{
 {How to choose loss function}
 \biz
@@ -821,6 +844,7 @@ I(h(x_i;\theta)>0.5 )
 }
 
 
+%%%-----------------------------------------------------------------
 \frame{
  
  \biz
@@ -864,6 +888,7 @@ directly .
 
 
 
+%%%-----------------------------------------------------------------
 \frame{
 { Loss  function  of 
 logistic regression = 
@@ -892,7 +917,8 @@ which is will be defined as $\ell$.
 \eiz
 }
  
- \frame{
+ %%%-----------------------------------------------------------------
+\frame{
  {Loss function for Binary classification}
 
 \begin{definition}
@@ -926,7 +952,8 @@ Derivative $\partial l /\partial h$
 \end{columns}
  }
  
- \frame{
+ %%%-----------------------------------------------------------------
+\frame{
  Then the objective  function
  \footnote{sometimes, we drop the $\frac{1}{n}$ factor in $J$ since it does not affect the minimizers.}
  on the training dataset $\Dcal=\set{(X^{(i)}, Y^{(i)})}$ is the sum of loss 
@@ -1010,6 +1037,7 @@ The important concept of
  \end{ex}
  \end{frame}
 
+%%%-----------------------------------------------------------------
 \frame{
 In this page, we   use $\set{\pm 1}$-encoded $\Ycal$
 and compare the 0-1 loss and the binomial 
@@ -1038,6 +1066,7 @@ is used in support vector classifier  (to be discussed later)
 
 
 
+%%%-----------------------------------------------------------------
 \frame {
 
 \begin{ex}
@@ -1071,6 +1100,7 @@ $h(x)=\sigma(z)=\sigma(f(x))$.
 }
 
 
+%%%-----------------------------------------------------------------
 \frame{{Loss function of $K$-classification }
 \biz
 \item 
@@ -1111,7 +1141,8 @@ where ${\bf h}=(h_1,\ldots h_K)=\mbox{softmax}
  
 
 
- \frame{{Information Theory view:
+ %%%-----------------------------------------------------------------
+\frame{{Information Theory view:
    Loss function as the  cross-entropy } 
 
 \begin{definition}
@@ -1135,7 +1166,8 @@ H(p,q)\triangleq-\sum_{y} p(y)\log q(y) =
 
 
 
- \frame{
+ %%%-----------------------------------------------------------------
+\frame{
 \biz
 \item
  $D_{\mathrm {KL} }(p\|q) $ is non-negative and is the measurement of how far from $q$  to $p$. Note that 
@@ -1166,12 +1198,13 @@ $H(p,q)= -\sum_{k} p(k) \log q(k) = - \log h_y(x;\theta) $, which is identical t
 
  \eiz
  This is why \eqref{softmaxloss}
-called the {\bf cross-entropy  loss} or {\it log} loss.
+called the {\bf cross-entropy  loss} or {\it log loss}.
 
  }
  
 %  
 %
+%%%%-----------------------------------------------------------------
 %\frame{
 %\biz
 %\item
@@ -1193,7 +1226,9 @@ called the {\bf cross-entropy  loss} or {\it log} loss.
 %
 %}
 
+%%%-----------------------------------------------------------------
 \frame{{Numerical Optimization of Logistic Regression Models}
+%%%-----------------------------------------------------------------
 \framesubtitle{ gradient calculation }
 Recall that ${\ell(h(x;\theta),y)= - y \log h(x;\theta)  -(1-y) \log (1-h(x;\theta))}$
 and 
@@ -1226,6 +1261,7 @@ Show that this matrix has the rank 1 and is  positive semi-definite.
 
 }
 
+%%%-----------------------------------------------------------------
 \frame{
 \[ 
 \begin{split}
