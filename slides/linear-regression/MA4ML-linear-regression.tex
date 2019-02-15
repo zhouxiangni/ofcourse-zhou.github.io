@@ -556,20 +556,20 @@ and thus
 
 \biz
 
-\item Recall the ML basics:
-Given a training dataset $\Dcal$, the function to approximate
-in the hypothesis space $\Hcal$  
-$\hat{f}_\Dcal \in \Hcal$ is a function $x$.
+\item Recall  that
+given a training dataset $\Dcal$, the function to approximate
+in the hypothesis space $\Hcal$,  
+$\hat{f}_\Dcal \in \Hcal$, is a function of $x$.
 In OLS, we assumed that
-$\hat{f}_\Dcal=\beta^\tr x$ is a linear function of $x$ parametrized by $\beta$.
+$\hat{f}_\Dcal $ is a linear function of $x$.
 \item
-Now, if we fix a testing input $x=a$ now, 
+Now, if we fix a testing input $x=a$, 
 $\hat{f}_\Dcal (a)$ then is a mapping (\underline{statistics})
 from $\Dcal$ to $\Ycal$.
 What if we assume this mapping is linear and 
-consider the  {\bf MVU}(minimum variance unbiased)  estimator of the ground truth $\beta^\tr a$ when $x=a$?
+consider the  {\bf MVU}(minimum variance unbiased)  estimator of the ground truth $\beta^\tr a$ at $x=a$?
 \item Fix the design matrix $X$,
-then this estimator takes  the linear form
+then this estimator takes  the linear form in the response of training examples $\hb{Y}$:
 $$Y\to c^\tr Y$$ with the coefficient $c\in \Real^n$.
 \eiz
 
@@ -578,31 +578,30 @@ $$Y\to c^\tr Y$$ with the coefficient $c\in \Real^n$.
 \begin{theorem}[Gauss-Markov Theorem]
 
 Let $u$ be an unbiased estimate of the ground truth response $a^\tr \beta$
-at the new input $x=a$ in the space of   linear transformations from the
+at the new input $x=a$, and $u$  is in the space of   linear transformations from the
  response  training data $Y=X\beta+\eps$,
 where   $\eps\sim N(0,\sigma^2 I_n)$.
 This is to say that
-$u=c^\tr Y$ for some  vector $c\in \Real^{(p+1) }$
-satisfies $\e u = a'\beta$  for {\em any } $\beta$ in $\Real^{p+1}$.
-Then
-$$\var(u) \geq \var(\hat{y}) = \sigma^2 a^\tr (\XX)^{-1}a $$ 
+$u=c^\tr Y$ for some  vector $c\in \Real^{n }$
+satisfying $\e u = a^\tr \beta$  for {\bf any } $\beta$ in $\Real^{p+1}$.
+Prove $$\var(u) \geq \var(\hat{y}) = \sigma^2 a^\tr (\XX)^{-1}a $$ 
 where $\hat{y}=a^\tr\bh^{\text{OLS}}=a^\tr (\XX)^{-1}X^\tr Y$.
  (see Exercise 3.3 in [ESL].)
 \end{theorem}
 \begin{proof}
-$\e u = c^\tr  \e Y = c^\tr X \beta$  must equal to $a'\beta$; then
-$$X'c=a.$$
-$\var(u)=c^\tr \var(y)c=\sigma^2 c^\tr c $.
-The optimal $c$ is the minimizer of the $L_2$ norm $\|c\|_2$
-subject to the $n$ linear constraints: $X^\tr c=a$.
-This is to search the $L_2$-minimal solution of the linear system $ X^\tr c =a $.
-The remaining is left as an exercise.
+$\e u = c^\tr  \e Y = c^\tr X \beta$  must equal   $a^\tr\beta$ for any $\beta$, then
+$$X^\tr c=a.$$
+$\var(u)=c^\tr \Var(Y)c=\sigma^2 \|c\|_2^2$.
+The optimal $c$ is  the $L_2$-minimal solution of the linear system $ X^\tr c =a $
+(which is exactly  the ``pseudo-inverse'' of $X^\tr$).
+The remaining is left as an exercise. 
 \end{proof}
 }
 
 \frame{{Cramer-Rao low bound}
+This exercise is optional. If you know Cramer-Rao bound, it is worth trying.
 \begin{ex}
-Find the Fisher information matrix, which is the 
+Find the Fisher information matrix $I$, which is the 
   covariance matrix of the parameter-gradient
 of the log likelihood function
 $I(\beta):= \Var(\partial_\beta \log p(Y;\beta)  )$
