@@ -8,8 +8,9 @@ I am no expert in this area. But as an applied and computmational mathematician,
 Overall, the coverage here is very classic, but my viewpoint might not be as traditional as you assume.
 Senior undergraduates should be able to follow. 
 
-**The use of this course material for non-commetial teaching is permitted if you are granted by a written(email) agreement from me (xizhou@cityu.eud.hk) and the explicit statement the sourece of this material ( from Dr Xiang Zhou, School of 
-Data Science, City University of Hong Kong). Any commercial use for any form of benefit is not allowed(特别是中国大陆的在线培训班).**
+**The use of this course material for non-commetial teaching is permitted if you are granted by a written(email) agreement from me (xizhou@cityu.eud.hk) and the explicit statement the sourece of this material ( 
+Acknowledge to _Dr Xiang Zhou, School of 
+Data Science, City University of Hong Kong_). Any commercial use for any form of benefit is not allowed(特别是中国大陆的在线培训班).**
 
 Acknowledgement :  
 
