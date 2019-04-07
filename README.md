@@ -14,6 +14,6 @@ Data Science, City University of Hong Kong_). Any commercial use for any form of
 
 Acknowledgement :  
 
-ISL and ESL: two classic books
+[ISL](http://www-bcf.usc.edu/~gareth/ISL/) and [ESL](http://web.stanford.edu/~hastie/ElemStatLearn/): two classic books
 Some part of Prof WANG Junhui's slides.
 Some Pictures from online resources.
