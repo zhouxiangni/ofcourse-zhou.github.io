@@ -8,7 +8,7 @@ I am no expert in this area. But as an applied and computmational mathematician,
 Overall, the coverage here is very classic, but my viewpoint might not be as traditional as you assume.
 Senior undergraduates should be able to follow. 
 
-**The use of this course material for non-commetial teaching is permitted if you ar granted by a written(email) agreement from me (xizhou@cityu.eud.hk). Any commercial use for any form of benefit is not allowed.**
+**The use of this course material for non-commetial teaching is permitted if you are granted by a written(email) agreement from me (xizhou@cityu.eud.hk). Any commercial use for any form of benefit is not allowed(特别是中国大陆的在线培训班).**
 
 Acknowledgement :  
 
