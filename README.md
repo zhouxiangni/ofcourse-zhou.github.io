@@ -1,4 +1,4 @@
-# courses
+# course information
 
 Course Materials Used for MA6630 in City University of Hong Kong.
 
