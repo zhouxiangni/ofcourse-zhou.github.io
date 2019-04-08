@@ -29,10 +29,10 @@
 \title[Boosting]{ Boosting}
 \author[Xiang Zhou]{%
   Xiang Zhou}
-  \institute[City University of Hong Kong]{%
+  \institute[City University of Hong Kong]{
+  School of Data Science, \\
   Department of Mathematics \\
-  City University of Hong Kong\\
-  Based on the slides of Junhui Wang}
+  City University of Hong Kong}
 
 \date[\today]{ 2019}
 \subject{Statistics}
@@ -71,7 +71,8 @@ computing.}
 \begin{itemize}
 \item LogitBoost (Friedman, Hastie and Tibshirani, AOS, 2000)
 \item L2Boost (Buhlmann and Yu, JASA, 2002)
-\item Others in machine learning community...
+\item {\bf Gradient Boosting}(= Gradient Descent + Boosting) is an extension over boosting method.
+
 \end{itemize}
 \item Focus on binary classification, and may be extended to multiclass case
 \end{itemize}
@@ -94,8 +95,8 @@ Training data: $(x_i, y_i)$; $i=1,\ldots,n$ with $x_i \in  \mathbb{R}^p$ and $y_
 \item For $m=1$ to $M$:
 \begin{enumerate}[a.]
 \item Fit a weak classifier\footnote{
-also called base learner. $h$ can take real values (``confidence-rated prediction'' by Shapire and Singer) and the 
-classifier is then $\sign(h)$;  } $h_m(x):\mathbb{R}^p \rightarrow \{-1,1\}$ to the training data with weights $w_{m,i}$
+also called base learner. $h_m$ can take real values (``confidence-rated prediction'' by Shapire and Singer) and the 
+weak learner is then $\sign(h_m)$;  } $h_m(x):\mathbb{R}^p \rightarrow \{-1,1\}$ to the training data with weights $w_{m,i}$
 \footnote{This means the loss function  is weighted:  $\min_{h_m}\sum_{i=1}^n  w_{m,i}\ell (x_i, h_m(x_i))$}
 \item Compute weighted misclassification error:
 \begin{equation}\label{em}
@@ -172,12 +173,22 @@ $$
 \min_f L(f) = \sum_{i=1}^n \ell(y_i, f(x_i))
 $$
 
-\vspace{0.5cm}
-The final classifier takes the additive form $f_M(x) = \sum_{m=1}^M \alpha_m h_m(x)$.
-Consider the stagewise additive modeling \footnote{instead of considering all
+ The final classifier takes the additive form $$f_M(x) = \sum_{m=1}^M \alpha_m h_m(x).$$
+ 
+ \par
+Consider the forward stagewise additive modeling \footnote{instead of considering all
 terms $h_m$ and $\alpha_m$, $1\leq m\leq M$, simultaneously.}:
 \begin{itemize}
-\item Given $h_0(x),\ldots, h_{m-1}(x)$, how to find optimal $h_m$?
+\item Given $h_0(x),\ldots, h_{m-1}(x)$, how to find optimal $h_m(x)$ and $\alpha_m$ at stage $m$?
+\end{itemize}
+Then we can update 
+$f_m $ as $ f_{m-1}+\alpha_m h_m(x)$
+
+}
+
+\frame
+{
+\begin{itemize}
 \item Compute the update as
 $$
 \boxed
@@ -291,20 +302,27 @@ as  in  the Step 2.d of  AdaBoost.
 \item 
 The exponential loss function 
 is Fisher consistence, so 
- any $\alpha>0$, the weak learner $h_m $ is consistent with  the Bayes classifier:
-  $\displaystyle h_m=\argmin_{h \in {\cal H}} \sum_i w_i^{(m)} I(y_i \neq h(x_i))$
+ for any {\color{red}{$\alpha>0$}}, the weak learner $h_m $ is consistent with  the Bayes classifier:
+  $\displaystyle h_m=\argmin_{h \in {\cal H}} \sum_i w_i^{(m)} I(y_i \neq h(x_i))$.
+ \footnote{ In practice, $h_m$ is not exactly this 0-1 loss minimizer
+  but a minimizer of the empirical risk for 
+  some Fisher consistent loss function.
+  }
 
 \item Then  for given $h_m$,    \eqref{eq:adaboostloss} becomes the 
 minimization for $\alpha$: 
  $$\min_\alpha \sum_{i=1}^n w_i^{(m)} \exp(-\alpha y_i h_m(x_i))
-=\min_\alpha (1-\epsilon_m) e^{-\alpha}
-+\epsilon_m e^{\alpha})$$
-where the weighted misclassification rate $\epsilon_m$ is defined in \eqref{em}
-gives 
+=\min_\alpha
+\left(
+ (1-\epsilon_m) e^{-\alpha}
++\epsilon_m e^{\alpha}
+\right)$$
+where the weighted misclassification rate $\epsilon_m$ is defined in \eqref{em}.
+The minimizer is  
  $\alpha_m = \frac{1}{2} \log( (1-\epsilon_m)/\epsilon_m )$,
  as in Step 2.c of AdaBoost.
-\item The weal learner assumption: 
-$$\alpha_m>0 \iff \epsilon_m >1/2
+\item {\bf The weak learner assumption}: 
+$$\alpha_m>0 \iff \epsilon_m <1/2
 $$
 \end{itemize}
 
@@ -365,7 +383,8 @@ it works as long as adding $h_m$ can decrease the loss function further.
 
 \frametitle{Does boosting overfit? }
 
-Boosting algorithms are relatively immune to overfitting but it does overfit slightly after a long time of iterations.
+In practice, the test error does not rise much as the number of iterations $m$ increases. 
+Boosting algorithms are relatively immune to overfitting but it overfit slightly  after a long time of iterations.
 \vspace{-0.5cm}
 \begin{figure}
 \centering
@@ -411,12 +430,13 @@ The most basic theoretical property of AdaBoost concerns its ability to reduce t
 \end{eqnarray*}
 \end{small}
 
-\item By $w_{m+1,i}=w_{m,i} \exp(-y_i \alpha_m  h_m(x_i))/Z_m$,
+\item By $w_{m+1,i}=w_{m,i} \exp(-y_i \alpha_m  h_m(x_i))/Z_m$ and $w_{1,i}\equiv 1/n$, 
 \begin{small}
 \begin{eqnarray*}
 & \frac{1}{n} \sum_{i=1}^n \exp \left ( - y_i \sum_{m=1}^M \alpha_m h_m(x_i) \right ) 
-\leq 
- \frac{1}{n}  \sum_{i=1}^n  \prod_{m=1}^{M} \left(Z_m\frac{ w_{m+1,i} }{ w_{m,i}} \right)\\
+= 
+ \frac{1}{n}  \sum_{i=1}^n  \prod_{m=1}^{M} \left(Z_m\frac{ w_{m+1,i} }{ w_{m,i}} \right)
+ \\
  & =
  \frac{1}{n}  \sum_{i=1}^n  \left(\prod_{m=1}^{M} Z_m\right) \frac{w_{M+1,i}}{w_{1,i}}
  \\
@@ -440,7 +460,7 @@ exponentially in the iteration number $M$:
  \leq \exp(-2\sum_{m=1}^M \gamma_m^2)
 \leq \exp(-2\gamma^2 M)
 \end{align*}
-where $\gamma_m = \epsilon_m -0.5$ and $\gamma=\min_m \gamma_m $.
+where $\gamma_m = 0.5-\epsilon_m$ and $\gamma=\min_m \gamma_m $.
 \end{theorem}
 The second line is a trivial consequence of the fact $\sqrt{1-t}\leq e^{-t/2}, t\in [0,1]$.
 }
@@ -459,9 +479,9 @@ Note that $\sum_{i=1}^n w_{M+1,i}=1$, $\alpha_m = \frac{1}{2} \log( (1-\epsilon_
 \begin{eqnarray*}
 Z_m &=& \sum_{i=1}^n w_{m,i} \exp(-y_i \alpha_m  h_m(x_i)) \\
 &=& \sum_{\{i: y_i = h_m(x_i)\}} w_{m,i} e^{-\alpha_m} + \sum_{\{i: y_i \neq h_m(x_i)\}} w_{m,i} e^{\alpha_m} \\
-&=& (1-\epsilon_m) e^{-\alpha_m} + \epsilon_m \alpha_m = 2 \sqrt{\epsilon_m (1-\epsilon_m)}.
+&=& (1-\epsilon_m) e^{-\alpha_m} + \epsilon_m e^{\alpha_m} = 2 \sqrt{\epsilon_m (1-\epsilon_m)}.
 \end{eqnarray*}
-The desired upper bound is obtained after plugging in $\alpha_m$ and $Z_m$.
+The desired upper bound is obtained after plugging in $\gamma_m$ and $Z_m$.
 
 }
 
@@ -469,7 +489,7 @@ The desired upper bound is obtained after plugging in $\alpha_m$ and $Z_m$.
 %%%--------------------------------------------------------------------
 
 \frame {
-The following exercise is a simple generalization of the above theorem.
+The following exercise is a   generalization of the above theorem.
  \begin{ex}
     For any $\theta>0$, show that
 $$
@@ -512,22 +532,28 @@ where the expression inside parenthesis $< 1$ when $\theta < \gamma$.
 
 
 \frame{{Generalization Error}
+ {\tiny
+R. E. Schapire, {et al}. Boosting the margin: A new explanation for the effectiveness of voting methods.   	Ann. Stat.,  1998.
+}
 
-The generalization error is bounded by  for any positive $\theta$
-\[
- {\Pr}_{\cal D} \left( Yf(X) \leq \theta \sum_{m=1}^M |\alpha_m| \right)
+The generalization error is bounded by  \[
+ {\Pr}_{\cal T} \left( Yf(X) \leq \theta  \right)
 + O(\sqrt{\frac{d}{n \theta^2}})
 \]
-where $d$  is the VC dimension of the hypothesis space $\mathcal{H}$
+for any positive $\theta$, where $d$  is the VC dimension of the hypothesis space $\mathcal{H}$
 and $n$ is the number of training samples. 
-$\Pr_{\cal D}$ is the prob. w.r.t. the training data.
+$\Pr_{\cal T}$ is the prob. w.r.t. the training data.
 
+\begin{enumerate}
+\item
+The first term decays exponentially in $M$ by the above exercise.
 The second term is independent of the iteration number $M$.
-\bigskip
-Ref:
-{\tiny
-Robert E. Schapire, Yoav Freund, Peter Bartlett, and Wee Sun Lee. Boosting the margin: A new explanation for the effectiveness of voting methods. The Annals of Statistics, 26(5):1651–1686, October 1998.
-}
+\item $yf(x)=y \sum_m \alpha_m h_m(x)$
+\footnote{ where $\sum_m \alpha_m=1$ is normalized and $h_m$ is $+1/-1$ response} is called the {\bf margin} of  example $(x,y)$: 
+the value of the margin  ($\in [-1,1]$) can be interpreted as a measure of confidence in the prediction.
+
+\end{enumerate}
+
 }
 
 
@@ -544,12 +570,23 @@ $$
 \begin{itemize}
 \item Initialize $f_0(x)=\bar y$
 \item Compute $g_m(x_i) = y_i-f_{m-1}(x_i)=r_i$
-\item Compute $(\alpha_m,h_m) = \argmin_{\alpha, h \in {\cal H}} \sum_{i=1}^n (r_i- \alpha h(x_i))^2$
-\item Update $f_m(x) = f_{m-1}(x)+\alpha_m h_m(x)$, and iterate
+\item Compute $
+\displaystyle (\alpha_m,h_m) = \argmin_{\alpha, h \in {\cal H}} \sum_{i=1}^n (r_i- \alpha h(x_i))^2$.
+\begin{itemize}
+\item
+One can interpret
+this as  to find the closest point, $\alpha_m h_m(x)$, in 
+$\mathcal{H}$ to the gradient $r_i$:
+the projection of the gradient
+onto the space $\mathcal{H}$.
+\item
+or to interpret this as
+ iteratively fitting the residuals 
+ $\{ (x_i, r_i)\}$.
 \end{itemize}
 
-\vspace{0.5cm}
-Remarks: This boils down to the standard approach of iteratively fitting the residuals
+\item Update $f_m(x) = f_{m-1}(x)+\alpha_m h_m(x)$, and iterate
+\end{itemize}
 
 }
 
@@ -558,13 +595,25 @@ Remarks: This boils down to the standard approach of iteratively fitting the res
 \frame {
 
 \frametitle{Example: LogitBoost}
-
+Loss function of logistic regression
+with binary classification where $Y=\pm 1$ (softplus function): 
 $$
 L(f) = \sum_{i=1}^n \log(1+\exp(-2y_if(x_i)))
 $$
 \begin{itemize}
 \item Initialize $f_0(x)=\frac{1}{2} \log \frac{1+\bar y}{1-\bar y}$
-\item Compute the gradient at $f_{m-1}$: $g_m(x_i) = 2y_i/(1+\exp(2y_if_{m-1}(x_i))) = \tilde y_i$
+ \begin{ex}
+Assume $f(x)\equiv f_0$ be a constant
+the  solve the problem 
+$\min_{f_0} L(f_0)=
+\sum_{i=1}^n \log(1+\exp(-2y_i f_0)$
+\end{ex}
+
+\item Compute the gradient 
+w.r.t. $f(x_i)$
+\footnote{Exercise!}
+at $f_{m-1}$: $g_m(x_i) = -2y_i/(1+\exp(2y_if_{m-1}(x_i))) =: -\tilde y_i$
+ 
 \item Compute $h_m = \argmax_{h \in {\cal H}}~\sum_{i=1}^n \tilde y_i h(x_i)$
 \item Approximate $\alpha_m$ by a Newton-Raphson step
 \item Update $f_m(x) = f_{m-1}(x)+\alpha_m h_m(x)$, and iterate
@@ -585,8 +634,9 @@ $$
 Training sample $(x_i,y_i)_{i=1}^n$ with $x_i \in \mathcal{R}^p$ and $y_i \in \{1,\ldots,K\}$. Denote $\f=(f_1,\ldots,f_K)^T$ and $G(x)=\argmax_k f_k(x)$.
 
 \begin{itemize}
-\item Generalization error: $GE(\f)=P(Y \neq G(X))$
-\item Bayes rule: $G^*(x) = \argmax_k Pr(Y=k|X=x)$
+\item Bayes rule: $G^*(x) = \argmax_k Pr(Y=k|X=x)
+=\argmax_k  f_k(x)$
+\item Generalization error: $GE(\f)=Pr(Y \neq G(X))$
 \item Sum-to-zero constraint: $\sum_k f_k(x) =0$ for all $x$
 \end{itemize}
 
