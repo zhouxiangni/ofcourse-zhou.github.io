@@ -1,1 +1,2 @@
 
+OLS: ordinary linear regression
