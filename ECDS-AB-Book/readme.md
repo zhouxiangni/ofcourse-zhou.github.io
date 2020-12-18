@@ -1,6 +1,6 @@
 Alain Bensoussan
 Estimation and Control of Dynamical Systems的书的安排 (focus on a few **chapters**)：
-+  1， 2-3: **linear dynamical system**
++  1， 2-3: **linear dynamical system**  -->  [CAI ZHIQIANG]
     + linear ODE;   fundamental matrix; controbability; stability; observability; 
   
   
