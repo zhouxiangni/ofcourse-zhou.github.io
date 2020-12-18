@@ -4,8 +4,8 @@ Estimation and Control of Dynamical Systems的书的安排 (focus on a few **cha
     + linear ODE;   fundamental matrix; controbability; stability; observability; 
   
   
-+ 4-5: 
-   +  estimation, inverse problem, bayesian, mean square, MLE, 
++ 4-5:   estimation, system identification, bayesian, mean square, MLE
+
 + 6-7: can be found in any stochastic prob. book and skipped
 
 + 8-9 : **stochastic control of linear SDE** || parallel to  2-3
