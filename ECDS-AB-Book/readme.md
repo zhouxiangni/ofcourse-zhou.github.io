@@ -10,19 +10,20 @@ Estimation and Control of Dynamical Systems的书的安排：
 + 8-9 : stochastic control of linear SDE  || parallel to  2-3
    +  LQR problem ; separation principle 
    
-+ 10:  **deterministic optimal control** -> Further reading:  Flemming&Soner:CMP&VS  Flemming&Rishel: DSOP
-  +  PMP  vs  DPP
++ 10:  **deterministic optimal control** -> companian  reading:  Flemming&Soner:Controlled Markov Process & Viscosity Solution and  Flemming&Rishel: DeterminisiticStochasitcOptimalControl
+   +  PMP  vs  DPP
   +  HJB; verification principle 
   
-+ 11:  **stochastic optimal control** -> Further reading:  Flemming&Soner:CMP&VS  Flemming&Rishel: DSOP
++ 11:  **stochastic optimal control** -> companian reading:  Flemming&Soner:Controlled Markov Process & Viscosity Solution and  Flemming&Rishel: DeterminisiticStochasitcOptimalControl
+
 *break into three sections*
   +  Gateaux differential formula ; adjoint state; BSDE; stochastic PMP
   +  HJB equation; uniqueness theorem; well-posedness theorem ; policy iteration technique 
   +  existence of optimal feedback control 
   +  FBSDE & PDE (11.5.2)
   +  viscosity theory and viscosity solution
-  
-  + 12-15, 17 skipped 
-  + 16 **Differential Game** 
+ 
+ + 12-15, 17 skipped 
+ + 16 **Differential Game** 
   
   
