@@ -28,6 +28,6 @@ Estimation and Control of Dynamical Systems的书的安排 (focus on a few **cha
     +  viscosity theory and viscosity solution
  
  + 12-15, 17 skipped 
- + 16 **Differential Game** 
+ + 16 **Differential Game**  --> [ZHANG HAO]
   
   
