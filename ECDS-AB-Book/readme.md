@@ -1,7 +1,7 @@
 Alain Bensoussan
 Estimation and Control of Dynamical Systems的书的安排：
 +  1， 2-3: 
-    + linear ODE; $x$ fundamental matrix; controbability; stability; observability; 
+    + linear ODE;   fundamental matrix; controbability; stability; observability; 
   
   
 + 4-5: 
