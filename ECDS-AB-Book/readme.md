@@ -8,7 +8,7 @@ Estimation and Control of Dynamical Systems的书的安排 (focus on a few **cha
 
 + 6-7: can be found in any stochastic prob. book and skipped
 
-+ 8-9 : **stochastic control of linear SDE** || parallel to  2-3
++ 8-9 : **stochastic control of linear SDE** || parallel to  2-3  [HAN JIAYUE]
    +  LQR problem ; separation principle 
    
 + 10:  **deterministic optimal control** -> companian  reading:  Flemming&Soner:Controlled Markov Process & Viscosity Solution and  Flemming&Rishel: DeterminisiticStochasitcOptimalControl
