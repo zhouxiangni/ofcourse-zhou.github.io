@@ -3,8 +3,8 @@ Estimation and Control of Dynamical Systems的书的安排 (focus on a few **cha
 
 +  This is *not* a book for the beginner reader; the best is to start with the following two books (which share some common parts a lot)
 
-        1. Flemming&Soner:Controlled Markov Process & Viscosity Solution 
-        2. Flemming&Rishel: DeterminisiticStochasitcOptimalControl
+     1. Flemming&Soner:Controlled Markov Process & Viscosity Solution 
+     2. Flemming&Rishel: DeterminisiticStochasitcOptimalControl
         
 +  Purpose/Intended Outcome:  
         1. Familarize the languages and the precise meaning of important concepts and definitions. 
