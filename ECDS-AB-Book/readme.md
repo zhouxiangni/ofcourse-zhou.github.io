@@ -11,7 +11,7 @@ Estimation and Control of Dynamical Systems的书的安排 (focus on a few **cha
         1. Familarize the languages and the precise meaning of important concepts and definitions. 
         2. Independently derive all details of linear quadratic regulator problems in various settings 
         3. Build the knowledge graph on *theories* in optimal control (with the supplementation of the above two text books)
-        4. Review the learnt math (Chapter 6/7) or learn if not.
+        4. Review the learnt math (Chapter 6/7) or fill in the void.
 
 
 -------------
