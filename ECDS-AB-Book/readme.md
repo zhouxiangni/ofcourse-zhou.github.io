@@ -13,14 +13,14 @@ Estimation and Control of Dynamical Systems的书的安排 (focus on a few **cha
    
 + 10:  **deterministic optimal control** -> companian  reading:  Flemming&Soner:Controlled Markov Process & Viscosity Solution and  Flemming&Rishel: DeterminisiticStochasitcOptimalControl
 
-   *split into two sessions* 
+   *split into two sessions*   difficulty level **** 
    
     +  PMP  vs  DPP
     +  HJB; verification principle 
   
 + 11:  **stochastic optimal control** -> companian reading:  Flemming&Soner:Controlled Markov Process & Viscosity Solution and  Flemming&Rishel: DeterminisiticStochasitcOptimalControl
 
-   *split into three sections*   
+   *split into three sections*  difficulty level ***** 
     +  Gateaux differential formula ; adjoint state; BSDE; stochastic PMP
     +  HJB equation; uniqueness theorem; well-posedness theorem ; policy iteration technique 
     +  existence of optimal feedback control 
