@@ -8,8 +8,8 @@ Estimation and Control of Dynamical Systems的书的安排 (focus on a few **cha
         
 +  Purpose/Intended Outcome:  
         
-        1. Familarize the languages and the precise meaning of important concepts and definitions. 
-        2. Independently derive all details of linear quadratic regulator problems in various settings 
+        1. Familarize the languages and the precise meanings of important concepts and definitions. 
+        2. Start from linear quadratic regulator problems in various settings as a good introductory step to the general and theoretic studes.
         3. Build the knowledge graph on *theories* in optimal control (with the supplementation of the above two text books)
         4. Review the learnt math (Chapter 6/7) or fill in the void.
 
