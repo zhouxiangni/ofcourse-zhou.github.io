@@ -1,6 +1,6 @@
 Alain Bensoussan
 Estimation and Control of Dynamical Systems的书的安排 (focus on a few **chapters**)：
-+  1， 2-3: **linear dynamical system**  -->  [CAI ZHIQIANG]
++  1， 2-3: **linear dynamical system**  -->  [CAI ZHIQIANG]  difficulty level **
     + linear ODE;   fundamental matrix; controbability; stability; observability; 
   
   
@@ -8,7 +8,7 @@ Estimation and Control of Dynamical Systems的书的安排 (focus on a few **cha
 
 + 6-7: can be found in any stochastic prob. book and skipped
 
-+ 8-9 : **stochastic control of linear SDE** || parallel to  2-3  [HAN JIAYUE]
++ 8-9 : **stochastic control of linear SDE** || parallel to  2-3  [HAN JIAYUE]  difficulty level *** 
    +  LQR problem ; separation principle 
    
 + 10:  **deterministic optimal control** -> companian  reading:  Flemming&Soner:Controlled Markov Process & Viscosity Solution and  Flemming&Rishel: DeterminisiticStochasitcOptimalControl
@@ -28,6 +28,6 @@ Estimation and Control of Dynamical Systems的书的安排 (focus on a few **cha
     +  viscosity theory and viscosity solution
  
  + 12-15, 17 skipped 
- + 16 **Differential Game**  --> [ZHANG HAO]
+ + 16 **Differential Game**  --> [ZHANG HAO]  difficulty level ****
   
   
