@@ -12,11 +12,12 @@ Estimation and Control of Dynamical Systems的书的安排：
    +  LQR problem ; separation principle 
    
 + 10:  **deterministic optimal control** -> companian  reading:  Flemming&Soner:Controlled Markov Process & Viscosity Solution and  Flemming&Rishel: DeterminisiticStochasitcOptimalControl
+*split into two sessoins* 
    +  PMP  vs  DPP
   +  HJB; verification principle 
   
 + 11:  **stochastic optimal control** -> companian reading:  Flemming&Soner:Controlled Markov Process & Viscosity Solution and  Flemming&Rishel: DeterminisiticStochasitcOptimalControl
-   *break into three sections*
+   *split into three sections*
     +  Gateaux differential formula ; adjoint state; BSDE; stochastic PMP
     +  HJB equation; uniqueness theorem; well-posedness theorem ; policy iteration technique 
     +  existence of optimal feedback control 
