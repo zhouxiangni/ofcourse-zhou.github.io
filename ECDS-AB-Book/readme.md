@@ -16,13 +16,12 @@ Estimation and Control of Dynamical Systems的书的安排：
   +  HJB; verification principle 
   
 + 11:  **stochastic optimal control** -> companian reading:  Flemming&Soner:Controlled Markov Process & Viscosity Solution and  Flemming&Rishel: DeterminisiticStochasitcOptimalControl
-
-*break into three sections*
-  +  Gateaux differential formula ; adjoint state; BSDE; stochastic PMP
-  +  HJB equation; uniqueness theorem; well-posedness theorem ; policy iteration technique 
-  +  existence of optimal feedback control 
-  +  FBSDE & PDE (11.5.2)
-  +  viscosity theory and viscosity solution
+   *break into three sections*
+    +  Gateaux differential formula ; adjoint state; BSDE; stochastic PMP
+    +  HJB equation; uniqueness theorem; well-posedness theorem ; policy iteration technique 
+    +  existence of optimal feedback control 
+    +  FBSDE & PDE (11.5.2)
+    +  viscosity theory and viscosity solution
  
  + 12-15, 17 skipped 
  + 16 **Differential Game** 
