@@ -1,5 +1,10 @@
 This first-week slide is written in ipynb file with 'slide' cells. 
 
+    classic examples of optimization in machine learning: linear regression/logistic regression/PCA/GAN
+    [no matrix completition] 
+
+
+
 RISE may be used for presentation.https://rise.readthedocs.io/en/stable/
 The benefit of using ipynb :
  + use latex
