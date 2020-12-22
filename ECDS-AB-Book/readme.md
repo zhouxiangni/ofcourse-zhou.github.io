@@ -17,12 +17,16 @@ Estimation and Control of Dynamical Systems的书的安排 (focus on a few **cha
 -------------
 
 +  1， 2-3: **linear dynamical system**  -->  [CAI ZHIQIANG]  difficulty level **
-    + linear ODE;   fundamental matrix; controbability; stability; observability; 
+    + fundamental matrix; adjoint system; controbability; stability; observability; 
   
   
-+ 4-5:   estimation, system identification, bayesian, mean square, MLE
++ 4-5:   estimation, system identification, bayesian, mean square, MLE; 
+          more like statitics; thus skipped
 
-+ 6-7: can be found in any stochastic prob. book and skipped
++ 6: can be found in any stochastic prob. book and skipped
+
++ 7:  **fitler theory in continuous time and linear model**
+
 
 + 8-9 : **stochastic control of linear SDE** || parallel to  2-3  [HAN JIAYUE]  difficulty level *** 
    +  LQR problem ; separation principle 
