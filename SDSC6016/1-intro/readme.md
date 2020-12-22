@@ -5,6 +5,6 @@ The benefit of using ipynb :
  + use latex
  + use python code
 The benefit of using RISE:
- + look fancy
- - see its web
- + con: no reverse search to go to source cell quickly.
+    + look fancy
+    - see its web
+    + con: no reverse search to go to source cell quickly.
