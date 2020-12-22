@@ -25,7 +25,7 @@ Estimation and Control of Dynamical Systems的书的安排 (focus on a few **cha
 
 + 6: can be found in any stochastic prob. book and skipped
 
-+ 7:   **fitler theory in continuous time and linear model**
++ 7:   **filter theory in continuous time and linear model**
 
 
 + 8-9 : **stochastic control of linear SDE** || parallel to  2-3  [HAN JIAYUE]  difficulty level *** 
