@@ -1,6 +1,6 @@
 + Chp3.1 
    + exercise: write the result in case where all little m and n and terminal T vanish. only M(t) an N(t) show in the payoff.
-   + proof:  inequality (3.1.12)
+   + **proof**:  inequality (3.1.12). The main idea of this proof is repeated used in many finite horizaton cases (chp 8.1/9.2)
  
 + Chp3.2 
   + Ex 3.2 (p.36)
