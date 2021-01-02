@@ -4,4 +4,5 @@
  
 + Chp3.2 
   + exercise: write the result for discounted infinite horizon problem.
+  + What is lower solution? What is minimum/maximum solution?
    
