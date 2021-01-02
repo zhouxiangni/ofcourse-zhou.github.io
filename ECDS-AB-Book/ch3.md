@@ -5,4 +5,7 @@
 + Chp3.2 
   + exercise: write the result for discounted infinite horizon problem.
   + What is lower solution? What is minimum/maximum solution?
+  + Why Eq.(3.2.3)is not unique ? Give an example.
+  + Is the minimum solution of (3.2.3) unique ? 
+  
    
