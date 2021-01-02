@@ -17,7 +17,7 @@ Estimation and Control of Dynamical Systems的书的安排 (focus on a few **cha
 -------------
 
 +  1， 2-3: **linear dynamical system**  -->  [CAI ZHIQIANG]  difficulty level **
-    + fundamental matrix; adjoint system; controbability; stability; observability; 
+    + fundamental matrix; adjoint equation; controbability; stability; observability; 
     + Section 3.3 skipped
   
   
