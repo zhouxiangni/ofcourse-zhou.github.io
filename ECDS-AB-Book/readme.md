@@ -16,7 +16,7 @@ Estimation and Control of Dynamical Systems的书的安排 (focus on a few **cha
 
 -------------
 
-+  1， 2-3: **linear dynamical system**  -->  [CAI ZHIQIANG]  difficulty level **
++  1， 2-3: **linear dynamical system**  -->   difficulty level **
     + fundamental matrix; adjoint equation; controbability; stability; observability; 
     + Section 3.3 skipped
   
@@ -26,11 +26,12 @@ Estimation and Control of Dynamical Systems的书的安排 (focus on a few **cha
 
 + 6: can be found in any stochastic prob. book and skipped
 
-+ 7:   **filter theory in continuous time and linear model**
++ 7:   filter theory in continuous time and linear model (skipped)
 
 
-+ 8-9 : **stochastic control of linear SDE** || parallel to  2-3  [HAN JIAYUE]  difficulty level *** 
-   +  LQR problem ; separation principle 
++ 8-9 : **stochastic control of linear SDE** || parallel to  2-3  difficulty level *** 
+   +  LQR problem 
+   + separation principle for partial observation (skipped in the first reading)
    
 + 10:  **deterministic optimal control** -> companian  reading:  Flemming&Soner:Controlled Markov Process & Viscosity Solution and  Flemming&Rishel: DeterminisiticStochasitcOptimalControl
 
