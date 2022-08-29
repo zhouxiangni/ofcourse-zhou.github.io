@@ -1,0 +1,1 @@
+stochastic gradient descent
