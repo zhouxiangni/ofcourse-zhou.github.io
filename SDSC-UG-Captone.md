@@ -25,6 +25,7 @@ Springer, by Zhoucheng Lin, Huan Li and Cong Fang.
 
 Some articles  
 
++ Optimization for deep learning: theory and algorithms, by  Ruoyu Sun https://arxiv.org/abs/1912.08957 
 
 +  TAO Molei: large learning rate .  https://itsdynamical.github.io/article/2022/07/25/large-learning-rate.html
 
