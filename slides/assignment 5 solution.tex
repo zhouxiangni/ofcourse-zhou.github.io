@@ -1,0 +1,144 @@
+\documentclass[a4 paper]{article}
+% Set target color model to RGB
+\usepackage[inner=2.0cm,outer=2.0cm,top=2.5cm,bottom=2.5cm]{geometry}
+\usepackage{setspace}
+\usepackage[rgb]{xcolor}
+\usepackage{verbatim}
+\usepackage{subcaption}
+\usepackage{amsgen,amsmath,amstext,amsbsy,amsopn,tikz,amssymb}
+\usepackage{fancyhdr}
+\usepackage[colorlinks=true, urlcolor=blue,  linkcolor=blue, citecolor=blue]{hyperref}
+\usepackage[colorinlistoftodos]{todonotes}
+\usepackage{rotating}
+%\usetikzlibrary{through,backgrounds}
+\hypersetup{%
+	pdfauthor={Ashudeep Singh},%
+	pdftitle={Homework},%
+	pdfkeywords={Tikz,latex,bootstrap,uncertaintes},%
+	pdfcreator={PDFLaTeX},%
+	pdfproducer={PDFLaTeX},%
+}
+%\usetikzlibrary{shadows}
+% \usepackage[francais]{babel}
+\usepackage{booktabs}
+%\input{macros.tex}
+
+\newcommand{\ra}[1]{\renewcommand{\arraystretch}{#1}}
+
+\newtheorem{thm}{Theorem}[section]
+\newtheorem{prop}[thm]{Proposition}
+\newtheorem{lem}[thm]{Lemma}
+\newtheorem{cor}[thm]{Corollary}
+\newtheorem{defn}[thm]{Definition}
+\newtheorem{rem}[thm]{Remark}
+\numberwithin{equation}{section}
+
+\newcommand{\homework}[6]{
+	\pagestyle{myheadings}
+	\thispagestyle{plain}
+	\newpage
+	\setcounter{page}{1}
+	\noindent
+	\begin{center}
+		\framebox{
+			\vbox{\vspace{2mm}
+				\hbox to 6.28in { {\bf MA 6630:~ Introduction to Statistical Learning \hfill {\small #2}} }
+				\vspace{6mm}
+				\hbox to 6.28in { {\Large \hfill #1  \hfill} }
+				\vspace{6mm}
+				\hbox to 6.28in { {\it Instructor: {\rm #3} \hfill Teaching Assistant: {\rm #5}} }
+				%\hbox to 6.28in { {\it TA: #4  \hfill #6}}
+				\vspace{2mm}}
+		}
+	\end{center}
+	\markboth{#5 -- #1}{#5 -- #1}
+	\vspace*{4mm}
+}
+
+\newcommand{\problem}[2]{~\\\fbox{\textbf{Problem #1}}\hfill (#2 points)\newline\newline}
+\newcommand{\subproblem}[1]{~\newline\textbf{(#1)}}
+\newcommand{\0}{\mathbf{0}}
+
+
+\begin{document}
+	\homework{Assignment 5}{2022-2023 Semester B}{Dr. ZHOU Xiang}{}{WANG Yue}
+	
+	
+	
+ 
+	\problem{1}{5}
+	Suppose the dataset for the binary classification has $n=4$ samples in $\mathbb{R}^2$ plane as follows:
+	
+	\begin{tabular}{ll ll}
+		$ {\bf x}_1$=(1, -1),&  $y_1$ = -1;
+		${\bf x}_2$=(1, 1), &  $y_2$ =   1.\\
+		${\bf x}_3$=(-1, 1),&  $y_3$ = -1;
+		${\bf x}_4$=(-1, -1),&  $y_4$ = 1.
+	\end{tabular}.
+
+	Basically, $y=x_1*x_2$ (Boolean logic operation XOR).
+	Is this dataset linearly separable? 
+	Can you find the maximal margin classifier 
+	$f({\bf x})={\bf w}\cdot {\bf x}+ b$?
+	What 
+	is the decision boundary of this classifier?
+	What is the margin of this dataset? 
+	Use the computer to solve the support vector classifier 
+	by using the   penalty $C\sum_{i}\xi_i$
+	and show how the result changes with increasing $C$.
+	%\end{ex}
+	
+	\bigskip
+	\noindent\textbf{Solution:}	   
+	
+	
+	\begin{align*}
+		&\max_{{\bf w}\in \mathbb{R}^d,b\in \mathbb{R}} M
+		\\
+		\mbox{subject to} ~&~~
+		w_1^2 + w_2^2 =1\\
+		&  w_1 + w_2 + b \geq M  
+		\\
+		&  -w_1 - w_2 + b \geq M  
+		\\&
+		w_1 - w_2 - b \geq M  
+		\\&
+		-w_1 + w_2 - b \geq M  
+	\end{align*} 
+	
+	The four linear constraints are equivalent to 
+	$0
+	\le |{w_1+w_2}|\leq -M+b$ and $0\le |{w_1-w_2}|\leq -M-b$.
+	
+	Then $|{w_1}|\le \frac12 |w_1+w_2|+\frac12 |w_1-w_2|\leq -M$. So any admissible $M$ is negative
+	and thus the dataset is {\bf not linearly separable} (you can also see this by plotting four points in the plane).
+	
+	We also have 
+	$-M\pm b\geq 0$. So the possible max of $M$ is $M^*=b$ or $M^*=-b$.
+	
+	If $M^*=b$, then $w_1+w_2=0\Rightarrow w_1=\pm 1/\sqrt{2}$,
+	and $|w_1|=|w_2|\le -M\Rightarrow M\leq -|w_1|$,
+	So $M^*=b^*=-|w_1|$ and 
+	$f(x)=(-x_1+x_2-1)/\sqrt{2}$ 
+	or $f(x)=( x_1-x_2-1)/\sqrt{2}$.
+	
+	Likewise, if $M^*=-b$, then 
+	$f(x)=(-x_1+x_2+1)/\sqrt{2}$
+	or $f(x)=( x_1-x_2+1)/\sqrt{2}$.
+	
+	
+	In both cases, $M^*=-1/\sqrt{2}$.
+	The decision boundaries of the four maximal margin classifiers are four diagonal lines.
+ 
+	 	\begin{figure}[t!]
+	 	\centering
+	 	\includegraphics[height=2.3in]{code.png}
+	 	\includegraphics[height=2.5in]{fig.png}
+	 	%\includegraphics[height=2.5in]{connectivity2.eps}
+	 	%\includegraphics[height=2.5in]{connectivity3.eps}
+	 	\caption{The margin versus cost graph. } 
+	 \end{figure}
+	
+	
+	
+\end{document} 

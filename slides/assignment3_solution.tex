@@ -1,0 +1,198 @@
+\documentclass[a4 paper]{article}
+% Set target color model to RGB
+\usepackage[inner=2.0cm,outer=2.0cm,top=2.5cm,bottom=2.5cm]{geometry}
+\usepackage{setspace}
+\usepackage[rgb]{xcolor}
+\usepackage{verbatim}
+\usepackage{subcaption}
+\usepackage{amsgen,amsmath,amstext,amsbsy,amsopn,tikz,amssymb}
+\usepackage{fancyhdr}
+\usepackage[colorlinks=true, urlcolor=blue,  linkcolor=blue, citecolor=blue]{hyperref}
+\usepackage[colorinlistoftodos]{todonotes}
+\usepackage{rotating}
+%\usetikzlibrary{through,backgrounds}
+\hypersetup{%
+	pdfauthor={Ashudeep Singh},%
+	pdftitle={Homework},%
+	pdfkeywords={Tikz,latex,bootstrap,uncertaintes},%
+	pdfcreator={PDFLaTeX},%
+	pdfproducer={PDFLaTeX},%
+}
+%\usetikzlibrary{shadows}
+% \usepackage[francais]{babel}
+\usepackage{booktabs}
+%\input{macros.tex}
+
+\newcommand{\ra}[1]{\renewcommand{\arraystretch}{#1}}
+
+\newtheorem{thm}{Theorem}[section]
+\newtheorem{prop}[thm]{Proposition}
+\newtheorem{lem}[thm]{Lemma}
+\newtheorem{cor}[thm]{Corollary}
+\newtheorem{defn}[thm]{Definition}
+\newtheorem{rem}[thm]{Remark}
+\numberwithin{equation}{section}
+
+\newcommand{\homework}[6]{
+	\pagestyle{myheadings}
+	\thispagestyle{plain}
+	\newpage
+	\setcounter{page}{1}
+	\noindent
+	\begin{center}
+		\framebox{
+			\vbox{\vspace{2mm}
+				\hbox to 6.28in { {\bf MA 6630:~ Introduction to Statistical Learning \hfill {\small #2}} }
+				\vspace{6mm}
+				\hbox to 6.28in { {\Large \hfill #1  \hfill} }
+				\vspace{6mm}
+				\hbox to 6.28in { {\it Instructor: {\rm #3} \hfill Teaching Assistant: {\rm #5}} }
+				%\hbox to 6.28in { {\it TA: #4  \hfill #6}}
+				\vspace{2mm}}
+		}
+	\end{center}
+	\markboth{#5 -- #1}{#5 -- #1}
+	\vspace*{4mm}
+}
+
+\newcommand{\problem}[2]{~\\\fbox{\textbf{Problem #1}}\hfill (#2 points)\newline\newline}
+\newcommand{\subproblem}[1]{~\newline\textbf{(#1)}}
+\newcommand{\0}{\mathbf{0}}
+
+
+\begin{document}
+	\homework{Assignment 3}{2022-2023 Semester B}{Dr. ZHOU Xiang}{}{PENG Jiahao}
+	
+	
+	
+	
+	\problem{1}{5}
+		Prove that the minimal point of the elastic net regularization 
+	$$
+	\min _{\beta\in \mathbb{R}} \quad (\beta-\hat{\beta})^2 / 2+\lambda_2 \beta^2+\lambda_1|\beta|
+	$$
+	is $\operatorname{sign}(\hat{\beta})\left(|\hat{\beta}|-\lambda_1\right)\frac{1}{1+2 \lambda_2}=\frac{1}{1+2 \lambda_2} \hat{\beta}^{\text {lasso }}$ which is effectively the ridge coefficient applied to $\hat{\beta}^{\text {lasso }}$
+	where $\hat{\beta}^{\text {lasso }}$ solves $\min _{\beta\in \mathbb{R}}  (\beta-\hat{\beta})^2 / 2+ \lambda_1|\beta|$
+	
+	\bigskip
+	\noindent\textbf{Solution:} \\
+	{\bf Method 1}: Let $L(\beta)=(\beta-\hat{\beta})^2 / 2+\lambda_2 \beta^2+\lambda_1|\beta|$, then the derivative w.r.t. $\beta$ is
+	$$
+	\begin{aligned}
+		& L^{\prime}(\beta)=\beta-\hat{\beta}+2 \lambda_2 \beta+\lambda_1 \operatorname{sign} (\beta).
+	\end{aligned}
+	$$
+	The optimal minimizer $\beta^*$ should satisfy the KKT condition $L^{\prime}(\beta)=0$.
+	
+	(1) If $\beta>0$, $L^{\prime}(\beta)=\left(1+2 \lambda_2\right) \beta-\left(\hat{\beta}-\lambda_1\right)$. If $\hat{\beta}-\lambda_1>0$, 
+let $L^{\prime}(\beta)=0$ yielding $\beta^*=\frac{\hat{\beta}-\lambda_1}{1+2 \lambda_2}$.
+If $\hat{\beta}-\lambda_1<0$, $ L^{\prime}(\beta)=0$ gives $\beta^*=0$.	
+
+
+	(2) If $\beta<0$, $L^{\prime}(\beta)= \left(1+2 \lambda_2\right) \beta-\left(\hat{\beta}+\lambda_1\right)$. If $\hat{\beta}+\lambda_1<0$, let $L^{\prime}(\beta)=0$ yielding $\beta^*=\frac{\hat{\beta}+\lambda_1}{1+2 \lambda_2}$. If
+	$\hat{\beta}+\lambda_1>0$, $\beta^*=0$.
+	
+	
+	Therefore, the minimal point $\beta^*$ is 
+	$\operatorname{sign}(\hat{\beta})\left(|\hat{\beta}|-\lambda_1\right)\frac{1}{1+2 \lambda_2}=\frac{1}{1+2 \lambda_2} \hat{\beta}^{\text {lasso }}$.
+	
+	\bigskip 
+	
+	{\bf Method 2}: rewrite the first two terms as the square term to directly apply lasso result.
+	$$(\beta-\hat{\beta})^2 / 2+\lambda_2 \beta^2 + \lambda_1|\beta| = \frac{1+2\lambda_2}{2}(\beta-\frac{1}{1+2\lambda_2}\hat{\beta})^2 + \frac{\lambda_2}{1+2\lambda_2}\hat{\beta}^2 + \lambda_1|\beta|$$
+	So the minimal point $\beta^*$ is $\arg \min (\beta-\hat{\beta})^2 / 2+\lambda_2 \beta^2 + \lambda_1|\beta| = \arg \min \frac{1}{2}(\beta-\frac{1}{1+2\lambda_2}\hat{\beta})^2 + \frac{\lambda_1}{1+2\lambda_2}|\beta|$ and we apply the lasso result directly, 
+	$$\beta^* = \operatorname{sign}(\frac{1}{1+2\lambda_2}\hat{\beta})\left(|\frac{1}{1+2\lambda_2}\hat{\beta}|-\frac{\lambda_1}{1+2\lambda_2}\right)=\operatorname{sign}(\hat{\beta})\left(|\hat{\beta}|-\lambda_1\right)\frac{1}{1+2 \lambda_2}=\frac{1}{1+2 \lambda_2} \hat{\beta}^{\text {lasso }}$$
+	
+	\bigskip
+	
+	
+	
+	\problem{2}{5}
+		Consider only two (highly correlated) samples with two predictors: $\left(x_{11}, x_{12}, y_1\right)=(1,1,1)$ and $\left(x_{21}, x_{22}, y_2\right)=(-1,-1,-1)$. Find the solutions of ridge, lasso, elastic-net regressions, respectively.
+	
+		\bigskip
+	\noindent\textbf{Solution:}	
+	
+	For ridge regression, the objective function is
+	$$
+	L(\boldsymbol{\beta} \mid \mathbf{X}, \mathbf{y})=\frac{1}{2 n}\|\mathbf{y}-\mathbf{X} \boldsymbol{\beta}\|_2^2+\lambda\|\boldsymbol{\beta}\|_2^2,
+	$$
+	which is differentiable. Then taking the derivative equal to zero, we have its minimum occurs at
+	$$
+	\widehat{\boldsymbol{\beta}}=\left(n^{-1} \mathbf{X}^T \mathbf{X}+\lambda \mathbf{I}\right)^{-1} n^{-1} \mathbf{X}^T \mathbf{y}.
+	$$
+	Since $n=2$,
+	$$
+	\mathbf{X}=\left(\begin{array}{ll}
+		1& 1\\
+		-1& -1
+	\end{array}\right), \quad
+	\mathbf{y}=\left(\begin{array}{ll}
+		1\\
+		-1
+	\end{array}\right),
+	$$
+	we have
+	$\widehat{\boldsymbol{\beta}}=(\frac{1}{\lambda+2}, \frac{1}{\lambda+2})^T$.  Note that if you use the notation in the slides, you have
+	$$
+	\widehat{\boldsymbol{\beta}}=\left( \mathbf{X}^T \mathbf{X}+\lambda \mathbf{I}\right)^{-1}  \mathbf{X}^T \mathbf{y} 
+	$$
+	and thus you will get $\widehat{\boldsymbol{\beta}}=(\frac{2}{\lambda+4}, \frac{2}{\lambda+4})^T$. Both answers are right.
+	\bigskip
+	
+ For lasso, consider the objective function
+	$$
+	L(\boldsymbol{\beta} \mid \mathbf{X}, \mathbf{y})=\frac{1}{2 n}\|\mathbf{y}-\mathbf{X} \boldsymbol{\beta}\|_2^2+\lambda\|\boldsymbol{\beta}\|_1.
+	$$
+ $\widehat{\boldsymbol{\beta}}$ minimizes the lasso objective function if and only if it satisfies the KKT conditions
+	$$
+	\begin{aligned}
+		& \frac{1}{n} \mathbf{x}_j^T(\mathbf{y}-\mathbf{X} \widehat{\boldsymbol{\beta}})=\lambda \operatorname{sign}\left(\widehat{\beta}_j\right), \quad \widehat{\beta}_j \neq 0, \\
+		& \frac{1}{n}\left|\mathbf{x}_j^T(\mathbf{y}-\mathbf{X} \widehat{\boldsymbol{\beta}})\right| \leq \lambda, \quad \widehat{\beta}_j=0,
+		&
+	\end{aligned}
+	$$
+	where $\mathbf{x}_1=(x_{11}, x_{21})^T$ and $\mathbf{x}_2=(x_{12}, x_{22})^T$. By calculation, the KKT conditions are
+	$$
+	\begin{aligned}
+		& 1-\widehat{\beta}_1 -\widehat{\beta}_2 =\lambda \operatorname{sign}\left(\widehat{\beta}_j\right), \quad \widehat{\beta}_j \neq 0, \quad j=1,2 \\
+		& \left|1 - \widehat{\beta}_2 \right| \leq \lambda, \quad \widehat{\beta}_1=0 \quad and \quad \left|1 - \widehat{\beta}_1 \right| \leq \lambda, \quad \widehat{\beta}_2=0
+		&
+	\end{aligned}
+	$$
+	
+	If $\lambda \geq 1$, assume $\widehat{\beta}_1>0$, then $1 -\widehat{\beta}_1 -\widehat{\beta}_2 = \lambda \operatorname{sign}\left(\widehat{\beta}_1\right) = \lambda$. Then we have $\widehat{\beta}_2 =1-\lambda -\widehat{\beta}_1 <0$ and $1 -\widehat{\beta}_1 -\widehat{\beta}_2 = \lambda \operatorname{sign}\left(\widehat{\beta}_2\right) = -\lambda$. This is contradictory to $1 -\widehat{\beta}_1 -\widehat{\beta}_2 = \lambda$. Next assume $\widehat{\beta}_1<0$, then $1 -\widehat{\beta}_1 -\widehat{\beta}_2 = \lambda \operatorname{sign}\left(\widehat{\beta}_1\right) = -\lambda$. Then we have $\widehat{\beta}_2 = 1+\lambda -\widehat{\beta}_1 > 0$ and $1 -\widehat{\beta}_1 -\widehat{\beta}_2 = \lambda \operatorname{sign}\left(\widehat{\beta}_2\right) = \lambda$. This is contradictory to $1 -\widehat{\beta}_1 -\widehat{\beta}_2 = -\lambda$. Combining the assumptions and contradictions, we prove $\widehat{\beta}_1 = 0$. Similarly, we can prove $\widehat{\beta}_2 = 0$ if $\lambda > 1$. Therefore, $\left(\widehat{\beta}_1, \widehat{\beta}_2\right)=  (0,0)$ if $\lambda \geq 1$.
+	
+	If $0 < \lambda < 1$, assume $\widehat{\beta}_1<0$, then $1 -\widehat{\beta}_1 -\widehat{\beta}_2 = \lambda \operatorname{sign}\left(\widehat{\beta}_1\right) = -\lambda$. Then we have $\widehat{\beta}_2 = 1 + \lambda -\widehat{\beta}_1 > 0$ and $1 -\widehat{\beta}_1 -\widehat{\beta}_2 = \lambda \operatorname{sign}\left(\widehat{\beta}_2\right) = \lambda$. This is contradictory to $1 - \widehat{\beta}_1 -\widehat{\beta}_2 = -\lambda$. We obtain that $\widehat{\beta}_1 \geq 0$ if $0 \leq \lambda < 1$. Similarly, we can prove $\widehat{\beta}_2 \geq 0$ if $0 \leq \lambda < 1$. So $\widehat{\beta}_1 \geq 0$ and $\widehat{\beta}_2 \geq 0$ if $0 < \lambda < 1$. And when $\widehat{\beta}_1 = \widehat{\beta}_2 = 0$, $\lambda \geq 1$ is contradictory to $0 < \lambda < 1$. Therefore, at least one $\widehat{\beta}_j \neq 0$, which means $1-\widehat{\beta}_1 -\widehat{\beta}_2 =\lambda$, $\widehat{\beta}_1 \geq 0$, and $\widehat{\beta}_2 \geq 0$ if $0 < \lambda < 1$.
+	
+	If $\lambda = 0$, then $\widehat{\beta}_1 = \widehat{\beta}_2 = \frac{1}{2}$. So $1-\widehat{\beta}_1 -\widehat{\beta}_2 =0=\lambda$, $\widehat{\beta}_1 \geq 0$, and $\widehat{\beta}_2 \geq 0$.
+	
+	Thus the solutions for lasso are
+	$$
+	\begin{aligned}
+		\left(\widehat{\beta}_1, \widehat{\beta}_2\right)= & (0,0) \text { if } \lambda \geq 1, \\
+		\left(\widehat{\beta}_1, \widehat{\beta}_2\right) \in & \left\{\left(\beta_1, \beta_2\right): \beta_1+\beta_2=1-\lambda, \beta_1 \geq 0, \beta_2 \geq 0\right\}   \text { if } 0 \leq \lambda<1.
+	\end{aligned}
+	$$
+	
+	
+		\bigskip
+For the elastic net regression, the objective function is
+$$
+	L(\boldsymbol{\beta} \mid \mathbf{X}, \mathbf{y})= \frac{1}{2 n}\|\mathbf{y}-\mathbf{X} \boldsymbol{\beta}\|_2^2 +\lambda_1\|\boldsymbol{\beta}\|_1+\frac{\lambda_2}{2}\|\boldsymbol{\beta}\|_2^2.
+$$
+ The KKT conditions are  
+ $$
+ \begin{aligned}
+ 	\frac{1}{n} \mathbf{x}_j^T(\mathbf{y}-\mathbf{X} \widehat{\boldsymbol{\beta}})-\lambda_2 \widehat{\beta}_j & =\lambda_1 \operatorname{sign}\left(\widehat{\beta}_j\right), & & \widehat{\beta}_j \neq 0, \\
+ 	\frac{1}{n}\left|\mathbf{x}_j^T(\mathbf{y}-\mathbf{X} \widehat{\boldsymbol{\beta}})\right| & \leq \lambda_1, & \widehat{\beta}_j & =0.
+ \end{aligned}
+ $$
+Thus it always yields a unique solution:
+	$$
+	\begin{cases}\widehat{\beta}_1=\widehat{\beta}_2=0 & \text { if } \lambda_1 \geq 1, \\ \widehat{\beta}_1=\widehat{\beta}_2=\frac{1-\lambda_1}{2+\lambda_2} & \text { if } 0<\lambda_1<1 .\end{cases}
+	$$
+	
+	
+	
+\end{document} 
